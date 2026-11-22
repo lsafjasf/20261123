@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d1115" />
+    <title>气口守门人 · Breath Gate Studio</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div>
+            <h1>气口守门人</h1>
+            <p>Breath Gate Studio · 有声书呼吸审听台</p>
+          </div>
+        </div>
+        <div class="top-actions">
+          <div class="offline-badge" title="所有音频仅在当前浏览器内存中处理">
+            <i></i> 完全离线
+          </div>
+          <label class="button ghost file-button">
+            <input id="file-input" type="file" accept="audio/*,.wav,.mp3,.m4a,.flac,.ogg" />
+            <span class="icon">＋</span> 导入音频
+          </label>
+          <button id="export-button" class="button primary" disabled>
+            导出与核验
+            <span class="key-hint">⌘E</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="left-rail">
+          <section class="panel source-panel">
+            <div class="panel-kicker">01 · 素材</div>
+            <div id="source-empty" class="source-empty">
+              <div class="drop-zone" id="drop-zone">
+                <span class="drop-icon">↧</span>
+                <strong>拖入有声书音频</strong>
+                <p>WAV / MP3 / M4A / OGG<br />单声道或立体声</p>
+              </div>
+              <button id="demo-button" class="button subtle wide">载入 18 秒测试段落</button>
+            </div>
+            <div id="source-loaded" class="source-loaded hidden">
+              <div class="source-title-row">
+                <div class="source-icon">W</div>
+                <div>
+                  <strong id="source-name">未命名.wav</strong>
+                  <p id="source-meta">44.1 kHz · 立体声</p>
+                </div>
+              </div>
+              <div class="source-stats">
+                <div><span>时长</span><b id="source-duration">--</b></div>
+                <div><span>底噪</span><b id="source-floor">--</b></div>
+                <div><span>峰值</span><b id="source-peak">--</b></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-kicker">02 · 分类谱</div>
+            <div class="legend-list">
+              <button class="legend active" data-filter="all">
+                <span class="legend-dot green"></span>
+                <span><b>可清理气口</b><small>短、干、远离语句</small></span>
+                <em id="count-clean">0</em>
+              </button>
+              <button class="legend" data-filter="emotional">
+                <span class="legend-dot amber"></span>
+                <span><b>情绪呼吸</b><small>贴近语句、较长或偏响</small></span>
+                <em id="count-emotional">0</em>
+              </button>
+              <button class="legend" data-filter="impulse">
+                <span class="legend-dot coral"></span>
+                <span><b>低频冲激</b><small>喷麦、爆音、低频瞬态</small></span>
+                <em id="count-impulse">0</em>
+              </button>
+            </div>
+          </section>
+
+          <section class="panel policy-panel">
+            <div class="panel-kicker">03 · 保守度</div>
+            <label class="slider-row" for="policy-slider">
+              <span>情绪保护</span>
+              <output id="policy-output">均衡</output>
+            </label>
+            <input id="policy-slider" class="range" type="range" min="0" max="100" value="55" />
+            <div class="range-labels"><span>多清理</span><span>多保留</span></div>
+            <p class="hint">调高会扩大情绪呼吸与低频冲激的保护范围。调整后重新分析，不破坏手动决定。</p>
+          </section>
+
+          <section class="room-card">
+            <div class="room-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div>
+              <span>房间底噪</span>
+              <b id="room-status">等待音频</b>
+            </div>
+          </section>
+        </aside>
+
+        <section class="center-stage">
+          <div class="transport">
+            <div class="transport-left">
+              <button id="play-button" class="play-button" disabled aria-label="播放">
+                <span class="play-icon"></span>
+              </button>
+              <div class="timecode">
+                <b id="current-time">00:00.000</b>
+                <span id="total-time">/ 00:00.000</span>
+              </div>
+              <div class="ab-toggle" role="group" aria-label="监听版本">
+                <button class="active" data-monitor="source">原始</button>
+                <button data-monitor="processed">处理后</button>
+              </div>
+            </div>
+            <div class="transport-right">
+              <span class="state-label" id="analysis-state">等待素材</span>
+              <button id="reanalyze-button" class="icon-button" title="重新分析" disabled>↻</button>
+              <div class="zoom-group">
+                <button id="zoom-out" class="icon-button" title="缩小">−</button>
+                <span id="zoom-label">全览</span>
+                <button id="zoom-in" class="icon-button" title="放大">＋</button>
+              </div>
+            </div>
+          </div>
+
+          <section class="wave-panel">
+            <div class="wave-head">
+              <div>
+                <span class="eyebrow">样本视图</span>
+                <b id="view-range">等待载入音频</b>
+              </div>
+              <div class="audit-pill" id="edit-summary">0 处改动 · 0 个样本</div>
+            </div>
+            <div class="canvas-wrap" id="canvas-wrap">
+              <canvas id="waveform"></canvas>
+              <div class="canvas-empty" id="canvas-empty">
+                <div class="empty-orbit"></div>
+                <strong>这里会显示呼吸事件与接缝</strong>
+                <span>载入音频后自动区分气口、情绪呼吸和低频冲激</span>
+              </div>
+              <div class="canvas-tooltip hidden" id="canvas-tooltip"></div>
+            </div>
+            <div class="wave-foot">
+              <span><i class="line-swatch"></i> 原始波形</span>
+              <span><i class="fill-swatch"></i> 处理后轮廓</span>
+              <span><i class="seam-swatch"></i> 底噪接缝</span>
+              <span class="wave-help">滚轮缩放 · 拖动平移 · 双击复位</span>
+            </div>
+          </section>
+
+          <section class="event-panel">
+            <div class="event-head">
+              <div>
+                <span class="eyebrow">事件队列</span>
+                <b>按时间排序 · 自动决定可随时覆盖</b>
+              </div>
+              <div class="event-tools">
+                <button id="bulk-clean" class="text-button" disabled>清理全部可清理气口</button>
+                <button id="bulk-restore" class="text-button" disabled>恢复全部自动处理</button>
+              </div>
+            </div>
+            <div class="event-table-wrap">
+              <table class="event-table">
+                <thead>
+                  <tr>
+                    <th>时间</th>
+                    <th>判定</th>
+                    <th>证据</th>
+                    <th>时长</th>
+                    <th>处理</th>
+                    <th>接缝</th>
+                  </tr>
+                </thead>
+                <tbody id="event-body">
+                  <tr class="empty-row"><td colspan="6">尚未分析到呼吸事件</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <aside class="inspector">
+          <div class="inspector-head">
+            <div>
+              <span class="eyebrow">事件检查器</span>
+              <h2 id="inspect-title">未选择事件</h2>
+            </div>
+            <span id="inspect-id" class="sample-id">—</span>
+          </div>
+          <div id="inspector-empty" class="inspector-empty">
+            <div class="scope-glyph"><i></i><i></i><i></i><i></i><i></i></div>
+            <p>在波形或事件队列中选择一处事件，查看分类证据并决定保留方式。</p>
+          </div>
+          <div id="inspector-content" class="hidden">
+            <div class="classification" role="group" aria-label="事件分类">
+              <button data-kind="clean"><i></i>可清理气口</button>
+              <button data-kind="emotional"><i></i>情绪呼吸</button>
+              <button data-kind="impulse"><i></i>低频冲激</button>
+            </div>
+            <div class="evidence-block">
+              <div class="section-label">判定证据 <span id="confidence-label">—</span></div>
+              <div class="meter-row">
+                <span>噪声样</span><div class="meter"><i id="meter-noise"></i></div><b id="val-noise">—</b>
+              </div>
+              <div class="meter-row">
+                <span>低频占比</span><div class="meter"><i id="meter-low"></i></div><b id="val-low">—</b>
+              </div>
+              <div class="meter-row">
+                <span>距语句</span><div class="meter"><i id="meter-distance"></i></div><b id="val-distance">—</b>
+              </div>
+              <div class="meter-row">
+                <span>瞬态强度</span><div class="meter"><i id="meter-crest"></i></div><b id="val-crest">—</b>
+              </div>
+              <ul id="reason-list" class="reason-list"></ul>
+            </div>
+            <div class="decision-block">
+              <div class="section-label">处理决定</div>
+              <div class="action-grid">
+                <button data-action="restore"><b>恢复原声</b><small>逐样本还原</small></button>
+                <button data-action="shorten"><b>缩短</b><small>切尾并补底噪</small></button>
+                <button data-action="fade"><b>淡出</b><small>时长不变</small></button>
+                <button data-action="attenuate"><b>降低</b><small>−12 dB</small></button>
+              </div>
+              <div class="amount-row">
+                <label for="shorten-amount">缩短保留量</label>
+                <input id="shorten-amount" class="range" type="range" min="20" max="80" value="42" />
+                <output id="shorten-output">42%</output>
+              </div>
+            </div>
+            <div class="seam-block">
+              <div class="seam-title"><span>匹配接缝</span><b id="seam-duration">—</b></div>
+              <div class="seam-visual"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <dl>
+                <div><dt>底噪来源</dt><dd id="seam-source">—</dd></div>
+                <div><dt>接缝电平</dt><dd id="seam-level">—</dd></div>
+                <div><dt>样本记录</dt><dd id="seam-record">—</dd></div>
+              </dl>
+            </div>
+            <div class="note-block">
+              <label for="event-note">审听备注</label>
+              <textarea id="event-note" rows="2" placeholder="例如：人物哽咽后的吸气，保留。"></textarea>
+            </div>
+          </div>
+        </aside>
+      </main>
+
+      <footer class="statusbar">
+        <div><i id="status-dot"></i><span id="status-text">本地工作台已就绪</span></div>
+        <div class="status-meta">
+          <span id="engine-status">WebAudio · WebCodecs · Canvas</span>
+          <span>不保存、不上传</span>
+        </div>
+      </footer>
+    </div>
+
+    <dialog id="export-dialog" class="export-dialog">
+      <form method="dialog" class="dialog-shell">
+        <div class="dialog-head">
+          <div>
+            <span class="eyebrow">无损导出</span>
+            <h2>导出并核验</h2>
+          </div>
+          <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+        </div>
+        <div class="dialog-body">
+          <div class="export-summary">
+            <div><span>输入时长</span><b id="export-input-duration">—</b></div>
+            <div><span>预计输出</span><b id="export-output-duration">—</b></div>
+            <div><span>处理事件</span><b id="export-event-count">—</b></div>
+            <div><span>接缝填充</span><b id="export-seam-count">—</b></div>
+          </div>
+          <label class="field-label" for="filename-input">文件名</label>
+          <div class="filename-field">
+            <input id="filename-input" type="text" value="audiobook_cleaned" />
+            <span>.wav</span>
+          </div>
+          <div class="format-note">
+            <span class="format-badge">WAV</span>
+            <div><b>32-bit float · 原始采样率</b><small>无损、可逐样本核验；不上传，不转码。</small></div>
+          </div>
+          <div id="export-progress" class="export-progress hidden">
+            <div class="progress-track"><i id="progress-fill"></i></div>
+            <span id="progress-label">正在组装样本…</span>
+          </div>
+          <div id="verify-panel" class="verify-panel hidden">
+            <div class="verify-head"><span>导出后核验</span><b id="verify-verdict">核验中</b></div>
+            <div class="verify-row" id="verify-duration"><i></i><span>总时长</span><em>—</em></div>
+            <div class="verify-row" id="verify-peak"><i></i><span>峰值 / 削波</span><em>—</em></div>
+            <div class="verify-row" id="verify-untouched"><i></i><span>未处理区逐样本</span><em>—</em></div>
+            <div class="verify-row" id="verify-webcodecs"><i></i><span>WebCodecs 独立指纹</span><em>—</em></div>
+          </div>
+        </div>
+        <div class="dialog-actions">
+          <button id="cancel-export" class="button ghost" value="cancel">取消</button>
+          <button id="run-export" class="button primary" type="button">生成并核验</button>
+          <a id="download-audio" class="button success hidden" download>下载音频</a>
+          <a id="download-manifest" class="button ghost hidden" download>下载样本清单</a>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast hidden" role="status"></div>
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
