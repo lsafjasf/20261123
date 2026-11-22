@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#081018" />
+    <title>Framelock — 双画幅烧录字幕</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark"><span></span><span></span><span></span></div>
+        <div>
+          <div class="wordmark">FRAMELOCK</div>
+          <div class="brand-sub">SUBTITLE BURNER / LOCAL ONLY</div>
+        </div>
+      </div>
+      <div class="top-status">
+        <span class="pill pill-offline"><i></i> OFFLINE</span>
+        <span class="pill">WEBCODECS</span>
+        <span class="pill">FRAME EXACT</span>
+        <span class="clock" id="clock">--:--:--</span>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="panel source-panel">
+        <div class="panel-heading">
+          <span class="step-index">01</span>
+          <div>
+            <h1>课程素材</h1>
+            <p>MP4 / H.264 + AAC</p>
+          </div>
+        </div>
+
+        <div class="dropzone" id="videoDrop">
+          <input type="file" id="videoInput" accept="video/mp4,.mp4" hidden />
+          <div class="drop-icon"><span></span></div>
+          <strong>拖入课程视频</strong>
+          <span>或 <button class="text-button" id="browseVideo">选择本地文件</button></span>
+          <small>不上传 · 不转云 · 原音轨直通</small>
+        </div>
+
+        <button class="sample-button" id="loadSample">
+          <span>载入样例课程</span>
+          <span>14s / 30fps</span>
+        </button>
+
+        <div class="meta-grid">
+          <div><span>SOURCE</span><strong id="metaName">—</strong></div>
+          <div><span>FRAME</span><strong id="metaFrame">1280 × 720</strong></div>
+          <div><span>FPS</span><strong id="metaFps">30.000</strong></div>
+          <div><span>DURATION</span><strong id="metaDuration">00:14.000</strong></div>
+          <div><span>VIDEO</span><strong id="metaVideo">AVC / H.264</strong></div>
+          <div><span>AUDIO</span><strong id="metaAudio">AAC / PASS-THROUGH</strong></div>
+        </div>
+
+        <div class="sub-heading">
+          <div>
+            <span class="eyebrow">CAPTIONS</span>
+            <h2>字幕文本</h2>
+          </div>
+          <button class="icon-button" id="loadSrt" title="导入 SRT / VTT">＋</button>
+          <input type="file" id="srtInput" accept=".srt,.vtt,.json,text/plain" hidden />
+        </div>
+        <textarea id="subtitleEditor" spellcheck="false" aria-label="字幕文本"></textarea>
+        <div class="parse-line">
+          <span id="parseStatus">SRT · 3 CUES</span>
+          <button class="text-button" id="applySubtitle">重新解析</button>
+        </div>
+        <div class="cue-list" id="cueList"></div>
+
+        <div class="source-note">
+          <span class="note-mark">i</span>
+          <p>预览音频只做监听。导出时 AAC 编码包逐字节复用，WebAudio 不进入导出链路。</p>
+        </div>
+      </aside>
+
+      <section class="stage">
+        <div class="stage-head">
+          <div>
+            <span class="eyebrow">DUAL FRAME PREVIEW</span>
+            <h2>同一时间轴 · 两种画幅</h2>
+          </div>
+          <div class="stage-tools">
+            <label class="switch"><input type="checkbox" id="debugToggle" /><span></span>版面辅助线</label>
+            <span class="frame-clock" id="frameClock">F 0000 / 00:00.000</span>
+          </div>
+        </div>
+
+        <div class="previews">
+          <article class="preview-card landscape-card">
+            <div class="preview-label">
+              <div><b>16:9</b><span>1920 × 1080</span></div>
+              <span class="ratio">LANDSCAPE</span>
+            </div>
+            <div class="canvas-wrap">
+              <canvas id="previewLandscape" width="960" height="540"></canvas>
+              <div class="canvas-corner tl"></div><div class="canvas-corner tr"></div>
+              <div class="canvas-corner bl"></div><div class="canvas-corner br"></div>
+            </div>
+            <div class="layout-readout">
+              <span>FONT <b id="lsFont">56</b>px</span>
+              <span>LINES <b id="lsLines">2</b></span>
+              <span>SAFE <b>6.4%</b></span>
+              <span id="lsPlacement">BOTTOM</span>
+            </div>
+          </article>
+
+          <article class="preview-card portrait-card">
+            <div class="preview-label">
+              <div><b>9:16</b><span>1080 × 1920</span></div>
+              <span class="ratio">PORTRAIT</span>
+            </div>
+            <div class="canvas-wrap">
+              <canvas id="previewPortrait" width="405" height="720"></canvas>
+              <div class="canvas-corner tl"></div><div class="canvas-corner tr"></div>
+              <div class="canvas-corner bl"></div><div class="canvas-corner br"></div>
+            </div>
+            <div class="layout-readout">
+              <span>FONT <b id="ptFont">50</b>px</span>
+              <span>LINES <b id="ptLines">2</b></span>
+              <span>SAFE <b>7.4%</b></span>
+              <span id="ptPlacement">BOTTOM</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="transport">
+          <div class="transport-top">
+            <button class="play-button" id="playButton" aria-label="播放">
+              <span class="play-shape"></span>
+            </button>
+            <span class="timecode" id="timecode">00:00:04.600</span>
+            <div class="timeline-wrap">
+              <div class="cue-track" id="cueTrack"></div>
+              <input type="range" id="timeline" min="0" max="14000000" step="1000" value="4600000" />
+            </div>
+            <span class="duration" id="durationCode">00:00:14.000</span>
+          </div>
+          <div class="transport-bottom">
+            <span><i class="dot dot-amber"></i>当前句高亮</span>
+            <span><i class="dot dot-mint"></i>安全区</span>
+            <span><i class="dot dot-orange"></i>主体避让框</span>
+            <span class="mono" id="activeCueLabel">CUE 02 / SENTENCE 01</span>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel inspector">
+        <div class="panel-heading">
+          <span class="step-index">02</span>
+          <div>
+            <h1>版面控制</h1>
+            <p>两种画幅独立计算</p>
+          </div>
+        </div>
+
+        <section class="control-section">
+          <div class="control-title"><span>背景样式</span><em>CANVAS LAYER</em></div>
+          <div class="segmented four" id="backgroundStyles">
+            <button data-value="box" class="active">底板</button>
+            <button data-value="glass">玻璃</button>
+            <button data-value="outline">描边</button>
+            <button data-value="none">无底</button>
+          </div>
+        </section>
+
+        <section class="control-section">
+          <div class="control-title"><span>位置策略</span><em>SUBJECT AVOIDANCE</em></div>
+          <div class="segmented" id="placementModes">
+            <button data-value="auto" class="active">自动避让</button>
+            <button data-value="bottom">固定底部</button>
+            <button data-value="top">固定顶部</button>
+          </div>
+          <label class="field-label" for="subjectMode">主体位置</label>
+          <select id="subjectMode">
+            <option value="presenter">讲师在左 / 竖屏在上</option>
+            <option value="lower">主体占下半区 → 字幕上置</option>
+            <option value="none">无主体框</option>
+          </select>
+          <div class="subject-preview" id="subjectPreview">
+            <span>16:9</span>
+            <div class="subject-diagram ls"><i></i></div>
+            <span>9:16</span>
+            <div class="subject-diagram pt"><i></i></div>
+          </div>
+        </section>
+
+        <section class="control-section two-col">
+          <div>
+            <label class="field-label" for="accentColor">强调色</label>
+            <div class="color-field"><input type="color" id="accentColor" value="#f4bd54" /><span>#F4BD54</span></div>
+          </div>
+          <div>
+            <label class="field-label" for="fontScale">字号</label>
+            <select id="fontScale">
+              <option value="1">标准</option>
+              <option value="0.92">紧凑</option>
+              <option value="1.08">放大</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="control-section">
+          <div class="control-title"><span>画幅规格</span><em>MASTER OUTPUT</em></div>
+          <div class="spec-card">
+            <div><b>16:9</b><span>1920 × 1080</span></div>
+            <div><span>SAFE</span><strong>6.4% / 7.0%</strong></div>
+            <div><span>FONT</span><strong>56 px</strong></div>
+            <div><span>MAX</span><strong>2 LINES</strong></div>
+          </div>
+          <div class="spec-card">
+            <div><b>9:16</b><span>1080 × 1920</span></div>
+            <div><span>SAFE</span><strong>7.4% / 8.0%</strong></div>
+            <div><span>FONT</span><strong>50 px</strong></div>
+            <div><span>MAX</span><strong>3 LINES</strong></div>
+          </div>
+        </section>
+
+        <section class="control-section export-section">
+          <div class="control-title"><span>导出</span><em>FRAME-ALIGNED</em></div>
+          <button class="primary-button" id="exportBoth">
+            <span>导出双版本</span><span class="button-arrow">↗</span>
+          </button>
+          <div class="split-buttons">
+            <button id="exportLandscape">16:9 烧录</button>
+            <button id="exportPortrait">9:16 烧录</button>
+          </div>
+          <button class="secondary-button" id="exportChecks">导出两种版面检查图</button>
+          <div class="progress-box hidden" id="progressBox">
+            <div class="progress-line"><span id="progressMessage">准备中…</span><b id="progressPercent">0%</b></div>
+            <div class="progress-bar"><i id="progressFill"></i></div>
+          </div>
+          <div class="export-results" id="exportResults"></div>
+          <p class="fine-print">输出 PTS 取源帧时间戳；AAC 样本直接封装。首帧与字幕时间轴同源，不做整体偏移。</p>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <span>FRAMELOCK / UID4-0032</span>
+      <span>NODE HTTP · TYPESCRIPT · WEBAUDIO · WEBCODECS · CANVAS · MEDIASOURCE</span>
+      <span id="supportStatus">检测运行时…</span>
+    </footer>
+
+    <video id="sourceVideo" playsinline hidden></video>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

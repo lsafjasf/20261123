@@ -1,0 +1,17 @@
+{
+  "name": "framelock-subtitle-burner",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline, frame-accurate subtitle burner for landscape and portrait course videos",
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "start": "npm run build && node dist/src/server.js",
+    "dev": "node scripts/build.ts --watch",
+    "test": "npm run build && node --test dist/src/tests/*.test.js",
+    "artifacts": "npm run build && node dist/scripts/build-artifacts.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}
