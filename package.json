@@ -1,0 +1,16 @@
+{
+  "name": "codec-bench",
+  "version": "0.1.0",
+  "private": true,
+  "description": "素材浏览器上线前编码组合实测台：WebCodecs 真实编码/解码/回放，零第三方依赖",
+  "type": "module",
+  "engines": {
+    "node": ">=23.6"
+  },
+  "scripts": {
+    "test": "node test/selftest.ts",
+    "bench": "node src/node/harness.ts",
+    "bench:list": "node src/node/harness.ts --list",
+    "bench:full": "node src/node/harness.ts --full"
+  }
+}

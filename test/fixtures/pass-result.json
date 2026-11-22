@@ -1,0 +1,17 @@
+{
+  "configId": "avc1-bl_320x180_24fps_i420_128k",
+  "runIndex": 0,
+  "status": "pass",
+  "claimedSupport": { "encoder": true, "decoder": true, "mse": true },
+  "timing": { "generateMs": 5, "encodeMs": 100, "firstChunkMs": 12, "decodeMs": 40, "ttffMs": 18, "mseMs": 900 },
+  "memory": { "peakJsHeapBytes": 52428800 },
+  "quality": { "mae": 2.1, "psnrDb": 38.5, "framesCompared": 48 },
+  "frames": { "expected": 48, "encoded": 48, "decoded": 48 },
+  "mse": "pass",
+  "mseNote": "played to 1.20s, rvfc=30",
+  "audioClockSkewMs": 3.2,
+  "userAgent": "selftest",
+  "platform": "selftest",
+  "startedAt": "2026-11-23T00:00:00.000Z",
+  "durationMs": 1200
+}
