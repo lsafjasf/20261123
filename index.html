@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>take-comp · 多 take 句子级拼接</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>take-comp</h1>
+    <div class="controls">
+      <button id="btn-load">加载 takes/</button>
+      <label class="file-btn">
+        打开本地文件<input id="file-input" type="file" accept="audio/*" multiple hidden />
+      </label>
+      <label>参考 take <select id="sel-ref"></select></label>
+      <label>交叉淡化 <input id="inp-fade" type="number" min="2" max="60" step="1" value="12" /> ms</label>
+      <button id="btn-play-comp" disabled>▶ 试听拼接</button>
+      <button id="btn-stop" disabled>■ 停止</button>
+      <button id="btn-save" disabled>保存工程</button>
+      <button id="btn-loadproj" disabled>读取工程</button>
+      <button id="btn-export-wav" disabled>导出 WAV</button>
+      <button id="btn-export-aac" disabled>导出 AAC</button>
+    </div>
+    <div id="status">就绪。把音频放进 takes/ 后点「加载 takes/」，或打开本地文件。</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>句子对齐矩阵 <span class="hint">点击单元格 = 选用该 take 并试听 · 行=句子 列=take</span></h2>
+      <div class="scroll-x"><canvas id="grid"></canvas></div>
+    </section>
+    <section>
+      <h2>当前句对比 <span class="hint">包络重叠（节奏）· 噪声底 / 情绪差异条形</span></h2>
+      <canvas id="detail"></canvas>
+    </section>
+    <section>
+      <h2>拼接时间线 <span class="hint">颜色=来源 take · 点击跳转试听 · 每段标注 句子·take</span></h2>
+      <canvas id="comp"></canvas>
+    </section>
+  </main>
+
+  <script type="module" src="src/app/main.ts"></script>
+</body>
+</html>

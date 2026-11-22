@@ -1,0 +1,12 @@
+{
+  "name": "take-comp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline multi-take voice comping: sentence alignment, comparison, crossfade stitching with take provenance. Zero dependencies.",
+  "scripts": {
+    "start": "node server.ts",
+    "demo": "node tools/make-demo-takes.ts",
+    "test": "node --test test/*.test.ts"
+  }
+}
