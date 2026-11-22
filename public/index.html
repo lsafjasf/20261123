@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MP4 粗剪（尽量不重编码）</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>MP4 粗剪</h1>
+    <input type="file" id="file" accept="video/mp4,.mp4" />
+    <span id="fileInfo"></span>
+  </header>
+
+  <main id="app" hidden>
+    <section class="preview">
+      <canvas id="screen" width="960" height="540"></canvas>
+      <div class="transport">
+        <button id="playBtn">播放</button>
+        <input type="range" id="seek" min="0" max="0" step="0.001" value="0" />
+        <span id="clock">0.000 / 0.000</span>
+      </div>
+      <canvas id="timeline" height="64"></canvas>
+      <div class="transport">
+        <button id="markStart">在此刻开始删除区</button>
+        <button id="markEnd">在此刻结束删除区</button>
+        <button id="genPlan">生成剪辑方案</button>
+      </div>
+    </section>
+
+    <section class="side">
+      <h2>删除区间</h2>
+      <ul id="ranges"></ul>
+      <h2>剪辑方案</h2>
+      <div id="planSummary"></div>
+      <ul id="segments"></ul>
+      <button id="backEdit">返回编辑区间</button>
+      <h2>导出</h2>
+      <div id="exportBox">
+        <button id="exportBtn" disabled>生成文件</button>
+        <label><input type="checkbox" id="saveServer" checked /> 同时保存到服务器 exports/</label>
+        <div id="exportStatus"></div>
+      </div>
+      <video id="result" controls hidden></video>
+    </section>
+  </main>
+
+  <script type="module" src="/js/web/app.js"></script>
+</body>
+</html>
