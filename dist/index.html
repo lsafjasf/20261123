@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Echo Takes — 本地优先的单声道人声重复 take 检索与复核工作台"
+    />
+    <title>Echo Takes · 人声 Take 检索台</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div>
+            <div class="brand-name">ECHO TAKES</div>
+            <div class="brand-sub">VOCAL RECALL WORKBENCH</div>
+          </div>
+        </div>
+        <div class="project-identity">
+          <span class="status-dot" id="projectDot"></span>
+          <span class="project-label">当前工程</span>
+          <strong id="fileName">尚未载入录音</strong>
+          <span class="project-meta" id="fileMeta">本地处理 · 不上传</span>
+        </div>
+        <div class="top-actions">
+          <button class="btn btn-ghost" id="demoBtn" type="button">
+            <span class="btn-icon">◇</span> 演示工程
+          </button>
+          <button class="btn btn-primary" id="importBtn" type="button">
+            <span class="btn-icon">＋</span> 载入人声
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="control-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">RETRIEVAL SETUP</span>
+              <h1>重复 take 检索</h1>
+            </div>
+            <span class="local-badge">LOCAL</span>
+          </div>
+
+          <button class="drop-card" id="dropZone" type="button">
+            <span class="drop-icon">
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <path d="M16 22V7m0 0-6 6m6-6 6 6" />
+                <path d="M6 21v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4" />
+              </svg>
+            </span>
+            <span class="drop-copy">
+              <strong id="dropTitle">拖入单声道人声</strong>
+              <span id="dropSub">WAV · MP3 · M4A · OGG / 本地解码</span>
+            </span>
+          </button>
+
+          <section class="control-section">
+            <div class="section-title">
+              <span>分析参数</span>
+              <button class="text-button" id="resetParams" type="button">重置</button>
+            </div>
+
+            <label class="range-field" for="minRepeat">
+              <span class="range-label">
+                <span>最短重复长度</span>
+                <output id="minRepeatValue">3.5 秒</output>
+              </span>
+              <input
+                type="range"
+                id="minRepeat"
+                min="1"
+                max="12"
+                step="0.5"
+                value="3.5"
+              />
+              <span class="range-hints"><span>1s</span><span>12s</span></span>
+            </label>
+
+            <label class="range-field" for="minGap">
+              <span class="range-label">
+                <span>far apart · 最小间隔</span>
+                <output id="minGapValue">20 秒</output>
+              </span>
+              <input
+                type="range"
+                id="minGap"
+                min="5"
+                max="300"
+                step="5"
+                value="20"
+              />
+              <span class="range-hints"><span>5s</span><span>5min</span></span>
+            </label>
+
+            <label class="range-field" for="transpose">
+              <span class="range-label">
+                <span>允许轻微移调</span>
+                <output id="transposeValue">±2 半音</output>
+              </span>
+              <input
+                type="range"
+                id="transpose"
+                min="0"
+                max="6"
+                step="0.5"
+                value="2"
+              />
+              <span class="range-hints"><span>0</span><span>±6</span></span>
+            </label>
+
+            <label class="range-field" for="similarity">
+              <span class="range-label">
+                <span>旋律相似度门槛</span>
+                <output id="similarityValue">76%</output>
+              </span>
+              <input
+                type="range"
+                id="similarity"
+                min="55"
+                max="95"
+                step="1"
+                value="76"
+              />
+              <span class="range-hints"><span>宽松 55%</span><span>严格 95%</span></span>
+            </label>
+          </section>
+
+          <div class="analysis-action">
+            <button class="btn btn-analyze" id="analyzeBtn" type="button" disabled>
+              <span class="scan-icon" aria-hidden="true"></span>
+              <span id="analyzeLabel">等待载入录音</span>
+              <kbd>⌘ ↵</kbd>
+            </button>
+            <div class="progress-track" id="progressTrack">
+              <span id="progressFill"></span>
+            </div>
+            <div class="progress-copy" id="progressCopy">音高轮廓 · 噪声门 · 远距自相似</div>
+          </div>
+
+          <section class="session-stats" id="sessionStats">
+            <div class="section-title"><span>本次扫描</span><span class="live-dot">—</span></div>
+            <div class="stat-grid">
+              <div><strong id="statScanned">—</strong><span>有效人声</span></div>
+              <div><strong id="statGroups">—</strong><span>候选组</span></div>
+              <div><strong id="statRejected">—</strong><span>静音/噪声</span></div>
+              <div><strong id="statPending">—</strong><span>待确认</span></div>
+            </div>
+            <p class="gate-note">
+              <span class="gate-pulse"></span>
+              已启用音高置信度与频谱平坦度双门限，空白和宽带噪声不进入候选池。
+            </p>
+          </section>
+
+          <section class="export-panel">
+            <div class="section-title">
+              <span>命中清单</span>
+              <span id="confirmedCount">0 / 0 已确认</span>
+            </div>
+            <div class="export-actions">
+              <button class="btn btn-outline" id="auditionBtn" type="button" disabled>
+                <span>▷</span> 试听串烧
+              </button>
+              <button class="btn btn-export" id="exportBtn" type="button" title="导出只播放命中片段的 M3U8 与 JSON 清单" disabled>
+                导出清单
+              </button>
+            </div>
+            <p class="export-note">
+              清单使用起止时间只播放已确认片段；音频文件与清单放在同一目录即可在 VLC 等播放器中使用。
+            </p>
+          </section>
+        </aside>
+
+        <section class="queue-panel">
+          <div class="queue-heading">
+            <div>
+              <span class="eyebrow">CANDIDATE GROUPS</span>
+              <h2>候选重复组 <span id="resultCount">0</span></h2>
+            </div>
+            <div class="queue-filter" role="group" aria-label="筛选候选组">
+              <button class="filter-chip active" data-filter="all" type="button">全部</button>
+              <button class="filter-chip" data-filter="pending" type="button">待定</button>
+              <button class="filter-chip" data-filter="confirmed" type="button">已确认</button>
+            </div>
+          </div>
+          <div class="queue-progress">
+            <span id="reviewProgressBar"></span>
+          </div>
+          <div class="group-list" id="groupList">
+            <div class="queue-placeholder">
+              <span class="placeholder-glyph">∿</span>
+              <p>载入录音后，相似但演唱不同的远距离段落会出现在这里。</p>
+            </div>
+          </div>
+          <div class="queue-footer">
+            <span><kbd>J</kbd><kbd>K</kbd> 切换候选</span>
+            <span><kbd>⏎</kbd> 确认 · <kbd>X</kbd> 排除</span>
+          </div>
+        </section>
+
+        <section class="detail-panel">
+          <div class="overview-card">
+            <div class="overview-title">
+              <span><i class="legend-swatch warm"></i>命中位置</span>
+              <strong id="overviewTime">00:00.0 / 00:00.0</strong>
+            </div>
+            <canvas id="overviewCanvas" aria-label="整段录音与命中位置时间轴"></canvas>
+            <div class="overview-scale" id="overviewScale"></div>
+          </div>
+
+          <div class="detail-empty" id="detailEmpty">
+            <div class="empty-orbit" aria-hidden="true">
+              <span></span><span></span><span></span>
+              <div class="empty-core">∿</div>
+            </div>
+            <span class="eyebrow">LISTEN. COMPARE. KEEP.</span>
+            <h2>让相隔很远的演唱<br />在这里重新相遇</h2>
+            <p>
+              上传几小时的单声道录音，自动提取旋律轮廓。每组候选都保留起止时间、
+              匹配分数和可对比的小波形，由你逐组决定去留。
+            </p>
+            <div class="empty-actions">
+              <button class="btn btn-primary" id="emptyImport" type="button">载入录音</button>
+              <button class="btn btn-ghost" id="emptyDemo" type="button">听听演示</button>
+            </div>
+          </div>
+
+          <div class="detail-content" id="detailContent" hidden>
+            <header class="detail-head">
+              <div class="group-number" id="detailNumber">GROUP 01</div>
+              <div class="detail-title">
+                <h2 id="detailTitle">旋律重复候选</h2>
+                <p id="detailMeta">— 个演唱片段 · 相隔 —</p>
+              </div>
+              <div class="score-block">
+                <span>相似度</span>
+                <strong id="detailScore">0%</strong>
+              </div>
+              <span class="status-pill pending" id="detailStatus">待复核</span>
+            </header>
+
+            <div class="compare-card">
+              <div class="compare-legend">
+                <span><i class="legend-swatch warm"></i><b>A</b> 主片段</span>
+                <span><i class="legend-swatch cool"></i><b>B</b> 对比片段</span>
+                <span class="compare-tip">点击下方波形切换 A / B</span>
+              </div>
+              <canvas id="compareCanvas" aria-label="两段人声波形与音高轮廓对比"></canvas>
+            </div>
+
+            <div class="occurrence-heading">
+              <span class="eyebrow">TAKES IN THIS GROUP</span>
+              <span id="occurrenceCount">0 个片段</span>
+            </div>
+            <div class="occurrence-list" id="occurrenceList"></div>
+
+            <footer class="review-footer">
+              <button class="btn btn-reject" id="rejectBtn" type="button">
+                <span>×</span> 排除本组
+              </button>
+              <div class="review-hint" id="reviewHint">确认后将进入命中清单</div>
+              <button class="btn btn-confirm" id="confirmBtn" type="button">
+                <span>✓</span> 确认重复
+              </button>
+            </footer>
+          </div>
+        </section>
+      </main>
+
+      <div class="transport" id="transport" hidden>
+        <span class="transport-state" id="transportState">命中串烧</span>
+        <div class="transport-meter"><span id="transportFill"></span></div>
+        <span id="transportTime">00:00</span>
+        <button class="transport-stop" id="stopBtn" type="button" aria-label="停止播放">
+          ■ 停止
+        </button>
+      </div>
+    </div>
+
+    <div class="drop-overlay" id="dropOverlay" hidden>
+      <div class="drop-overlay-inner">
+        <span class="drop-icon large">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <path d="M16 22V7m0 0-6 6m6-6 6 6" />
+            <path d="M6 21v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4" />
+          </svg>
+        </span>
+        <h2>松手即可载入</h2>
+        <p>音频只在当前浏览器内解码与分析</p>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <input
+      type="file"
+      id="fileInput"
+      accept="audio/*,.wav,.mp3,.m4a,.ogg,.flac"
+      hidden
+    />
+    <script type="module" src="./client/app.js"></script>
+  </body>
+</html>
