@@ -1,0 +1,18 @@
+{
+  "name": "cdcue",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Byte-exact CUE/WAV splitter with pregap and offset correction (Node.js standard library only).",
+  "bin": {
+    "cdcue": "src/cdcue/cli.ts"
+  },
+  "scripts": {
+    "split": "node src/cdcue/cli.ts split",
+    "verify": "node src/cdcue/cli.ts verify",
+    "test": "node --test test/selftest.ts test/cli-e2e.ts test/missing-source.ts"
+  },
+  "engines": {
+    "node": ">=22.6.0"
+  }
+}
