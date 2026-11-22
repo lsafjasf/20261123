@@ -1,0 +1,14 @@
+{
+  "name": "esports-multiview",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Zero-dependency esports coaching multiview: three-source layout compositor, HUD occlusion alerts, WebCodecs/WebM export and frame manifest.",
+  "scripts": {
+    "start": "node src/server/server.ts",
+    "test": "node --test \"test/*.test.ts\""
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Esports Multiview Coach</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>电竞多画面训练台</h1>
+      <div class="transport">
+        <button id="play-btn" type="button">播放</button>
+        <button id="pause-btn" type="button">暂停</button>
+        <button id="step-btn" type="button">步进 1 帧</button>
+        <label class="scrub">
+          帧
+          <input id="frame-scrub" type="range" min="0" max="599" value="0" />
+        </label>
+        <span id="clock" class="clock">0000 / 000.00s</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="stage">
+        <canvas id="stage-canvas" width="1280" height="720"></canvas>
+        <div id="occlusion-banner" class="banner hidden"></div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel-card">
+          <h2>信号源</h2>
+          <div id="source-slots"></div>
+          <button id="synthetic-btn" type="button">载入内置合成信号</button>
+        </section>
+
+        <section class="panel-card">
+          <h2>布局编辑</h2>
+          <p class="hint">拖拽面板移动，右下角手柄缩放；改动会在当前帧插入关键帧。</p>
+          <button id="add-keyframe-btn" type="button">在当前帧存关键帧</button>
+          <ol id="segment-list" class="segment-list"></ol>
+        </section>
+
+        <section class="panel-card">
+          <h2>HUD 遮挡</h2>
+          <ul id="hud-list" class="hud-list"></ul>
+        </section>
+
+        <section class="panel-card">
+          <h2>导出与校验</h2>
+          <button id="record-btn" type="button">开始实时导出</button>
+          <button id="stop-record-btn" type="button" disabled>结束并封装</button>
+          <button id="manifest-btn" type="button">下载帧号清单 JSON</button>
+          <p id="record-status" class="hint">未开始</p>
+          <video id="verify-video" controls muted playsinline></video>
+          <pre id="verify-report" class="report"></pre>
+        </section>
+
+        <section class="panel-card">
+          <h2>事件日志</h2>
+          <ol id="event-log" class="event-log"></ol>
+        </section>
+      </aside>
+    </main>
+
+    <script type="module" src="/main.ts"></script>
+  </body>
+</html>
