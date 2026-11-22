@@ -1,0 +1,27 @@
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 24px;
+  font: 14px/1.6 system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #14171c; color: #d7dde6;
+}
+header h1 { margin: 0 0 4px; font-size: 20px; }
+.sub { margin: 0 0 16px; color: #8b94a3; }
+#drop {
+  border: 1px dashed #3a4352; border-radius: 8px;
+  padding: 20px; margin-bottom: 16px; color: #9aa4b2;
+}
+#controls { display: flex; gap: 24px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+#controls label { display: flex; gap: 8px; align-items: center; }
+button, select {
+  background: #232a35; color: #d7dde6; border: 1px solid #3a4352;
+  border-radius: 6px; padding: 4px 12px; cursor: pointer;
+}
+#summary { margin: 8px 0 16px; color: #aeb7c4; white-space: pre-line; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 16px; font-size: 13px; }
+th, td { border: 1px solid #2c3440; padding: 4px 8px; text-align: left; }
+th { background: #1d232d; }
+td.sev-high { color: #ff7a7a; font-weight: 600; }
+td.sev-mid { color: #ffc46b; }
+td.sev-low { color: #9aa4b2; }
+canvas { width: 100%; border: 1px solid #2c3440; border-radius: 8px; background: #0e1116; }

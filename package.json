@@ -1,0 +1,11 @@
+{
+  "name": "splice-forensics",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "本地音频剪接取证分析：房间底噪 / 相位 / 样本连续性 / 短时重复，零第三方依赖",
+  "scripts": {
+    "start": "node server.ts",
+    "test": "node test/synth.ts"
+  }
+}

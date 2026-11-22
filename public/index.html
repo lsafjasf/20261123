@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>录音剪接取证分析</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>录音剪接取证分析</h1>
+    <p class="sub">本地分析 · 原始 PCM · 不做降噪 · 零第三方依赖</p>
+  </header>
+
+  <section id="drop">
+    <input type="file" id="file" accept="audio/*,.wav,.mp3,.m4a,.aac,.ogg,.flac,.webm,.mp4" />
+    <p>选择或拖入访谈录音（文件含两类房间的拼接样本亦可对比）</p>
+  </section>
+
+  <section id="controls" hidden>
+    <label>
+      灵敏度
+      <input type="range" id="sensitivity" min="0" max="100" value="50" />
+      <span id="sensLabel">中</span>
+    </label>
+    <label>
+      判定所需独立证据数
+      <select id="minVotes">
+        <option value="2" selected>≥ 2 项（默认，防误报）</option>
+        <option value="3">≥ 3 项（严格）</option>
+        <option value="1">≥ 1 项（仅排查用）</option>
+      </select>
+    </label>
+    <button id="exportBtn">导出证据图 PNG</button>
+  </section>
+
+  <section id="summary" hidden></section>
+  <section id="tableWrap" hidden>
+    <table id="hits">
+      <thead>
+        <tr><th>时间</th><th>评级</th><th>底噪阶跃</th><th>相位断裂</th><th>样本跳变</th><th>重复痕迹</th><th>良性解释</th><th>试听</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="canvasWrap" hidden>
+    <canvas id="evidence"></canvas>
+  </section>
+
+  <script type="module" src="/src/app.ts"></script>
+</body>
+</html>
