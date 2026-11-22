@@ -1,0 +1,14 @@
+{
+  "name": "timeline-normalizer",
+  "version": "0.1.0",
+  "description": "Normalize mixed-rate EDL/FCPXML timelines into a unified per-frame model, with visual diff reporting. Local-only, zero dependencies.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "cli": "node src/cli.ts",
+    "build:viewer": "node src/build-viewer.ts",
+    "test": "node --test test/"
+  }
+}

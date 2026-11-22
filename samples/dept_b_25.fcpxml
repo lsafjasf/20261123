@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.10">
+  <resources>
+    <format id="r1" name="FFVideoFormat1080p25" frameDuration="1/25s" width="1920" height="1080"/>
+    <format id="r2" name="FFVideoFormat1080p2398" frameDuration="1001/24000s" width="1920" height="1080"/>
+    <asset id="a1" name="B_WIDE_SHOT" src="file:///media/dept_b/B_WIDE_SHOT.mov" start="0s" duration="500/25s" hasVideo="1" hasAudio="1" format="r1"/>
+    <asset id="a2" name="B_CLOSE_UP" src="file:///media/dept_b/B_CLOSE_UP.mov" start="0s" duration="2400/25s" hasVideo="1" format="r1"/>
+    <asset id="a3" name="B_FILM_SCAN_23976" src="file:///media/dept_b/B_FILM_SCAN.mov" start="0s" duration="24024/1001s" hasVideo="1" format="r2"/>
+    <asset id="a4" name="B_VOICEOVER" src="file:///media/dept_b/B_VOICEOVER.wav" start="0s" duration="300/25s" hasAudio="1" format="r1"/>
+  </resources>
+  <library>
+    <event name="DEPT_B">
+      <project name="DEPT_B_25">
+        <sequence format="r1" tcStart="0s" tcFormat="NDF">
+          <spine>
+            <asset-clip ref="a1" name="B_WIDE_SHOT" offset="0s" start="0s" duration="125/25s"/>
+            <asset-clip ref="a2" name="B_CLOSE_UP" offset="125/25s" start="100/25s" duration="200/25s">
+              <transition name="Cross Dissolve" offset="125/25s" duration="25/25s"/>
+              <conform-rate speedEnabled="1" speedMultiplier="2" srcFrameRate="25"/>
+            </asset-clip>
+            <asset-clip ref="a3" name="B_FILM_SCAN_23976" offset="325/25s" start="0s" duration="150/25s">
+              <timeMap>
+                <timeRamp keyframeInterpolation="linear">
+                  <time time="0s" value="0s"/>
+                  <time time="75/25s" value="150/25s"/>
+                  <time time="150/25s" value="175/25s"/>
+                </timeRamp>
+              </timeMap>
+            </asset-clip>
+            <title ref="r9" name="B_LOWER_THIRD" offset="200/25s" start="0s" duration="75/25s" lane="1"/>
+            <asset-clip ref="a4" name="B_VOICEOVER" offset="0s" start="0s" duration="300/25s" lane="-1"/>
+          </spine>
+        </sequence>
+      </project>
+    </event>
+  </library>
+</fcpxml>

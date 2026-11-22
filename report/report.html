@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Timeline Normalizer Report</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #14171c;
+  --panel: #1d222b;
+  --line: #2c3340;
+  --text: #dbe2ec;
+  --muted: #8b96a6;
+  --accent: #4da3ff;
+  --warn: #ffb84d;
+  --bad: #ff6b6b;
+  --ok: #6bd88f;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font: 14px/1.5 "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  background: var(--bg);
+  color: var(--text);
+}
+header { padding: 16px 24px; border-bottom: 1px solid var(--line); }
+header h1 { margin: 0 0 4px; font-size: 18px; }
+header p { margin: 0; color: var(--muted); }
+main { padding: 0 24px 48px; }
+section { margin-top: 28px; }
+h2 { font-size: 15px; border-left: 3px solid var(--accent); padding-left: 8px; }
+canvas { display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; max-width: 100%; }
+.detail {
+  margin-top: 8px; padding: 10px 12px; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 6px; min-height: 40px; white-space: pre-wrap;
+}
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin-bottom: 16px; }
+.panel h3 { margin: 0 0 8px; font-size: 13px; color: var(--accent); }
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.compare pre {
+  margin: 0; padding: 10px; background: #10131a; border: 1px solid var(--line);
+  border-radius: 6px; overflow: auto; font-size: 12px; max-height: 320px;
+}
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+.tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 11px; margin-right: 4px; }
+.tag.lost { background: rgba(255,107,107,.15); color: var(--bad); }
+.tag.degraded { background: rgba(255,184,77,.15); color: var(--warn); }
+.tag.ok { background: rgba(107,216,143,.15); color: var(--ok); }
+.hint { color: var(--muted); font-size: 12px; }
+#preview-output { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.preview-card { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px; width: 320px; }
+.preview-card h4 { margin: 0 0 6px; font-size: 12px; word-break: break-all; }
+.preview-card video, .preview-card canvas { width: 100%; border-radius: 4px; background: #000; }
+
+</style>
+</head>
+<body>
+<header>
+  <h1>Timeline Normalizer 对照报告</h1>
+  <p>项目帧率: <strong>25</strong> · 输入 3 个文件 · 全部处理在本机完成</p>
+</header>
+<main>
+  <section id="combined-section">
+    <h2>统一逐帧时间线（项目网格）</h2>
+    <canvas id="combined-canvas"></canvas>
+    <div id="clip-detail" class="detail">点击片段查看详情</div>
+  </section>
+  <section id="sources-section">
+    <h2>输入 / 导出对照</h2>
+    <div id="source-panels"></div>
+  </section>
+  <section id="findings-section">
+    <h2>检测结果（变速 / 转场 / 缺失素材 / 帧率转换）</h2>
+    <div id="findings"></div>
+  </section>
+  <section id="loss-section">
+    <h2>导回 EDL 将丢失的能力</h2>
+    <div id="losses"></div>
+  </section>
+  <section id="preview-section">
+    <h2>素材预览（WebCodecs / WebAudio / MediaSource）</h2>
+    <p class="hint">选择本地媒体文件以解码缩略图与波形；文件不离开本机。</p>
+    <input type="file" id="media-picker" multiple>
+    <div id="preview-output"></div>
+  </section>
+</main>
+<script>
+window.__REPORT__ = {"projectRate":"25","timelines":[{"name":"DEPT_A_23976","projectRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"tracks":[{"kind":"video","index":0,"clips":[{"id":"dept_a_23976.edl#0","name":"A_ROLL_OPENING.MOV","reel":"REEL_A01","mediaPath":null,"sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":86400,"sourceOut":86520,"recordIn":0,"recordOut":125,"speedSegments":[{"timelineStart":0,"timelineDuration":125,"sourceStart":86400,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]},{"id":"dept_a_23976.edl#1","name":"A_ROLL_DISSOLVE_IN.MOV","reel":"REEL_A02","mediaPath":null,"sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":89280,"sourceOut":89472,"recordIn":125,"recordOut":325,"speedSegments":[{"timelineStart":0,"timelineDuration":200,"sourceStart":89280,"speed":1,"ramp":false}],"transitionIn":{"kind":"dissolve","name":"Cross Dissolve","duration":25,"at":125},"transitionOut":null,"capabilities":[]},{"id":"dept_a_23976.edl#2","name":"A_SLOWMO.MOV","reel":"REEL_A03","mediaPath":null,"sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":93600,"sourceOut":93696,"recordIn":325,"recordOut":425,"speedSegments":[{"timelineStart":0,"timelineDuration":100,"sourceStart":93600,"speed":0.5,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]},{"id":"dept_a_23976.edl#3","name":"A_FREEZE_END.MOV","reel":"REEL_A04","mediaPath":null,"sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":100800,"sourceOut":100944,"recordIn":425,"recordOut":576,"speedSegments":[{"timelineStart":0,"timelineDuration":150,"sourceStart":100860,"speed":0,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":["freeze-frame"]}]},{"kind":"audio","index":0,"clips":[{"id":"dept_a_23976.edl#4","name":"A_MUSIC_BED.WAV","reel":"REEL_A05","mediaPath":null,"sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":172800,"sourceOut":173352,"recordIn":0,"recordOut":576,"speedSegments":[{"timelineStart":0,"timelineDuration":576,"sourceStart":172800,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]}]}],"sources":["dept_a_23976.edl"]},{"name":"DEPT_C_2997DF","projectRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"tracks":[{"kind":"video","index":0,"clips":[{"id":"dept_c_2997df.edl#0","name":"C_NEWS_PKG.MOV","reel":"REEL_C01","mediaPath":null,"sourceRate":{"fps":{"num":30000,"den":1001},"drop":true,"label":"29.97 DF"},"sourceIn":1078920,"sourceOut":1079220,"recordIn":90000,"recordOut":90250,"speedSegments":[{"timelineStart":0,"timelineDuration":250,"sourceStart":1078920,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]},{"id":"dept_c_2997df.edl#1","name":"C_WIPE_SHOT.MOV","reel":"REEL_C02","mediaPath":null,"sourceRate":{"fps":{"num":30000,"den":1001},"drop":true,"label":"29.97 DF"},"sourceIn":1087910,"sourceOut":1088150,"recordIn":90250,"recordOut":90450,"speedSegments":[{"timelineStart":0,"timelineDuration":200,"sourceStart":1087910,"speed":1,"ramp":false}],"transitionIn":{"kind":"wipe","name":"W001","duration":13,"at":90250},"transitionOut":null,"capabilities":[]},{"id":"dept_c_2997df.edl#2","name":"C_REVERSE.MOV","reel":"REEL_C03","mediaPath":null,"sourceRate":{"fps":{"num":30000,"den":1001},"drop":true,"label":"29.97 DF"},"sourceIn":1114884,"sourceOut":1115034,"recordIn":90450,"recordOut":90575,"speedSegments":[{"timelineStart":0,"timelineDuration":125,"sourceStart":1115034,"speed":-1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":["reverse"]}]},{"kind":"audio","index":1,"clips":[{"id":"dept_c_2997df.edl#3","name":"C_NAT_SOUND.WAV","reel":"REEL_C04","mediaPath":null,"sourceRate":{"fps":{"num":30000,"den":1001},"drop":true,"label":"29.97 DF"},"sourceIn":1186812,"sourceOut":1187502,"recordIn":90000,"recordOut":90575,"speedSegments":[{"timelineStart":0,"timelineDuration":576,"sourceStart":1186812,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]}]}],"sources":["dept_c_2997df.edl"]},{"name":"DEPT_B_25","projectRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"tracks":[{"kind":"video","index":0,"clips":[{"id":"dept_b_25.fcpxml#0","name":"B_WIDE_SHOT","reel":"a1","mediaPath":"/media/dept_b/B_WIDE_SHOT.mov","sourceRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"sourceIn":0,"sourceOut":125,"recordIn":0,"recordOut":125,"speedSegments":[{"timelineStart":0,"timelineDuration":125,"sourceStart":0,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]},{"id":"dept_b_25.fcpxml#1","name":"B_CLOSE_UP","reel":"a2","mediaPath":"/media/dept_b/B_CLOSE_UP.mov","sourceRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"sourceIn":100,"sourceOut":500,"recordIn":125,"recordOut":325,"speedSegments":[{"timelineStart":0,"timelineDuration":200,"sourceStart":100,"speed":2,"ramp":false}],"transitionIn":{"kind":"dissolve","name":"Cross Dissolve","duration":25,"at":125},"transitionOut":null,"capabilities":["retime:2x (src 25fps)"]},{"id":"dept_b_25.fcpxml#2","name":"B_FILM_SCAN_23976","reel":"a3","mediaPath":"/media/dept_b/B_FILM_SCAN.mov","sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":0,"sourceOut":288,"recordIn":325,"recordOut":475,"speedSegments":[{"timelineStart":0,"timelineDuration":75,"sourceStart":0,"speed":2,"ramp":true},{"timelineStart":75,"timelineDuration":75,"sourceStart":144,"speed":0.3333333333333333,"ramp":true}],"transitionIn":null,"transitionOut":null,"capabilities":[]}]},{"kind":"video","index":1,"clips":[{"id":"dept_b_25.fcpxml#3","name":"B_LOWER_THIRD","reel":"r9","mediaPath":null,"sourceRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"sourceIn":0,"sourceOut":75,"recordIn":200,"recordOut":275,"speedSegments":[{"timelineStart":0,"timelineDuration":75,"sourceStart":0,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":["title","connected-clip:lane1"]}]},{"kind":"audio","index":1,"clips":[{"id":"dept_b_25.fcpxml#4","name":"B_VOICEOVER","reel":"a4","mediaPath":"/media/dept_b/B_VOICEOVER.wav","sourceRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"sourceIn":0,"sourceOut":300,"recordIn":0,"recordOut":300,"speedSegments":[{"timelineStart":0,"timelineDuration":300,"sourceStart":0,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]}]}],"sources":["dept_b_25.fcpxml"]}],"combined":{"name":"combined","projectRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"tracks":[{"kind":"video","index":0,"clips":[{"id":"dept_a_23976.edl#0","name":"A_ROLL_OPENING.MOV","reel":"REEL_A01","mediaPath":null,"sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":86400,"sourceOut":86520,"recordIn":0,"recordOut":125,"speedSegments":[{"timelineStart":0,"timelineDuration":125,"sourceStart":86400,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]},{"id":"dept_a_23976.edl#1","name":"A_ROLL_DISSOLVE_IN.MOV","reel":"REEL_A02","mediaPath":null,"sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":89280,"sourceOut":89472,"recordIn":125,"recordOut":325,"speedSegments":[{"timelineStart":0,"timelineDuration":200,"sourceStart":89280,"speed":1,"ramp":false}],"transitionIn":{"kind":"dissolve","name":"Cross Dissolve","duration":25,"at":125},"transitionOut":null,"capabilities":[]},{"id":"dept_a_23976.edl#2","name":"A_SLOWMO.MOV","reel":"REEL_A03","mediaPath":null,"sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":93600,"sourceOut":93696,"recordIn":325,"recordOut":425,"speedSegments":[{"timelineStart":0,"timelineDuration":100,"sourceStart":93600,"speed":0.5,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]},{"id":"dept_a_23976.edl#3","name":"A_FREEZE_END.MOV","reel":"REEL_A04","mediaPath":null,"sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":100800,"sourceOut":100944,"recordIn":425,"recordOut":576,"speedSegments":[{"timelineStart":0,"timelineDuration":150,"sourceStart":100860,"speed":0,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":["freeze-frame"]}]},{"kind":"audio","index":1,"clips":[{"id":"dept_a_23976.edl#4","name":"A_MUSIC_BED.WAV","reel":"REEL_A05","mediaPath":null,"sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":172800,"sourceOut":173352,"recordIn":0,"recordOut":576,"speedSegments":[{"timelineStart":0,"timelineDuration":576,"sourceStart":172800,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]}]},{"kind":"video","index":2,"clips":[{"id":"dept_c_2997df.edl#0","name":"C_NEWS_PKG.MOV","reel":"REEL_C01","mediaPath":null,"sourceRate":{"fps":{"num":30000,"den":1001},"drop":true,"label":"29.97 DF"},"sourceIn":1078920,"sourceOut":1079220,"recordIn":90000,"recordOut":90250,"speedSegments":[{"timelineStart":0,"timelineDuration":250,"sourceStart":1078920,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]},{"id":"dept_c_2997df.edl#1","name":"C_WIPE_SHOT.MOV","reel":"REEL_C02","mediaPath":null,"sourceRate":{"fps":{"num":30000,"den":1001},"drop":true,"label":"29.97 DF"},"sourceIn":1087910,"sourceOut":1088150,"recordIn":90250,"recordOut":90450,"speedSegments":[{"timelineStart":0,"timelineDuration":200,"sourceStart":1087910,"speed":1,"ramp":false}],"transitionIn":{"kind":"wipe","name":"W001","duration":13,"at":90250},"transitionOut":null,"capabilities":[]},{"id":"dept_c_2997df.edl#2","name":"C_REVERSE.MOV","reel":"REEL_C03","mediaPath":null,"sourceRate":{"fps":{"num":30000,"den":1001},"drop":true,"label":"29.97 DF"},"sourceIn":1114884,"sourceOut":1115034,"recordIn":90450,"recordOut":90575,"speedSegments":[{"timelineStart":0,"timelineDuration":125,"sourceStart":1115034,"speed":-1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":["reverse"]}]},{"kind":"audio","index":3,"clips":[{"id":"dept_c_2997df.edl#3","name":"C_NAT_SOUND.WAV","reel":"REEL_C04","mediaPath":null,"sourceRate":{"fps":{"num":30000,"den":1001},"drop":true,"label":"29.97 DF"},"sourceIn":1186812,"sourceOut":1187502,"recordIn":90000,"recordOut":90575,"speedSegments":[{"timelineStart":0,"timelineDuration":576,"sourceStart":1186812,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]}]},{"kind":"video","index":4,"clips":[{"id":"dept_b_25.fcpxml#0","name":"B_WIDE_SHOT","reel":"a1","mediaPath":"/media/dept_b/B_WIDE_SHOT.mov","sourceRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"sourceIn":0,"sourceOut":125,"recordIn":0,"recordOut":125,"speedSegments":[{"timelineStart":0,"timelineDuration":125,"sourceStart":0,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]},{"id":"dept_b_25.fcpxml#1","name":"B_CLOSE_UP","reel":"a2","mediaPath":"/media/dept_b/B_CLOSE_UP.mov","sourceRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"sourceIn":100,"sourceOut":500,"recordIn":125,"recordOut":325,"speedSegments":[{"timelineStart":0,"timelineDuration":200,"sourceStart":100,"speed":2,"ramp":false}],"transitionIn":{"kind":"dissolve","name":"Cross Dissolve","duration":25,"at":125},"transitionOut":null,"capabilities":["retime:2x (src 25fps)"]},{"id":"dept_b_25.fcpxml#2","name":"B_FILM_SCAN_23976","reel":"a3","mediaPath":"/media/dept_b/B_FILM_SCAN.mov","sourceRate":{"fps":{"num":24000,"den":1001},"drop":false,"label":"23.976"},"sourceIn":0,"sourceOut":288,"recordIn":325,"recordOut":475,"speedSegments":[{"timelineStart":0,"timelineDuration":75,"sourceStart":0,"speed":2,"ramp":true},{"timelineStart":75,"timelineDuration":75,"sourceStart":144,"speed":0.3333333333333333,"ramp":true}],"transitionIn":null,"transitionOut":null,"capabilities":[]}]},{"kind":"video","index":5,"clips":[{"id":"dept_b_25.fcpxml#3","name":"B_LOWER_THIRD","reel":"r9","mediaPath":null,"sourceRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"sourceIn":0,"sourceOut":75,"recordIn":200,"recordOut":275,"speedSegments":[{"timelineStart":0,"timelineDuration":75,"sourceStart":0,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":["title","connected-clip:lane1"]}]},{"kind":"audio","index":6,"clips":[{"id":"dept_b_25.fcpxml#4","name":"B_VOICEOVER","reel":"a4","mediaPath":"/media/dept_b/B_VOICEOVER.wav","sourceRate":{"fps":{"num":25,"den":1},"drop":false,"label":"25"},"sourceIn":0,"sourceOut":300,"recordIn":0,"recordOut":300,"speedSegments":[{"timelineStart":0,"timelineDuration":300,"sourceStart":0,"speed":1,"ramp":false}],"transitionIn":null,"transitionOut":null,"capabilities":[]}]}],"sources":["dept_a_23976.edl","dept_c_2997df.edl","dept_b_25.fcpxml"]},"analyses":[{"timeline":"DEPT_A_23976","projectRate":"25","speed":[{"clipId":"dept_a_23976.edl#2","clipName":"A_SLOWMO.MOV","kind":"constant","detail":"0.5x over 100 project frames from source frame 93600"},{"clipId":"dept_a_23976.edl#3","clipName":"A_FREEZE_END.MOV","kind":"freeze","detail":"0x over 150 project frames from source frame 100860"}],"transitions":[{"clipId":"dept_a_23976.edl#1","clipName":"A_ROLL_DISSOLVE_IN.MOV","kind":"dissolve","name":"Cross Dissolve","durationFrames":25,"atFrame":125}],"missingMedia":[{"clipId":"dept_a_23976.edl#0","clipName":"A_ROLL_OPENING.MOV","reel":"REEL_A01","expectedPath":null,"reason":"no media path in source file; reel name only"},{"clipId":"dept_a_23976.edl#1","clipName":"A_ROLL_DISSOLVE_IN.MOV","reel":"REEL_A02","expectedPath":null,"reason":"no media path in source file; reel name only"},{"clipId":"dept_a_23976.edl#2","clipName":"A_SLOWMO.MOV","reel":"REEL_A03","expectedPath":null,"reason":"no media path in source file; reel name only"},{"clipId":"dept_a_23976.edl#3","clipName":"A_FREEZE_END.MOV","reel":"REEL_A04","expectedPath":null,"reason":"no media path in source file; reel name only"},{"clipId":"dept_a_23976.edl#4","clipName":"A_MUSIC_BED.WAV","reel":"REEL_A05","expectedPath":null,"reason":"no media path in source file; reel name only"}],"conforms":[{"clipId":"dept_a_23976.edl#0","clipName":"A_ROLL_OPENING.MOV","fromRate":"23.976","toRate":"25"},{"clipId":"dept_a_23976.edl#1","clipName":"A_ROLL_DISSOLVE_IN.MOV","fromRate":"23.976","toRate":"25"},{"clipId":"dept_a_23976.edl#2","clipName":"A_SLOWMO.MOV","fromRate":"23.976","toRate":"25"},{"clipId":"dept_a_23976.edl#3","clipName":"A_FREEZE_END.MOV","fromRate":"23.976","toRate":"25"},{"clipId":"dept_a_23976.edl#4","clipName":"A_MUSIC_BED.WAV","fromRate":"23.976","toRate":"25"}]},{"timeline":"DEPT_C_2997DF","projectRate":"25","speed":[{"clipId":"dept_c_2997df.edl#2","clipName":"C_REVERSE.MOV","kind":"reverse","detail":"-1x over 125 project frames from source frame 1115034"}],"transitions":[{"clipId":"dept_c_2997df.edl#1","clipName":"C_WIPE_SHOT.MOV","kind":"wipe","name":"W001","durationFrames":13,"atFrame":90250}],"missingMedia":[{"clipId":"dept_c_2997df.edl#0","clipName":"C_NEWS_PKG.MOV","reel":"REEL_C01","expectedPath":null,"reason":"no media path in source file; reel name only"},{"clipId":"dept_c_2997df.edl#1","clipName":"C_WIPE_SHOT.MOV","reel":"REEL_C02","expectedPath":null,"reason":"no media path in source file; reel name only"},{"clipId":"dept_c_2997df.edl#2","clipName":"C_REVERSE.MOV","reel":"REEL_C03","expectedPath":null,"reason":"no media path in source file; reel name only"},{"clipId":"dept_c_2997df.edl#3","clipName":"C_NAT_SOUND.WAV","reel":"REEL_C04","expectedPath":null,"reason":"no media path in source file; reel name only"}],"conforms":[{"clipId":"dept_c_2997df.edl#0","clipName":"C_NEWS_PKG.MOV","fromRate":"29.97 DF","toRate":"25"},{"clipId":"dept_c_2997df.edl#1","clipName":"C_WIPE_SHOT.MOV","fromRate":"29.97 DF","toRate":"25"},{"clipId":"dept_c_2997df.edl#2","clipName":"C_REVERSE.MOV","fromRate":"29.97 DF","toRate":"25"},{"clipId":"dept_c_2997df.edl#3","clipName":"C_NAT_SOUND.WAV","fromRate":"29.97 DF","toRate":"25"}]},{"timeline":"DEPT_B_25","projectRate":"25","speed":[{"clipId":"dept_b_25.fcpxml#1","clipName":"B_CLOSE_UP","kind":"constant","detail":"2x over 200 project frames from source frame 100"},{"clipId":"dept_b_25.fcpxml#2","clipName":"B_FILM_SCAN_23976","kind":"ramp","detail":"2x over 75 project frames from source frame 0"},{"clipId":"dept_b_25.fcpxml#2","clipName":"B_FILM_SCAN_23976","kind":"ramp","detail":"0.3333333333333333x over 75 project frames from source frame 144"}],"transitions":[{"clipId":"dept_b_25.fcpxml#1","clipName":"B_CLOSE_UP","kind":"dissolve","name":"Cross Dissolve","durationFrames":25,"atFrame":125}],"missingMedia":[{"clipId":"dept_b_25.fcpxml#0","clipName":"B_WIDE_SHOT","reel":"a1","expectedPath":"/media/dept_b/B_WIDE_SHOT.mov","reason":"referenced file not found on disk"},{"clipId":"dept_b_25.fcpxml#1","clipName":"B_CLOSE_UP","reel":"a2","expectedPath":"/media/dept_b/B_CLOSE_UP.mov","reason":"referenced file not found on disk"},{"clipId":"dept_b_25.fcpxml#2","clipName":"B_FILM_SCAN_23976","reel":"a3","expectedPath":"/media/dept_b/B_FILM_SCAN.mov","reason":"referenced file not found on disk"},{"clipId":"dept_b_25.fcpxml#4","clipName":"B_VOICEOVER","reel":"a4","expectedPath":"/media/dept_b/B_VOICEOVER.wav","reason":"referenced file not found on disk"}],"conforms":[{"clipId":"dept_b_25.fcpxml#2","clipName":"B_FILM_SCAN_23976","fromRate":"23.976","toRate":"25"}]}],"exports":[{"name":"DEPT_A_23976","edl":"TITLE: DEPT_A_23976\nFCM: NON-DROP FRAME\n\n001  REEL_A01 V     C         01:00:00:00 01:00:05:00 00:00:00:00 00:00:05:00\n* FROM CLIP NAME: A_ROLL_OPENING.MOV\n002  REEL_A02 V     D    025 01:02:00:00 01:02:08:00 00:00:05:00 00:00:13:00\n* FROM CLIP NAME: A_ROLL_DISSOLVE_IN.MOV\n003  REEL_A03 V     C         01:05:00:00 01:05:04:00 00:00:13:00 00:00:17:00\n* FROM CLIP NAME: A_SLOWMO.MOV\nM2   REEL_A03   50.0                01:05:00:00\n004  REEL_A04 V     C         01:10:00:00 01:10:06:00 00:00:17:00 00:00:23:01\n* FROM CLIP NAME: A_FREEZE_END.MOV\nM2   REEL_A04    0.0                01:10:02:12\n005  REEL_A05 A1    C         02:00:00:00 02:00:23:00 00:00:00:00 00:00:23:01\n* FROM CLIP NAME: A_MUSIC_BED.WAV\n","losses":[{"severity":"degraded","feature":"mixed source frame rate","reason":"source is 23.976 but EDL is written at 25; source timecodes are conformed","clips":["A_ROLL_OPENING.MOV","A_ROLL_DISSOLVE_IN.MOV","A_SLOWMO.MOV","A_FREEZE_END.MOV","A_MUSIC_BED.WAV"]}]},{"name":"DEPT_C_2997DF","edl":"TITLE: DEPT_C_2997DF\nFCM: NON-DROP FRAME\n\n001  REEL_C01 V     C         10:00:00;00 10:00:10;00 01:00:00:00 01:00:10:00\n* FROM CLIP NAME: C_NEWS_PKG.MOV\n002  REEL_C02 V     W001 013 10:04:59;28 10:05:08;00 01:00:10:00 01:00:18:00\n* FROM CLIP NAME: C_WIPE_SHOT.MOV\n003  REEL_C03 V     C         10:20:00;00 10:20:05;00 01:00:18:00 01:00:23:00\n* FROM CLIP NAME: C_REVERSE.MOV\nM2   REEL_C03 -100.0                10:20:05;00\n004  REEL_C04 A1    C         11:00:00;00 11:00:23;00 01:00:00:00 01:00:23:00\n* FROM CLIP NAME: C_NAT_SOUND.WAV\n","losses":[{"severity":"degraded","feature":"mixed source frame rate","reason":"source is 29.97 DF but EDL is written at 25; source timecodes are conformed","clips":["C_NEWS_PKG.MOV","C_WIPE_SHOT.MOV","C_REVERSE.MOV","C_NAT_SOUND.WAV"]}]},{"name":"DEPT_B_25","edl":"TITLE: DEPT_B_25\nFCM: NON-DROP FRAME\n\n001  a1       V     C         00:00:00:00 00:00:05:00 00:00:00:00 00:00:05:00\n* FROM CLIP NAME: B_WIDE_SHOT\n002  a2       V     D    025 00:00:04:00 00:00:20:00 00:00:05:00 00:00:13:00\n* FROM CLIP NAME: B_CLOSE_UP\nM2   a2        200.0                00:00:04:00\n003  a3       V     C         00:00:00:00 00:00:12:00 00:00:13:00 00:00:19:00\n* FROM CLIP NAME: B_FILM_SCAN_23976\n004  a4       A1    C         00:00:00:00 00:00:12:00 00:00:00:00 00:00:12:00\n* FROM CLIP NAME: B_VOICEOVER\n","losses":[{"severity":"lost","feature":"multiple video tracks","reason":"CMX3600 carries a single video track; upper lanes are dropped","clips":["B_LOWER_THIRD"]},{"severity":"degraded","feature":"mixed source frame rate","reason":"source is 23.976 but EDL is written at 25; source timecodes are conformed","clips":["B_FILM_SCAN_23976"]},{"severity":"lost","feature":"speed ramp","reason":"EDL M2 records a single constant speed; ramp shape is lost","clips":["B_FILM_SCAN_23976"]}]}]};
+/**
+ * Browser viewer for the normalization report. Inlined into report.html;
+ * uses Canvas for timelines, WebCodecs for thumbnails, WebAudio for
+ * waveforms, MediaSource for preview playback. No network access.
+ */
+                         
+                        
+                           
+                      
+                
+                
+ 
+                       
+               
+               
+                   
+             
+ 
+                 
+             
+               
+               
+                           
+                                
+                   
+                    
+                   
+                    
+                                 
+                                   
+                                    
+                         
+ 
+                  
+               
+                
+                 
+ 
+                     
+               
+                                 
+                   
+                    
+ 
+                   
+                      
+                         
+                      
+                   
+                     
+                        
+                                                                     
+                                                                                                                  
+                                                                                                         
+                                                                            
+     
+                  
+                 
+                
+                                                                                          
+     
+ 
+const REPORT = (window                                      ).__REPORT__;
+const ROW_H = 34;
+const TRACK_PAD = 6;
+const RULER_H = 22;
+const LEFT_W = 70;
+
+                  
+            
+            
+            
+            
+              
+ 
+
+function trackColor(kind        , index        )         {
+  if (kind === "video") return ["#3d6ea5", "#4d7fc0", "#2f5a88"][index % 3];
+  return ["#3e8e5f", "#4da56f", "#2f7349"][index % 3];
+}
+
+function drawBadges(ctx                          , clip       , x        , y        )       {
+  let dx = 0;
+  for (const seg of clip.speedSegments) {
+    if (seg.speed === 1 && !seg.ramp) continue;
+    const text = seg.speed === 0 ? "❄冻结" : seg.ramp ? "↝变速" : seg.speed < 0 ? `↩${seg.speed}x` : `⚡${seg.speed}x`;
+    ctx.fillStyle = "#ffd27f";
+    ctx.fillText(text, x + dx, y);
+    dx += text.length * 11 + 8;
+  }
+  if (clip.capabilities.includes("title")) {
+    ctx.fillStyle = "#c9a0ff";
+    ctx.fillText("T", x + dx, y);
+  }
+}
+
+function drawTimeline(canvas                   , tl           , label        )           {
+  const hits           = [];
+  let end = 1;
+  for (const t of tl.tracks) for (const c of t.clips) end = Math.max(end, c.recordOut);
+  const width = Math.max(900, canvas.parentElement ? canvas.parentElement.clientWidth - 4 : 900);
+  const height = RULER_H + tl.tracks.length * (ROW_H + TRACK_PAD) + 24;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = `${width}px`;
+  canvas.style.height = `${height}px`;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return hits;
+  ctx.scale(dpr, dpr);
+  ctx.font = "11px Menlo, Consolas, monospace";
+  const px = (frame        ) => LEFT_W + (frame / end) * (width - LEFT_W - 12);
+
+  ctx.fillStyle = "#8b96a6";
+  for (let i = 0; i <= 10; i++) {
+    const f = Math.round((end * i) / 10);
+    const x = px(f);
+    ctx.fillRect(x, RULER_H - 6, 1, 6);
+    ctx.fillText(`${f}f`, x + 3, RULER_H - 8);
+  }
+  ctx.fillStyle = "#dbe2ec";
+  ctx.fillText(label, 8, 14);
+
+  tl.tracks.forEach((track, ti) => {
+    const y = RULER_H + ti * (ROW_H + TRACK_PAD);
+    ctx.fillStyle = "#8b96a6";
+    ctx.fillText(`${track.kind === "video" ? "V" : "A"}${ti + 1}`, 8, y + ROW_H / 2 + 4);
+    ctx.strokeStyle = "#2c3340";
+    ctx.strokeRect(LEFT_W, y, width - LEFT_W - 12, ROW_H);
+    for (const clip of track.clips) {
+      const x = px(clip.recordIn);
+      const w = Math.max(2, px(clip.recordOut) - x);
+      const missing = clip.mediaPath === null && clip.reel !== "" && clip.reel !== "AX" && clip.reel !== "BL";
+      ctx.fillStyle = trackColor(track.kind, ti);
+      ctx.fillRect(x, y + 2, w, ROW_H - 4);
+      if (missing) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(x, y + 2, w, ROW_H - 4);
+        ctx.clip();
+        ctx.strokeStyle = "rgba(255,107,107,.8)";
+        for (let d = -ROW_H; d < w + ROW_H; d += 8) {
+          ctx.beginPath();
+          ctx.moveTo(x + d, y + ROW_H);
+          ctx.lineTo(x + d + ROW_H, y);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+      ctx.fillStyle = "#eaf1fa";
+      const labelText = clip.name.length > 24 ? `${clip.name.slice(0, 23)}…` : clip.name;
+      ctx.fillText(labelText, x + 4, y + 14, w - 8);
+      drawBadges(ctx, clip, x + 4, y + ROW_H - 6);
+      for (const t of [clip.transitionIn, clip.transitionOut]) {
+        if (!t) continue;
+        const tx = px(t.at);
+        const tw = Math.max(4, px(t.at + t.duration) - tx);
+        ctx.fillStyle = "rgba(255,184,77,.55)";
+        ctx.beginPath();
+        ctx.moveTo(tx, y + ROW_H - 2);
+        ctx.lineTo(tx + tw, y + ROW_H - 2);
+        ctx.lineTo(tx + tw / 2, y + 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+      hits.push({ x, y, w, h: ROW_H, clip });
+    }
+  });
+  return hits;
+}
+
+function esc(s        )         {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function clipDetail(clip       )         {
+  const lines = [
+    `片段: ${clip.name}  (reel: ${clip.reel || "-"})`,
+    `源帧率: ${clip.sourceRate.label}  源入出: ${clip.sourceIn}f - ${clip.sourceOut}f`,
+    `项目网格: ${clip.recordIn}f - ${clip.recordOut}f  (时长 ${clip.recordOut - clip.recordIn}f)`,
+    `媒体: ${clip.mediaPath ?? "未找到 / 未关联"}`,
+  ];
+  for (const s of clip.speedSegments) {
+    lines.push(`  速度段: ${s.speed}x ${s.ramp ? "(ramp) " : ""}tl+${s.timelineStart}f 持续${s.timelineDuration}f 源起${s.sourceStart}f`);
+  }
+  for (const t of [clip.transitionIn, clip.transitionOut]) {
+    if (t) lines.push(`  转场: ${t.name} (${t.kind}) ${t.duration}f @${t.at}f`);
+  }
+  if (clip.capabilities.length) lines.push(`  能力标签: ${clip.capabilities.join(", ")}`);
+  return lines.join("\n");
+}
+
+function renderCombined()       {
+  const canvas = document.getElementById("combined-canvas")                     ;
+  const detail = document.getElementById("clip-detail")                  ;
+  const hits = drawTimeline(canvas, REPORT.combined, `combined @ ${REPORT.projectRate}`);
+  canvas.addEventListener("click", (ev) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = ev.clientX - rect.left;
+    const my = ev.clientY - rect.top;
+    const hit = hits.find((h) => mx >= h.x && mx <= h.x + h.w && my >= h.y && my <= h.y + h.h);
+    detail.textContent = hit ? clipDetail(hit.clip) : "点击片段查看详情";
+  });
+}
+
+function renderSources()       {
+  const host = document.getElementById("source-panels")                  ;
+  REPORT.timelines.forEach((tl, i) => {
+    const exp = REPORT.exports[i];
+    const panel = document.createElement("div");
+    panel.className = "panel";
+    const title = document.createElement("h3");
+    title.textContent = `${tl.name} — 输入 ${tl.sources.join(", ")}`;
+    panel.appendChild(title);
+    const canvas = document.createElement("canvas");
+    panel.appendChild(canvas);
+    const compare = document.createElement("div");
+    compare.className = "compare";
+    const left = document.createElement("pre");
+    left.textContent = summarizeInput(tl);
+    const right = document.createElement("pre");
+    right.textContent = exp ? exp.edl : "";
+    compare.appendChild(left);
+    compare.appendChild(right);
+    panel.appendChild(compare);
+    host.appendChild(panel);
+    drawTimeline(canvas, tl, `${tl.name} @ ${REPORT.projectRate}`);
+  });
+}
+
+function summarizeInput(tl           )         {
+  const lines = [`统一模型（项目网格 ${REPORT.projectRate}）`];
+  tl.tracks.forEach((t, ti) => {
+    lines.push(`${t.kind === "video" ? "V" : "A"}${ti + 1}:`);
+    for (const c of t.clips) {
+      const spd = c.speedSegments.some((s) => s.speed !== 1 || s.ramp) ? " [变速]" : "";
+      const tr = c.transitionIn || c.transitionOut ? " [转场]" : "";
+      lines.push(`  ${c.recordIn}f-${c.recordOut}f  ${c.name}  src ${c.sourceRate.label} ${c.sourceIn}f-${c.sourceOut}f${spd}${tr}`);
+    }
+  });
+  return lines.join("\n");
+}
+
+function renderFindings()       {
+  const host = document.getElementById("findings")                  ;
+  for (const a of REPORT.analyses) {
+    const panel = document.createElement("div");
+    panel.className = "panel";
+    const rows           = [];
+    for (const s of a.speed) rows.push(`<tr><td><span class="tag degraded">变速</span></td><td>${esc(s.clipName)}</td><td>${esc(s.kind)}</td><td>${esc(s.detail)}</td></tr>`);
+    for (const t of a.transitions) rows.push(`<tr><td><span class="tag ok">转场</span></td><td>${esc(t.clipName)}</td><td>${esc(t.name)}</td><td>${t.durationFrames}f @${t.atFrame}f</td></tr>`);
+    for (const m of a.missingMedia) rows.push(`<tr><td><span class="tag lost">缺失</span></td><td>${esc(m.clipName)}</td><td>${esc(m.reel)}</td><td>${esc(m.expectedPath ?? m.reason)}</td></tr>`);
+    for (const c of a.conforms) rows.push(`<tr><td><span class="tag degraded">帧率</span></td><td>${esc(c.clipName)}</td><td>${esc(c.fromRate)} → ${esc(c.toRate)}</td><td>conform</td></tr>`);
+    panel.innerHTML = `<h3>${esc(a.timeline)}</h3>${
+      rows.length ? `<table><tr><th>类型</th><th>片段</th><th>详情</th><th>说明</th></tr>${rows.join("")}</table>` : '<p class="hint">无异常</p>'
+    }`;
+    host.appendChild(panel);
+  }
+}
+
+function renderLosses()       {
+  const host = document.getElementById("losses")                  ;
+  for (const exp of REPORT.exports) {
+    const panel = document.createElement("div");
+    panel.className = "panel";
+    const rows = exp.losses.map(
+      (l) =>
+        `<tr><td><span class="tag ${l.severity}">${l.severity === "lost" ? "丢失" : "降级"}</span></td>` +
+        `<td>${esc(l.feature)}</td><td>${esc(l.clips.slice(0, 6).join(", "))}${l.clips.length > 6 ? " …" : ""}</td>` +
+        `<td>${esc(l.reason)}</td></tr>`,
+    );
+    panel.innerHTML = `<h3>${esc(exp.name)} → EDL</h3>${
+      rows.length ? `<table><tr><th>级别</th><th>能力</th><th>涉及片段</th><th>原因</th></tr>${rows.join("")}</table>` : '<p class="hint">无损失</p>'
+    }`;
+    host.appendChild(panel);
+  }
+}
+
+async function previewFile(file      , host             )                {
+  const card = document.createElement("div");
+  card.className = "preview-card";
+  const title = document.createElement("h4");
+  title.textContent = file.name;
+  card.appendChild(title);
+  host.appendChild(card);
+
+  if (file.type.startsWith("video/") || file.type.startsWith("audio/")) {
+    const video = document.createElement("video");
+    video.controls = true;
+    video.muted = false;
+    if (typeof MediaSource !== "undefined" && MediaSource.isTypeSupported(file.type || "video/mp4")) {
+      const ms = new MediaSource();
+      video.src = URL.createObjectURL(ms);
+      ms.addEventListener("sourceopen", async () => {
+        try {
+          const buf = ms.addSourceBuffer(file.type || "video/mp4");
+          buf.appendBuffer(await file.arrayBuffer());
+          buf.addEventListener("updateend", () => ms.endOfStream(), { once: true });
+        } catch {
+          video.src = URL.createObjectURL(file);
+        }
+      });
+    } else {
+      video.src = URL.createObjectURL(file);
+    }
+    card.appendChild(video);
+  }
+
+  if (typeof VideoDecoder !== "undefined" && file.type.startsWith("video/")) {
+    const note = document.createElement("p");
+    note.className = "hint";
+    note.textContent = "WebCodecs 可用：浏览器支持硬解；缩略图经 Canvas 抽取。";
+    card.appendChild(note);
+    const thumb = document.createElement("canvas");
+    thumb.width = 300;
+    thumb.height = 168;
+    card.appendChild(thumb);
+    const probe = document.createElement("video");
+    probe.muted = true;
+    probe.src = URL.createObjectURL(file);
+    probe.addEventListener("loadeddata", () => {
+      probe.currentTime = Math.min(1, (probe.duration || 2) / 2);
+    });
+    probe.addEventListener("seeked", () => {
+      const ctx = thumb.getContext("2d");
+      if (ctx) ctx.drawImage(probe, 0, 0, thumb.width, thumb.height);
+      URL.revokeObjectURL(probe.src);
+    });
+  }
+
+  if (file.type.startsWith("audio/")) {
+    try {
+      const ac = new AudioContext();
+      const buf = await ac.decodeAudioData(await file.arrayBuffer());
+      const wave = document.createElement("canvas");
+      wave.width = 300;
+      wave.height = 80;
+      card.appendChild(wave);
+      const ctx = wave.getContext("2d");
+      if (ctx) {
+        const data = buf.getChannelData(0);
+        const step = Math.max(1, Math.floor(data.length / wave.width));
+        ctx.strokeStyle = "#4da3ff";
+        ctx.beginPath();
+        for (let x = 0; x < wave.width; x++) {
+          let min = 1;
+          let max = -1;
+          for (let j = 0; j < step; j++) {
+            const v = data[x * step + j] ?? 0;
+            if (v < min) min = v;
+            if (v > max) max = v;
+          }
+          ctx.moveTo(x, ((1 + min) / 2) * wave.height);
+          ctx.lineTo(x, ((1 + max) / 2) * wave.height);
+        }
+        ctx.stroke();
+      }
+      await ac.close();
+    } catch {
+      const note = document.createElement("p");
+      note.className = "hint";
+      note.textContent = "WebAudio 无法解码该音频。";
+      card.appendChild(note);
+    }
+  }
+}
+
+function setupPreview()       {
+  const picker = document.getElementById("media-picker")                    ;
+  const host = document.getElementById("preview-output")                  ;
+  picker.addEventListener("change", () => {
+    host.innerHTML = "";
+    for (const file of Array.from(picker.files ?? [])) {
+      void previewFile(file, host);
+    }
+  });
+}
+
+renderCombined();
+renderSources();
+renderFindings();
+renderLosses();
+setupPreview();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+[
+  {
+    "timeline": "DEPT_A_23976",
+    "projectRate": "25",
+    "speed": [
+      {
+        "clipId": "dept_a_23976.edl#2",
+        "clipName": "A_SLOWMO.MOV",
+        "kind": "constant",
+        "detail": "0.5x over 100 project frames from source frame 93600"
+      },
+      {
+        "clipId": "dept_a_23976.edl#3",
+        "clipName": "A_FREEZE_END.MOV",
+        "kind": "freeze",
+        "detail": "0x over 150 project frames from source frame 100860"
+      }
+    ],
+    "transitions": [
+      {
+        "clipId": "dept_a_23976.edl#1",
+        "clipName": "A_ROLL_DISSOLVE_IN.MOV",
+        "kind": "dissolve",
+        "name": "Cross Dissolve",
+        "durationFrames": 25,
+        "atFrame": 125
+      }
+    ],
+    "missingMedia": [
+      {
+        "clipId": "dept_a_23976.edl#0",
+        "clipName": "A_ROLL_OPENING.MOV",
+        "reel": "REEL_A01",
+        "expectedPath": null,
+        "reason": "no media path in source file; reel name only"
+      },
+      {
+        "clipId": "dept_a_23976.edl#1",
+        "clipName": "A_ROLL_DISSOLVE_IN.MOV",
+        "reel": "REEL_A02",
+        "expectedPath": null,
+        "reason": "no media path in source file; reel name only"
+      },
+      {
+        "clipId": "dept_a_23976.edl#2",
+        "clipName": "A_SLOWMO.MOV",
+        "reel": "REEL_A03",
+        "expectedPath": null,
+        "reason": "no media path in source file; reel name only"
+      },
+      {
+        "clipId": "dept_a_23976.edl#3",
+        "clipName": "A_FREEZE_END.MOV",
+        "reel": "REEL_A04",
+        "expectedPath": null,
+        "reason": "no media path in source file; reel name only"
+      },
+      {
+        "clipId": "dept_a_23976.edl#4",
+        "clipName": "A_MUSIC_BED.WAV",
+        "reel": "REEL_A05",
+        "expectedPath": null,
+        "reason": "no media path in source file; reel name only"
+      }
+    ],
+    "conforms": [
+      {
+        "clipId": "dept_a_23976.edl#0",
+        "clipName": "A_ROLL_OPENING.MOV",
+        "fromRate": "23.976",
+        "toRate": "25"
+      },
+      {
+        "clipId": "dept_a_23976.edl#1",
+        "clipName": "A_ROLL_DISSOLVE_IN.MOV",
+        "fromRate": "23.976",
+        "toRate": "25"
+      },
+      {
+        "clipId": "dept_a_23976.edl#2",
+        "clipName": "A_SLOWMO.MOV",
+        "fromRate": "23.976",
+        "toRate": "25"
+      },
+      {
+        "clipId": "dept_a_23976.edl#3",
+        "clipName": "A_FREEZE_END.MOV",
+        "fromRate": "23.976",
+        "toRate": "25"
+      },
+      {
+        "clipId": "dept_a_23976.edl#4",
+        "clipName": "A_MUSIC_BED.WAV",
+        "fromRate": "23.976",
+        "toRate": "25"
+      }
+    ]
+  },
+  {
+    "timeline": "DEPT_C_2997DF",
+    "projectRate": "25",
+    "speed": [
+      {
+        "clipId": "dept_c_2997df.edl#2",
+        "clipName": "C_REVERSE.MOV",
+        "kind": "reverse",
+        "detail": "-1x over 125 project frames from source frame 1115034"
+      }
+    ],
+    "transitions": [
+      {
+        "clipId": "dept_c_2997df.edl#1",
+        "clipName": "C_WIPE_SHOT.MOV",
+        "kind": "wipe",
+        "name": "W001",
+        "durationFrames": 13,
+        "atFrame": 90250
+      }
+    ],
+    "missingMedia": [
+      {
+        "clipId": "dept_c_2997df.edl#0",
+        "clipName": "C_NEWS_PKG.MOV",
+        "reel": "REEL_C01",
+        "expectedPath": null,
+        "reason": "no media path in source file; reel name only"
+      },
+      {
+        "clipId": "dept_c_2997df.edl#1",
+        "clipName": "C_WIPE_SHOT.MOV",
+        "reel": "REEL_C02",
+        "expectedPath": null,
+        "reason": "no media path in source file; reel name only"
+      },
+      {
+        "clipId": "dept_c_2997df.edl#2",
+        "clipName": "C_REVERSE.MOV",
+        "reel": "REEL_C03",
+        "expectedPath": null,
+        "reason": "no media path in source file; reel name only"
+      },
+      {
+        "clipId": "dept_c_2997df.edl#3",
+        "clipName": "C_NAT_SOUND.WAV",
+        "reel": "REEL_C04",
+        "expectedPath": null,
+        "reason": "no media path in source file; reel name only"
+      }
+    ],
+    "conforms": [
+      {
+        "clipId": "dept_c_2997df.edl#0",
+        "clipName": "C_NEWS_PKG.MOV",
+        "fromRate": "29.97 DF",
+        "toRate": "25"
+      },
+      {
+        "clipId": "dept_c_2997df.edl#1",
+        "clipName": "C_WIPE_SHOT.MOV",
+        "fromRate": "29.97 DF",
+        "toRate": "25"
+      },
+      {
+        "clipId": "dept_c_2997df.edl#2",
+        "clipName": "C_REVERSE.MOV",
+        "fromRate": "29.97 DF",
+        "toRate": "25"
+      },
+      {
+        "clipId": "dept_c_2997df.edl#3",
+        "clipName": "C_NAT_SOUND.WAV",
+        "fromRate": "29.97 DF",
+        "toRate": "25"
+      }
+    ]
+  },
+  {
+    "timeline": "DEPT_B_25",
+    "projectRate": "25",
+    "speed": [
+      {
+        "clipId": "dept_b_25.fcpxml#1",
+        "clipName": "B_CLOSE_UP",
+        "kind": "constant",
+        "detail": "2x over 200 project frames from source frame 100"
+      },
+      {
+        "clipId": "dept_b_25.fcpxml#2",
+        "clipName": "B_FILM_SCAN_23976",
+        "kind": "ramp",
+        "detail": "2x over 75 project frames from source frame 0"
+      },
+      {
+        "clipId": "dept_b_25.fcpxml#2",
+        "clipName": "B_FILM_SCAN_23976",
+        "kind": "ramp",
+        "detail": "0.3333333333333333x over 75 project frames from source frame 144"
+      }
+    ],
+    "transitions": [
+      {
+        "clipId": "dept_b_25.fcpxml#1",
+        "clipName": "B_CLOSE_UP",
+        "kind": "dissolve",
+        "name": "Cross Dissolve",
+        "durationFrames": 25,
+        "atFrame": 125
+      }
+    ],
+    "missingMedia": [
+      {
+        "clipId": "dept_b_25.fcpxml#0",
+        "clipName": "B_WIDE_SHOT",
+        "reel": "a1",
+        "expectedPath": "/media/dept_b/B_WIDE_SHOT.mov",
+        "reason": "referenced file not found on disk"
+      },
+      {
+        "clipId": "dept_b_25.fcpxml#1",
+        "clipName": "B_CLOSE_UP",
+        "reel": "a2",
+        "expectedPath": "/media/dept_b/B_CLOSE_UP.mov",
+        "reason": "referenced file not found on disk"
+      },
+      {
+        "clipId": "dept_b_25.fcpxml#2",
+        "clipName": "B_FILM_SCAN_23976",
+        "reel": "a3",
+        "expectedPath": "/media/dept_b/B_FILM_SCAN.mov",
+        "reason": "referenced file not found on disk"
+      },
+      {
+        "clipId": "dept_b_25.fcpxml#4",
+        "clipName": "B_VOICEOVER",
+        "reel": "a4",
+        "expectedPath": "/media/dept_b/B_VOICEOVER.wav",
+        "reason": "referenced file not found on disk"
+      }
+    ],
+    "conforms": [
+      {
+        "clipId": "dept_b_25.fcpxml#2",
+        "clipName": "B_FILM_SCAN_23976",
+        "fromRate": "23.976",
+        "toRate": "25"
+      }
+    ]
+  }
+]

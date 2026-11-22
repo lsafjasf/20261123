@@ -1,0 +1,49 @@
+:root {
+  color-scheme: dark;
+  --bg: #14171c;
+  --panel: #1d222b;
+  --line: #2c3340;
+  --text: #dbe2ec;
+  --muted: #8b96a6;
+  --accent: #4da3ff;
+  --warn: #ffb84d;
+  --bad: #ff6b6b;
+  --ok: #6bd88f;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font: 14px/1.5 "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  background: var(--bg);
+  color: var(--text);
+}
+header { padding: 16px 24px; border-bottom: 1px solid var(--line); }
+header h1 { margin: 0 0 4px; font-size: 18px; }
+header p { margin: 0; color: var(--muted); }
+main { padding: 0 24px 48px; }
+section { margin-top: 28px; }
+h2 { font-size: 15px; border-left: 3px solid var(--accent); padding-left: 8px; }
+canvas { display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; max-width: 100%; }
+.detail {
+  margin-top: 8px; padding: 10px 12px; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 6px; min-height: 40px; white-space: pre-wrap;
+}
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin-bottom: 16px; }
+.panel h3 { margin: 0 0 8px; font-size: 13px; color: var(--accent); }
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.compare pre {
+  margin: 0; padding: 10px; background: #10131a; border: 1px solid var(--line);
+  border-radius: 6px; overflow: auto; font-size: 12px; max-height: 320px;
+}
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+.tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 11px; margin-right: 4px; }
+.tag.lost { background: rgba(255,107,107,.15); color: var(--bad); }
+.tag.degraded { background: rgba(255,184,77,.15); color: var(--warn); }
+.tag.ok { background: rgba(107,216,143,.15); color: var(--ok); }
+.hint { color: var(--muted); font-size: 12px; }
+#preview-output { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.preview-card { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px; width: 320px; }
+.preview-card h4 { margin: 0 0 6px; font-size: 12px; word-break: break-all; }
+.preview-card video, .preview-card canvas { width: 100%; border-radius: 4px; background: #000; }

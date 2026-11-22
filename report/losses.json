@@ -1,0 +1,54 @@
+[
+  {
+    "timeline": "DEPT_A_23976",
+    "severity": "degraded",
+    "feature": "mixed source frame rate",
+    "reason": "source is 23.976 but EDL is written at 25; source timecodes are conformed",
+    "clips": [
+      "A_ROLL_OPENING.MOV",
+      "A_ROLL_DISSOLVE_IN.MOV",
+      "A_SLOWMO.MOV",
+      "A_FREEZE_END.MOV",
+      "A_MUSIC_BED.WAV"
+    ]
+  },
+  {
+    "timeline": "DEPT_C_2997DF",
+    "severity": "degraded",
+    "feature": "mixed source frame rate",
+    "reason": "source is 29.97 DF but EDL is written at 25; source timecodes are conformed",
+    "clips": [
+      "C_NEWS_PKG.MOV",
+      "C_WIPE_SHOT.MOV",
+      "C_REVERSE.MOV",
+      "C_NAT_SOUND.WAV"
+    ]
+  },
+  {
+    "timeline": "DEPT_B_25",
+    "severity": "lost",
+    "feature": "multiple video tracks",
+    "reason": "CMX3600 carries a single video track; upper lanes are dropped",
+    "clips": [
+      "B_LOWER_THIRD"
+    ]
+  },
+  {
+    "timeline": "DEPT_B_25",
+    "severity": "degraded",
+    "feature": "mixed source frame rate",
+    "reason": "source is 23.976 but EDL is written at 25; source timecodes are conformed",
+    "clips": [
+      "B_FILM_SCAN_23976"
+    ]
+  },
+  {
+    "timeline": "DEPT_B_25",
+    "severity": "lost",
+    "feature": "speed ramp",
+    "reason": "EDL M2 records a single constant speed; ramp shape is lost",
+    "clips": [
+      "B_FILM_SCAN_23976"
+    ]
+  }
+]

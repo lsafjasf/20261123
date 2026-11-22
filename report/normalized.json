@@ -1,0 +1,1057 @@
+{
+  "projectRate": "25",
+  "timelines": [
+    {
+      "name": "DEPT_A_23976",
+      "projectRate": {
+        "fps": {
+          "num": 25,
+          "den": 1
+        },
+        "drop": false,
+        "label": "25"
+      },
+      "tracks": [
+        {
+          "kind": "video",
+          "index": 0,
+          "clips": [
+            {
+              "id": "dept_a_23976.edl#0",
+              "name": "A_ROLL_OPENING.MOV",
+              "reel": "REEL_A01",
+              "mediaPath": null,
+              "sourceRate": {
+                "fps": {
+                  "num": 24000,
+                  "den": 1001
+                },
+                "drop": false,
+                "label": "23.976"
+              },
+              "sourceIn": 86400,
+              "sourceOut": 86520,
+              "recordIn": 0,
+              "recordOut": 125,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 125,
+                  "sourceStart": 86400,
+                  "speed": 1,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": []
+            },
+            {
+              "id": "dept_a_23976.edl#1",
+              "name": "A_ROLL_DISSOLVE_IN.MOV",
+              "reel": "REEL_A02",
+              "mediaPath": null,
+              "sourceRate": {
+                "fps": {
+                  "num": 24000,
+                  "den": 1001
+                },
+                "drop": false,
+                "label": "23.976"
+              },
+              "sourceIn": 89280,
+              "sourceOut": 89472,
+              "recordIn": 125,
+              "recordOut": 325,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 200,
+                  "sourceStart": 89280,
+                  "speed": 1,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": {
+                "kind": "dissolve",
+                "name": "Cross Dissolve",
+                "duration": 25,
+                "at": 125
+              },
+              "transitionOut": null,
+              "capabilities": []
+            },
+            {
+              "id": "dept_a_23976.edl#2",
+              "name": "A_SLOWMO.MOV",
+              "reel": "REEL_A03",
+              "mediaPath": null,
+              "sourceRate": {
+                "fps": {
+                  "num": 24000,
+                  "den": 1001
+                },
+                "drop": false,
+                "label": "23.976"
+              },
+              "sourceIn": 93600,
+              "sourceOut": 93696,
+              "recordIn": 325,
+              "recordOut": 425,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 100,
+                  "sourceStart": 93600,
+                  "speed": 0.5,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": []
+            },
+            {
+              "id": "dept_a_23976.edl#3",
+              "name": "A_FREEZE_END.MOV",
+              "reel": "REEL_A04",
+              "mediaPath": null,
+              "sourceRate": {
+                "fps": {
+                  "num": 24000,
+                  "den": 1001
+                },
+                "drop": false,
+                "label": "23.976"
+              },
+              "sourceIn": 100800,
+              "sourceOut": 100944,
+              "recordIn": 425,
+              "recordOut": 576,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 150,
+                  "sourceStart": 100860,
+                  "speed": 0,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": [
+                "freeze-frame"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "audio",
+          "index": 0,
+          "clips": [
+            {
+              "id": "dept_a_23976.edl#4",
+              "name": "A_MUSIC_BED.WAV",
+              "reel": "REEL_A05",
+              "mediaPath": null,
+              "sourceRate": {
+                "fps": {
+                  "num": 24000,
+                  "den": 1001
+                },
+                "drop": false,
+                "label": "23.976"
+              },
+              "sourceIn": 172800,
+              "sourceOut": 173352,
+              "recordIn": 0,
+              "recordOut": 576,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 576,
+                  "sourceStart": 172800,
+                  "speed": 1,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": []
+            }
+          ]
+        }
+      ],
+      "sources": [
+        "dept_a_23976.edl"
+      ]
+    },
+    {
+      "name": "DEPT_C_2997DF",
+      "projectRate": {
+        "fps": {
+          "num": 25,
+          "den": 1
+        },
+        "drop": false,
+        "label": "25"
+      },
+      "tracks": [
+        {
+          "kind": "video",
+          "index": 0,
+          "clips": [
+            {
+              "id": "dept_c_2997df.edl#0",
+              "name": "C_NEWS_PKG.MOV",
+              "reel": "REEL_C01",
+              "mediaPath": null,
+              "sourceRate": {
+                "fps": {
+                  "num": 30000,
+                  "den": 1001
+                },
+                "drop": true,
+                "label": "29.97 DF"
+              },
+              "sourceIn": 1078920,
+              "sourceOut": 1079220,
+              "recordIn": 90000,
+              "recordOut": 90250,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 250,
+                  "sourceStart": 1078920,
+                  "speed": 1,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": []
+            },
+            {
+              "id": "dept_c_2997df.edl#1",
+              "name": "C_WIPE_SHOT.MOV",
+              "reel": "REEL_C02",
+              "mediaPath": null,
+              "sourceRate": {
+                "fps": {
+                  "num": 30000,
+                  "den": 1001
+                },
+                "drop": true,
+                "label": "29.97 DF"
+              },
+              "sourceIn": 1087910,
+              "sourceOut": 1088150,
+              "recordIn": 90250,
+              "recordOut": 90450,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 200,
+                  "sourceStart": 1087910,
+                  "speed": 1,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": {
+                "kind": "wipe",
+                "name": "W001",
+                "duration": 13,
+                "at": 90250
+              },
+              "transitionOut": null,
+              "capabilities": []
+            },
+            {
+              "id": "dept_c_2997df.edl#2",
+              "name": "C_REVERSE.MOV",
+              "reel": "REEL_C03",
+              "mediaPath": null,
+              "sourceRate": {
+                "fps": {
+                  "num": 30000,
+                  "den": 1001
+                },
+                "drop": true,
+                "label": "29.97 DF"
+              },
+              "sourceIn": 1114884,
+              "sourceOut": 1115034,
+              "recordIn": 90450,
+              "recordOut": 90575,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 125,
+                  "sourceStart": 1115034,
+                  "speed": -1,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": [
+                "reverse"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "audio",
+          "index": 1,
+          "clips": [
+            {
+              "id": "dept_c_2997df.edl#3",
+              "name": "C_NAT_SOUND.WAV",
+              "reel": "REEL_C04",
+              "mediaPath": null,
+              "sourceRate": {
+                "fps": {
+                  "num": 30000,
+                  "den": 1001
+                },
+                "drop": true,
+                "label": "29.97 DF"
+              },
+              "sourceIn": 1186812,
+              "sourceOut": 1187502,
+              "recordIn": 90000,
+              "recordOut": 90575,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 576,
+                  "sourceStart": 1186812,
+                  "speed": 1,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": []
+            }
+          ]
+        }
+      ],
+      "sources": [
+        "dept_c_2997df.edl"
+      ]
+    },
+    {
+      "name": "DEPT_B_25",
+      "projectRate": {
+        "fps": {
+          "num": 25,
+          "den": 1
+        },
+        "drop": false,
+        "label": "25"
+      },
+      "tracks": [
+        {
+          "kind": "video",
+          "index": 0,
+          "clips": [
+            {
+              "id": "dept_b_25.fcpxml#0",
+              "name": "B_WIDE_SHOT",
+              "reel": "a1",
+              "mediaPath": "/media/dept_b/B_WIDE_SHOT.mov",
+              "sourceRate": {
+                "fps": {
+                  "num": 25,
+                  "den": 1
+                },
+                "drop": false,
+                "label": "25"
+              },
+              "sourceIn": 0,
+              "sourceOut": 125,
+              "recordIn": 0,
+              "recordOut": 125,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 125,
+                  "sourceStart": 0,
+                  "speed": 1,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": []
+            },
+            {
+              "id": "dept_b_25.fcpxml#1",
+              "name": "B_CLOSE_UP",
+              "reel": "a2",
+              "mediaPath": "/media/dept_b/B_CLOSE_UP.mov",
+              "sourceRate": {
+                "fps": {
+                  "num": 25,
+                  "den": 1
+                },
+                "drop": false,
+                "label": "25"
+              },
+              "sourceIn": 100,
+              "sourceOut": 500,
+              "recordIn": 125,
+              "recordOut": 325,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 200,
+                  "sourceStart": 100,
+                  "speed": 2,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": {
+                "kind": "dissolve",
+                "name": "Cross Dissolve",
+                "duration": 25,
+                "at": 125
+              },
+              "transitionOut": null,
+              "capabilities": [
+                "retime:2x (src 25fps)"
+              ]
+            },
+            {
+              "id": "dept_b_25.fcpxml#2",
+              "name": "B_FILM_SCAN_23976",
+              "reel": "a3",
+              "mediaPath": "/media/dept_b/B_FILM_SCAN.mov",
+              "sourceRate": {
+                "fps": {
+                  "num": 24000,
+                  "den": 1001
+                },
+                "drop": false,
+                "label": "23.976"
+              },
+              "sourceIn": 0,
+              "sourceOut": 288,
+              "recordIn": 325,
+              "recordOut": 475,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 75,
+                  "sourceStart": 0,
+                  "speed": 2,
+                  "ramp": true
+                },
+                {
+                  "timelineStart": 75,
+                  "timelineDuration": 75,
+                  "sourceStart": 144,
+                  "speed": 0.3333333333333333,
+                  "ramp": true
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": []
+            }
+          ]
+        },
+        {
+          "kind": "video",
+          "index": 1,
+          "clips": [
+            {
+              "id": "dept_b_25.fcpxml#3",
+              "name": "B_LOWER_THIRD",
+              "reel": "r9",
+              "mediaPath": null,
+              "sourceRate": {
+                "fps": {
+                  "num": 25,
+                  "den": 1
+                },
+                "drop": false,
+                "label": "25"
+              },
+              "sourceIn": 0,
+              "sourceOut": 75,
+              "recordIn": 200,
+              "recordOut": 275,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 75,
+                  "sourceStart": 0,
+                  "speed": 1,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": [
+                "title",
+                "connected-clip:lane1"
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "audio",
+          "index": 1,
+          "clips": [
+            {
+              "id": "dept_b_25.fcpxml#4",
+              "name": "B_VOICEOVER",
+              "reel": "a4",
+              "mediaPath": "/media/dept_b/B_VOICEOVER.wav",
+              "sourceRate": {
+                "fps": {
+                  "num": 25,
+                  "den": 1
+                },
+                "drop": false,
+                "label": "25"
+              },
+              "sourceIn": 0,
+              "sourceOut": 300,
+              "recordIn": 0,
+              "recordOut": 300,
+              "speedSegments": [
+                {
+                  "timelineStart": 0,
+                  "timelineDuration": 300,
+                  "sourceStart": 0,
+                  "speed": 1,
+                  "ramp": false
+                }
+              ],
+              "transitionIn": null,
+              "transitionOut": null,
+              "capabilities": []
+            }
+          ]
+        }
+      ],
+      "sources": [
+        "dept_b_25.fcpxml"
+      ]
+    }
+  ],
+  "combined": {
+    "name": "combined",
+    "projectRate": {
+      "fps": {
+        "num": 25,
+        "den": 1
+      },
+      "drop": false,
+      "label": "25"
+    },
+    "tracks": [
+      {
+        "kind": "video",
+        "index": 0,
+        "clips": [
+          {
+            "id": "dept_a_23976.edl#0",
+            "name": "A_ROLL_OPENING.MOV",
+            "reel": "REEL_A01",
+            "mediaPath": null,
+            "sourceRate": {
+              "fps": {
+                "num": 24000,
+                "den": 1001
+              },
+              "drop": false,
+              "label": "23.976"
+            },
+            "sourceIn": 86400,
+            "sourceOut": 86520,
+            "recordIn": 0,
+            "recordOut": 125,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 125,
+                "sourceStart": 86400,
+                "speed": 1,
+                "ramp": false
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": []
+          },
+          {
+            "id": "dept_a_23976.edl#1",
+            "name": "A_ROLL_DISSOLVE_IN.MOV",
+            "reel": "REEL_A02",
+            "mediaPath": null,
+            "sourceRate": {
+              "fps": {
+                "num": 24000,
+                "den": 1001
+              },
+              "drop": false,
+              "label": "23.976"
+            },
+            "sourceIn": 89280,
+            "sourceOut": 89472,
+            "recordIn": 125,
+            "recordOut": 325,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 200,
+                "sourceStart": 89280,
+                "speed": 1,
+                "ramp": false
+              }
+            ],
+            "transitionIn": {
+              "kind": "dissolve",
+              "name": "Cross Dissolve",
+              "duration": 25,
+              "at": 125
+            },
+            "transitionOut": null,
+            "capabilities": []
+          },
+          {
+            "id": "dept_a_23976.edl#2",
+            "name": "A_SLOWMO.MOV",
+            "reel": "REEL_A03",
+            "mediaPath": null,
+            "sourceRate": {
+              "fps": {
+                "num": 24000,
+                "den": 1001
+              },
+              "drop": false,
+              "label": "23.976"
+            },
+            "sourceIn": 93600,
+            "sourceOut": 93696,
+            "recordIn": 325,
+            "recordOut": 425,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 100,
+                "sourceStart": 93600,
+                "speed": 0.5,
+                "ramp": false
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": []
+          },
+          {
+            "id": "dept_a_23976.edl#3",
+            "name": "A_FREEZE_END.MOV",
+            "reel": "REEL_A04",
+            "mediaPath": null,
+            "sourceRate": {
+              "fps": {
+                "num": 24000,
+                "den": 1001
+              },
+              "drop": false,
+              "label": "23.976"
+            },
+            "sourceIn": 100800,
+            "sourceOut": 100944,
+            "recordIn": 425,
+            "recordOut": 576,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 150,
+                "sourceStart": 100860,
+                "speed": 0,
+                "ramp": false
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": [
+              "freeze-frame"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "audio",
+        "index": 1,
+        "clips": [
+          {
+            "id": "dept_a_23976.edl#4",
+            "name": "A_MUSIC_BED.WAV",
+            "reel": "REEL_A05",
+            "mediaPath": null,
+            "sourceRate": {
+              "fps": {
+                "num": 24000,
+                "den": 1001
+              },
+              "drop": false,
+              "label": "23.976"
+            },
+            "sourceIn": 172800,
+            "sourceOut": 173352,
+            "recordIn": 0,
+            "recordOut": 576,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 576,
+                "sourceStart": 172800,
+                "speed": 1,
+                "ramp": false
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": []
+          }
+        ]
+      },
+      {
+        "kind": "video",
+        "index": 2,
+        "clips": [
+          {
+            "id": "dept_c_2997df.edl#0",
+            "name": "C_NEWS_PKG.MOV",
+            "reel": "REEL_C01",
+            "mediaPath": null,
+            "sourceRate": {
+              "fps": {
+                "num": 30000,
+                "den": 1001
+              },
+              "drop": true,
+              "label": "29.97 DF"
+            },
+            "sourceIn": 1078920,
+            "sourceOut": 1079220,
+            "recordIn": 90000,
+            "recordOut": 90250,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 250,
+                "sourceStart": 1078920,
+                "speed": 1,
+                "ramp": false
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": []
+          },
+          {
+            "id": "dept_c_2997df.edl#1",
+            "name": "C_WIPE_SHOT.MOV",
+            "reel": "REEL_C02",
+            "mediaPath": null,
+            "sourceRate": {
+              "fps": {
+                "num": 30000,
+                "den": 1001
+              },
+              "drop": true,
+              "label": "29.97 DF"
+            },
+            "sourceIn": 1087910,
+            "sourceOut": 1088150,
+            "recordIn": 90250,
+            "recordOut": 90450,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 200,
+                "sourceStart": 1087910,
+                "speed": 1,
+                "ramp": false
+              }
+            ],
+            "transitionIn": {
+              "kind": "wipe",
+              "name": "W001",
+              "duration": 13,
+              "at": 90250
+            },
+            "transitionOut": null,
+            "capabilities": []
+          },
+          {
+            "id": "dept_c_2997df.edl#2",
+            "name": "C_REVERSE.MOV",
+            "reel": "REEL_C03",
+            "mediaPath": null,
+            "sourceRate": {
+              "fps": {
+                "num": 30000,
+                "den": 1001
+              },
+              "drop": true,
+              "label": "29.97 DF"
+            },
+            "sourceIn": 1114884,
+            "sourceOut": 1115034,
+            "recordIn": 90450,
+            "recordOut": 90575,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 125,
+                "sourceStart": 1115034,
+                "speed": -1,
+                "ramp": false
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": [
+              "reverse"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "audio",
+        "index": 3,
+        "clips": [
+          {
+            "id": "dept_c_2997df.edl#3",
+            "name": "C_NAT_SOUND.WAV",
+            "reel": "REEL_C04",
+            "mediaPath": null,
+            "sourceRate": {
+              "fps": {
+                "num": 30000,
+                "den": 1001
+              },
+              "drop": true,
+              "label": "29.97 DF"
+            },
+            "sourceIn": 1186812,
+            "sourceOut": 1187502,
+            "recordIn": 90000,
+            "recordOut": 90575,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 576,
+                "sourceStart": 1186812,
+                "speed": 1,
+                "ramp": false
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": []
+          }
+        ]
+      },
+      {
+        "kind": "video",
+        "index": 4,
+        "clips": [
+          {
+            "id": "dept_b_25.fcpxml#0",
+            "name": "B_WIDE_SHOT",
+            "reel": "a1",
+            "mediaPath": "/media/dept_b/B_WIDE_SHOT.mov",
+            "sourceRate": {
+              "fps": {
+                "num": 25,
+                "den": 1
+              },
+              "drop": false,
+              "label": "25"
+            },
+            "sourceIn": 0,
+            "sourceOut": 125,
+            "recordIn": 0,
+            "recordOut": 125,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 125,
+                "sourceStart": 0,
+                "speed": 1,
+                "ramp": false
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": []
+          },
+          {
+            "id": "dept_b_25.fcpxml#1",
+            "name": "B_CLOSE_UP",
+            "reel": "a2",
+            "mediaPath": "/media/dept_b/B_CLOSE_UP.mov",
+            "sourceRate": {
+              "fps": {
+                "num": 25,
+                "den": 1
+              },
+              "drop": false,
+              "label": "25"
+            },
+            "sourceIn": 100,
+            "sourceOut": 500,
+            "recordIn": 125,
+            "recordOut": 325,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 200,
+                "sourceStart": 100,
+                "speed": 2,
+                "ramp": false
+              }
+            ],
+            "transitionIn": {
+              "kind": "dissolve",
+              "name": "Cross Dissolve",
+              "duration": 25,
+              "at": 125
+            },
+            "transitionOut": null,
+            "capabilities": [
+              "retime:2x (src 25fps)"
+            ]
+          },
+          {
+            "id": "dept_b_25.fcpxml#2",
+            "name": "B_FILM_SCAN_23976",
+            "reel": "a3",
+            "mediaPath": "/media/dept_b/B_FILM_SCAN.mov",
+            "sourceRate": {
+              "fps": {
+                "num": 24000,
+                "den": 1001
+              },
+              "drop": false,
+              "label": "23.976"
+            },
+            "sourceIn": 0,
+            "sourceOut": 288,
+            "recordIn": 325,
+            "recordOut": 475,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 75,
+                "sourceStart": 0,
+                "speed": 2,
+                "ramp": true
+              },
+              {
+                "timelineStart": 75,
+                "timelineDuration": 75,
+                "sourceStart": 144,
+                "speed": 0.3333333333333333,
+                "ramp": true
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": []
+          }
+        ]
+      },
+      {
+        "kind": "video",
+        "index": 5,
+        "clips": [
+          {
+            "id": "dept_b_25.fcpxml#3",
+            "name": "B_LOWER_THIRD",
+            "reel": "r9",
+            "mediaPath": null,
+            "sourceRate": {
+              "fps": {
+                "num": 25,
+                "den": 1
+              },
+              "drop": false,
+              "label": "25"
+            },
+            "sourceIn": 0,
+            "sourceOut": 75,
+            "recordIn": 200,
+            "recordOut": 275,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 75,
+                "sourceStart": 0,
+                "speed": 1,
+                "ramp": false
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": [
+              "title",
+              "connected-clip:lane1"
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "audio",
+        "index": 6,
+        "clips": [
+          {
+            "id": "dept_b_25.fcpxml#4",
+            "name": "B_VOICEOVER",
+            "reel": "a4",
+            "mediaPath": "/media/dept_b/B_VOICEOVER.wav",
+            "sourceRate": {
+              "fps": {
+                "num": 25,
+                "den": 1
+              },
+              "drop": false,
+              "label": "25"
+            },
+            "sourceIn": 0,
+            "sourceOut": 300,
+            "recordIn": 0,
+            "recordOut": 300,
+            "speedSegments": [
+              {
+                "timelineStart": 0,
+                "timelineDuration": 300,
+                "sourceStart": 0,
+                "speed": 1,
+                "ramp": false
+              }
+            ],
+            "transitionIn": null,
+            "transitionOut": null,
+            "capabilities": []
+          }
+        ]
+      }
+    ],
+    "sources": [
+      "dept_a_23976.edl",
+      "dept_c_2997df.edl",
+      "dept_b_25.fcpxml"
+    ]
+  }
+}
