@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>碰撞事件确定性混音器</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #16161e;
+        color: #c0caf5;
+      }
+      h1 { font-size: 18px; margin: 0 0 12px; }
+      .panel {
+        background: #1f2335;
+        border: 1px solid #2a2e44;
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+      label { display: inline-block; margin-right: 16px; font-size: 13px; }
+      input { width: 90px; background: #16161e; color: #c0caf5; border: 1px solid #2a2e44; border-radius: 6px; padding: 4px 6px; }
+      button {
+        background: #7aa2f7; color: #16161e; border: 0; border-radius: 6px;
+        padding: 7px 14px; font-weight: 700; cursor: pointer; margin-right: 8px;
+      }
+      button.secondary { background: #2a2e44; color: #c0caf5; }
+      button:disabled { opacity: 0.5; cursor: default; }
+      canvas { width: 100%; height: 320px; display: block; background: #16161e; border-radius: 8px; }
+      table { border-collapse: collapse; font-size: 12px; width: 100%; }
+      td, th { border: 1px solid #2a2e44; padding: 4px 8px; text-align: right; }
+      th { color: #9aa5ce; }
+      #status { font-size: 12px; color: #9ece6a; min-height: 18px; margin-top: 8px; }
+      .muted { color: #565f89; }
+    </style>
+  </head>
+  <body>
+    <h1>碰撞事件确定性混音器（TypeScript + WebCodecs / WebAudio / Canvas / MediaSource）</h1>
+
+    <div class="panel">
+      <label>seed <input id="seed" type="number" value="20261123" /></label>
+      <label>时长(s) <input id="duration" type="number" value="12" min="1" max="60" /></label>
+      <label>碰撞/秒 <input id="rate" type="number" value="14" min="1" max="120" /></label>
+      <button id="render">离线渲染</button>
+      <button id="play" class="secondary" disabled>播放 / 暂停</button>
+      <button id="downloadWav" class="secondary" disabled>下载 WAV</button>
+      <button id="downloadWebm" class="secondary" disabled>下载 WebM/Opus</button>
+      <div id="status">就绪：点击“离线渲染”，同 seed 永远得到同样结果。</div>
+    </div>
+
+    <div class="panel">
+      <canvas id="canvas" width="1100" height="320"></canvas>
+    </div>
+
+    <div class="panel">
+      <table id="summary">
+        <thead>
+          <tr>
+            <th>事件数</th><th>接受</th><th>轮换</th><th>抢占丢弃</th>
+            <th>过慢忽略</th><th>master 峰值</th><th>编码路径</th>
+          </tr>
+        </thead>
+        <tbody><tr><td colspan="7" class="muted">尚未渲染</td></tr></tbody>
+      </table>
+    </div>
+
+    <audio id="audio"></audio>
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>

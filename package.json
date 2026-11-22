@@ -1,0 +1,17 @@
+{
+  "name": "collision-mixer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "由碰撞速度与材质驱动的确定性混音器（TypeScript + Node 标准库 + WebCodecs/WebAudio/Canvas/MediaSource，零第三方包）",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "test": "node --test 'test/**/*.test.ts'",
+    "render": "node src/node/render.ts",
+    "serve": "node src/node/server.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
