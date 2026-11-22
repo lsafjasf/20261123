@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#101210" />
+    <title>留白 Pause Studio</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="留白 Pause Studio 首页">
+          <span class="brand-mark" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i>
+          </span>
+          <span class="brand-type">
+            <strong>留白</strong>
+            <small>PAUSE STUDIO</small>
+          </span>
+        </a>
+        <div class="topbar-context" id="topbarContext">
+          <span class="local-led"></span>
+          <span>本机处理</span>
+          <span class="context-divider"></span>
+          <span>原文件只读</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="button button-quiet" id="importButton" type="button">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m0-9 3 3m-3-3L7 6M4 12v3.5A1.5 1.5 0 0 0 5.5 17h9a1.5 1.5 0 0 0 1.5-1.5V12"/></svg>
+            导入 WAV
+            <kbd>⌘ O</kbd>
+          </button>
+          <button class="button button-primary" id="exportButton" type="button" disabled>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13V4m0 9 3-3m-3 3L7 10M4 13v2.5A1.5 1.5 0 0 0 5.5 17h9a1.5 1.5 0 0 0 1.5-1.5V13"/></svg>
+            导出 WAV
+          </button>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="welcome" id="welcome">
+          <div class="welcome-copy">
+            <p class="eyebrow"><span></span> LOCAL AUDIO WORKBENCH</p>
+            <h1>把长停顿收紧，<br /><em>让表达留下呼吸。</em></h1>
+            <p class="welcome-lead">
+              拖入两轨 WAV。自动把 800 ms 以上的空白压到 250 ms，
+              笑声、语气词与真正需要的留白，一个都不误伤。
+            </p>
+            <div class="welcome-actions">
+              <button class="button button-primary button-large" id="welcomeImportButton" type="button">
+                选择 WAV 文件
+              </button>
+              <button class="button button-quiet button-large" id="demoButton" type="button">
+                载入演示工程
+              </button>
+            </div>
+            <div class="trust-row">
+              <span><i class="trust-dot"></i>无需上传</span>
+              <span><i class="trust-dot"></i>无第三方依赖</span>
+              <span><i class="trust-dot"></i>不经网络传输</span>
+            </div>
+          </div>
+          <button class="drop-card" id="dropCard" type="button">
+            <span class="drop-orbit orbit-one"></span>
+            <span class="drop-orbit orbit-two"></span>
+            <span class="drop-icon">
+              <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5v16m0-16 6 6m-6-6-6 6M6 22v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2"/></svg>
+            </span>
+            <strong>拖入 WAV</strong>
+            <small>立体声或两轨单声道 · PCM / Float</small>
+            <span class="drop-cta">或点击浏览文件</span>
+          </button>
+          <div class="welcome-steps">
+            <article>
+              <span>01</span>
+              <h2>先看再剪</h2>
+              <p>能量检测标出每一处长停顿，时间位置与置信度一目了然。</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h2>每一刀都可反悔</h2>
+              <p>逐段试听、旁路、撤销；自动判断永远不是不可逆操作。</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h2>发布级交付</h2>
+              <p>变速不变调，按 −14 LUFS / −1 dBTP 归一后导出 24-bit WAV。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="workspace is-hidden" id="workspace">
+          <div class="workspace-heading">
+            <div class="project-identity">
+              <div class="project-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 14v-4m4 8V6m4 13V5m4 12V7m4 5v-4"/></svg>
+              </div>
+              <div>
+                <div class="project-name-line">
+                  <h1 id="projectName">未命名工程</h1>
+                  <span class="demo-badge is-hidden" id="demoBadge">演示工程</span>
+                  <span class="saved-state"><i></i> 原文件未改动</span>
+                </div>
+                <p id="projectMeta">—</p>
+              </div>
+            </div>
+            <div class="source-stamp" id="sourceStamp">NO SOURCE</div>
+          </div>
+
+          <div class="work-grid">
+            <section class="stage" aria-label="音频编辑工作区">
+              <div class="transport">
+                <div class="transport-group">
+                  <button class="icon-button" id="toStartButton" type="button" title="回到开头" aria-label="回到开头">
+                    <svg viewBox="0 0 20 20"><path d="M5 4v12M15 5l-7 5 7 5V5Z"/></svg>
+                  </button>
+                  <button class="play-button" id="playButton" type="button" title="播放 / 暂停" aria-label="播放">
+                    <svg class="play-icon" viewBox="0 0 22 22"><path d="m8 5 9 6-9 6V5Z"/></svg>
+                    <svg class="pause-icon" viewBox="0 0 22 22"><path d="M7 5h3v12H7zM13 5h3v12h-3z"/></svg>
+                  </button>
+                  <button class="icon-button" id="toEndButton" type="button" title="跳到结尾" aria-label="跳到结尾">
+                    <svg viewBox="0 0 20 20"><path d="M15 4v12M5 5l7 5-7 5V5Z"/></svg>
+                  </button>
+                  <div class="time-readout" aria-label="播放时间">
+                    <strong id="currentTime">00:00.00</strong>
+                    <span>/</span>
+                    <span id="durationTime">00:00.00</span>
+                  </div>
+                </div>
+                <div class="transport-level" title="输出电平">
+                  <span>L</span><i><b id="meterLeft"></b></i>
+                  <span>R</span><i><b id="meterRight"></b></i>
+                </div>
+                <div class="speed-control">
+                  <span class="control-label">变速不变调</span>
+                  <div class="segmented" id="speedControl" role="group" aria-label="播放速度">
+                    <button type="button" data-speed="0.75">0.75×</button>
+                    <button type="button" data-speed="1" class="is-active">1.0×</button>
+                    <button type="button" data-speed="1.25">1.25×</button>
+                    <button type="button" data-speed="1.5">1.5×</button>
+                    <button type="button" data-speed="2">2×</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-card">
+                <div class="timeline-toolbar">
+                  <div class="timeline-tabs" role="tablist" aria-label="时间线视图">
+                    <button class="timeline-tab is-active" type="button" data-view="edited">成片时间线</button>
+                    <button class="timeline-tab" type="button" data-view="source">源时间线</button>
+                  </div>
+                  <div class="timeline-tools">
+                    <span class="timeline-hint">滚轮缩放 · 拖动平移</span>
+                    <button class="mini-button" id="zoomOutButton" type="button" title="缩小" aria-label="缩小">−</button>
+                    <button class="mini-button" id="zoomFitButton" type="button" title="适合窗口" aria-label="适合窗口">
+                      <svg viewBox="0 0 16 16"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>
+                    </button>
+                    <button class="mini-button" id="zoomInButton" type="button" title="放大" aria-label="放大">+</button>
+                  </div>
+                </div>
+                <div class="timeline-layout">
+                  <div class="track-heads">
+                    <div class="track-head-spacer"></div>
+                    <div class="track-head">
+                      <span class="track-color track-a"></span>
+                      <div><strong>轨道 A</strong><small id="trackAMeta">CH 1</small></div>
+                      <button class="track-mute" type="button" data-track="0" title="静音轨道 A" aria-label="静音轨道 A">M</button>
+                    </div>
+                    <div class="track-head">
+                      <span class="track-color track-b"></span>
+                      <div><strong>轨道 B</strong><small id="trackBMeta">CH 2</small></div>
+                      <button class="track-mute" type="button" data-track="1" title="静音轨道 B" aria-label="静音轨道 B">M</button>
+                    </div>
+                    <div class="track-head-overview">总览</div>
+                  </div>
+                  <div class="canvas-wrap" id="canvasWrap">
+                    <canvas id="timelineCanvas" aria-label="双轨音频波形时间线"></canvas>
+                    <div class="canvas-empty" id="canvasEmpty">等待音频</div>
+                  </div>
+                </div>
+                <div class="timeline-legend">
+                  <span><i class="legend-swatch legend-pause"></i>自动停顿</span>
+                  <span><i class="legend-swatch legend-protected"></i>已旁路 / 保留</span>
+                  <span><i class="legend-swatch legend-playhead"></i>播放头</span>
+                  <span class="legend-tip">点击停顿可检查 · 空格播放</span>
+                </div>
+              </div>
+
+              <div class="selection-panel" id="selectionPanel">
+                <div class="selection-empty" id="selectionEmpty">
+                  <span class="selection-empty-icon">
+                    <svg viewBox="0 0 24 24"><path d="M4 12h3m3-6v12m4-9v6m4-8v10m3-5h-1"/></svg>
+                  </span>
+                  <div>
+                    <strong>选择一个自动停顿</strong>
+                    <p>在波形或右侧清单中选择，逐段试听、旁路或撤销。</p>
+                  </div>
+                </div>
+                <div class="selection-content is-hidden" id="selectionContent">
+                  <div class="selection-title-row">
+                    <div>
+                      <span class="selection-kicker" id="selectionKicker">自动停顿 01</span>
+                      <h2 id="selectionTime">00:00.00 — 00:00.00</h2>
+                    </div>
+                    <div class="selection-badges">
+                      <span class="status-pill active" id="selectionStatus">已压缩</span>
+                      <span class="confidence-pill" id="selectionConfidence">置信度 91%</span>
+                    </div>
+                  </div>
+                  <div class="selection-metrics">
+                    <div><span>检测原长</span><strong id="selectionOriginal">—</strong></div>
+                    <div><span>成片留白</span><strong id="selectionOutput">—</strong></div>
+                    <div><span>电平</span><strong id="selectionLevel">—</strong></div>
+                    <label class="selection-target">
+                      <span>目标长度 <b id="selectionTargetValue">250 ms</b></span>
+                      <input id="selectionTarget" aria-label="此片段目标长度" type="range" min="100" max="700" step="10" value="250" />
+                    </label>
+                  </div>
+                  <div class="selection-actions">
+                    <button class="button button-quiet" id="previewOriginalButton" type="button">
+                      <svg viewBox="0 0 20 20"><path d="m7 5 7 5-7 5V5Z"/></svg>试听原声
+                    </button>
+                    <button class="button button-quiet" id="previewProcessedButton" type="button">
+                      <svg viewBox="0 0 20 20"><path d="m7 5 7 5-7 5V5Z"/></svg>试听处理
+                    </button>
+                    <button class="button button-outline" id="bypassButton" type="button">旁路此段</button>
+                    <button class="text-danger-button" id="undoSegmentButton" type="button">撤销此段</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <aside class="sidebar" aria-label="停顿检测与发布">
+              <div class="side-tabs" role="tablist">
+                <button class="side-tab is-active" type="button" data-tab="segments">
+                  自动停顿 <span id="segmentTabCount">0</span>
+                </button>
+                <button class="side-tab" type="button" data-tab="publish">发布设置</button>
+              </div>
+
+              <section class="side-panel" id="segmentsPanel">
+                <div class="analysis-card">
+                  <div class="analysis-head">
+                    <div>
+                      <span class="section-kicker">DETECTION</span>
+                      <h2>留白分析</h2>
+                    </div>
+                    <button class="mini-icon-button" id="reanalyzeButton" type="button" title="重新分析" aria-label="重新分析">
+                      <svg viewBox="0 0 18 18"><path d="M14.5 7A6 6 0 1 0 15 11M14.5 3v4h-4"/></svg>
+                    </button>
+                  </div>
+                  <div class="analysis-stats">
+                    <div><strong id="detectedCount">0</strong><span>处长停顿</span></div>
+                    <div><strong id="removedDuration">0.0s</strong><span>预计收紧</span></div>
+                  </div>
+                  <div class="setting-line">
+                    <div class="setting-label"><span>检测阈值</span><b id="thresholdValue">≥ 800 ms</b></div>
+                    <input id="thresholdRange" aria-label="停顿检测阈值" type="range" min="500" max="2000" step="50" value="800" />
+                    <div class="range-ends"><span>500 ms</span><span>2 s</span></div>
+                  </div>
+                  <div class="setting-line">
+                    <div class="setting-label"><span>压缩至</span><b id="targetValue">250 ms</b></div>
+                    <input id="targetRange" aria-label="压缩目标长度" type="range" min="100" max="600" step="10" value="250" />
+                    <div class="range-ends"><span>100 ms</span><span>600 ms</span></div>
+                  </div>
+                  <label class="smart-toggle">
+                    <span class="toggle-copy">
+                      <strong>智能保护</strong>
+                      <small>仅剪低能量空白，非静音内容保持原样</small>
+                    </span>
+                    <input id="smartProtection" type="checkbox" checked />
+                    <span class="switch" aria-hidden="true"><i></i></span>
+                  </label>
+                </div>
+
+                <div class="segment-list-head">
+                  <div>
+                    <span class="section-kicker">CUT LIST</span>
+                    <strong><span id="segmentListCount">0</span> 段可检查</strong>
+                  </div>
+                  <button class="link-button" id="resetAllButton" type="button">全部恢复</button>
+                </div>
+                <div class="segment-list" id="segmentList"></div>
+                <div class="list-empty is-hidden" id="segmentListEmpty">
+                  <span>∿</span>
+                  <strong>没有超过阈值的停顿</strong>
+                  <p>降低阈值或导入另一段音频再试试。</p>
+                </div>
+                <div class="sidebar-footnote">
+                  <span class="shield-dot"></span>
+                  只在本机内存中分析。原始 WAV 文件不会被写回或覆盖。
+                </div>
+              </section>
+
+              <section class="side-panel is-hidden" id="publishPanel">
+                <div class="publish-head">
+                  <span class="section-kicker">DELIVERY</span>
+                  <h2>流媒体交付</h2>
+                  <p>导出前统一响度与真峰值，生成一份全新的 WAV 文件。</p>
+                </div>
+                <label class="field-label" for="loudnessTarget">响度标准</label>
+                <div class="select-wrap">
+                  <select id="loudnessTarget">
+                    <option value="-14">流媒体 · −14 LUFS</option>
+                    <option value="-16">播客 · −16 LUFS</option>
+                    <option value="-23">广播 · −23 LUFS</option>
+                  </select>
+                  <svg viewBox="0 0 14 14" aria-hidden="true"><path d="m3 5 4 4 4-4"/></svg>
+                </div>
+                <div class="publish-spec">
+                  <div><span>真峰值上限</span><strong>−1.0 dBTP</strong></div>
+                  <div><span>导出格式</span><strong>WAV · 24-bit PCM</strong></div>
+                  <div><span>采样率</span><strong id="publishSampleRate">—</strong></div>
+                  <div><span>预计时长</span><strong id="publishDuration">—</strong></div>
+                </div>
+                <div class="publish-estimate">
+                  <div class="estimate-ring"><span id="estimateLufs">−14.0</span><small>LUFS</small></div>
+                  <p>导出时会重新测量整段节目响度，并以真峰值限制器守住上限。</p>
+                </div>
+                <button class="button button-primary button-wide" id="publishExportButton" type="button">
+                  测量并导出 WAV
+                </button>
+                <p class="publish-note">新文件命名会追加 <code>.pausecut</code>，不会覆盖原文件。</p>
+              </section>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <input id="fileInput" type="file" accept=".wav,audio/wav,audio/x-wav,audio/wave" multiple hidden />
+    <div class="drag-overlay is-hidden" id="dragOverlay">
+      <div class="drag-overlay-inner">
+        <span class="drag-icon">
+          <svg viewBox="0 0 40 40"><path d="M20 7v20m0-20 7 7m-7-7-7 7M8 28v3a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2v-3"/></svg>
+        </span>
+        <strong>松开以载入 WAV</strong>
+        <small>支持单个立体声文件，或两个等长单轨文件</small>
+      </div>
+    </div>
+
+    <div class="processing-overlay is-hidden" id="processingOverlay">
+      <div class="processing-card">
+        <div class="processing-visual"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <strong id="processingTitle">正在分析留白</strong>
+        <p id="processingText">读取波形并与环境底噪比较…</p>
+        <div class="progress-track"><i id="processingProgress"></i></div>
+      </div>
+    </div>
+
+    <div class="export-sheet is-hidden" id="exportSheet" role="dialog" aria-modal="true" aria-labelledby="exportSheetTitle">
+      <div class="sheet-backdrop" id="sheetBackdrop"></div>
+      <div class="sheet-card">
+        <button class="sheet-close" id="sheetClose" type="button" aria-label="关闭">×</button>
+        <span class="sheet-check">
+          <svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg>
+        </span>
+        <span class="section-kicker">READY TO DELIVER</span>
+        <h2 id="exportSheetTitle">成片已就绪</h2>
+        <p class="sheet-subtitle" id="exportFileName">—</p>
+        <div class="delivery-metrics">
+          <div><span>整段响度</span><strong id="exportLufs">—</strong><small>LUFS</small></div>
+          <div><span>真峰值</span><strong id="exportPeak">—</strong><small>dBTP</small></div>
+          <div><span>成片时长</span><strong id="exportDuration">—</strong><small>mm:ss</small></div>
+          <div><span>收紧留白</span><strong id="exportSaved">—</strong><small>seconds</small></div>
+        </div>
+        <div class="sheet-actions">
+          <button class="button button-primary button-large" id="downloadButton" type="button">下载 WAV</button>
+          <button class="button button-quiet button-large" id="keepEditingButton" type="button">继续编辑</button>
+        </div>
+        <p class="sheet-footnote">原文件保持只读 · 导出文件名 <span id="exportSafeName">—</span></p>
+      </div>
+    </div>
+
+    <div class="toast-host" id="toastHost" aria-live="polite"></div>
+    <script type="module" src="/src/app.ts"></script>
+  </body>
+</html>

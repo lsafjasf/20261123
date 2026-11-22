@@ -1,0 +1,16 @@
+{
+  "name": "pause-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local, dependency-free two-track WAV pause editor",
+  "scripts": {
+    "start": "node server.ts",
+    "dev": "node server.ts",
+    "test": "node --test tests/*.test.ts",
+    "check": "node scripts/check.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
