@@ -1,0 +1,18 @@
+{
+  "name": "film-multitrack-delivery",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline multi-track film delivery QC and dialogue-first mix toolkit (no third-party dependencies).",
+  "scripts": {
+    "samples": "node src/cli/main.ts samples samples",
+    "analyze": "node src/cli/main.ts analyze samples --out report",
+    "mix:zh": "node src/cli/main.ts mix samples --lang zh --out report",
+    "mix:en": "node src/cli/main.ts mix samples --lang en --out report",
+    "serve": "node src/cli/main.ts serve samples --port 8080",
+    "test": "node --test \"test/*.test.ts\""
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}

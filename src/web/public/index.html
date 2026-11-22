@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>影片多轨交付 QC · 离线工作台</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>影片多轨交付 QC · 对白优先混音</h1>
+      <p class="sub">中文 / English / 音乐说明三轨 · 全离线 · WebCodecs + WebAudio + Canvas + MediaSource</p>
+    </header>
+
+    <section class="card">
+      <h2>1. 载入素材</h2>
+      <div class="loaders">
+        <label class="file-label">
+          音频轨道（多选 WAV）
+          <input id="audio-files" type="file" accept=".wav,audio/wav" multiple />
+        </label>
+        <label class="file-label">
+          画面（可选 MP4/WebM）
+          <input id="video-file" type="file" accept=".mp4,.webm,video/*" />
+        </label>
+      </div>
+      <p id="status" class="status" data-tone="info">等待载入…</p>
+    </section>
+
+    <section class="card">
+      <h2>2. 试听与语言切换（画面不重启）</h2>
+      <div class="transport">
+        <button id="play">播放</button>
+        <button id="pause">暂停</button>
+        <span class="group-label">语言：</span>
+        <button id="lang-zh" class="lang active">中文</button>
+        <button id="lang-en" class="lang">English</button>
+        <span class="group-label">混音：</span>
+        <button id="mode-ducked" class="mode active">对白优先（闪避）</button>
+        <button id="mode-raw" class="mode">原始叠加（A/B 对比）</button>
+      </div>
+      <input id="seek" type="range" min="0" max="100" step="0.01" value="0" />
+      <p id="timecode" class="timecode">0.00s / 0.00s</p>
+      <video id="video" controls playsinline muted></video>
+      <div id="track-controls" class="track-controls"></div>
+      <div class="canvas-stack">
+        <div>
+          <h3>当前对白波形</h3>
+          <canvas id="waveform" width="900" height="120"></canvas>
+        </div>
+        <div>
+          <h3>音乐闪避包络（侧链）</h3>
+          <canvas id="duck-canvas" width="900" height="90"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. 轨道矩阵</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>文件</th><th>角色</th><th>声道</th><th>采样率</th>
+              <th>时长(s)</th><th>积分响度(LUFS)</th><th>LRA</th><th>真峰(dBTP)</th>
+              <th>尾静音(s)</th><th>状态</th>
+            </tr>
+          </thead>
+          <tbody id="matrix-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4. 异常清单与导出</h2>
+      <ul id="anomaly-list" class="anomaly-list"></ul>
+      <div class="exports">
+        <button id="export-json">导出 report.json</button>
+        <button id="export-matrix">导出 track-matrix.csv</button>
+        <button id="export-anomalies">导出 anomalies.csv</button>
+        <button id="export-mix" class="primary">导出当前默认混音 WAV</button>
+      </div>
+    </section>
+
+    <script type="module" src="../../src/web/app.ts"></script>
+  </body>
+</html>
