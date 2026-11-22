@@ -1,0 +1,13 @@
+{
+  "name": "loudness-desk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Streaming loudness QC workbench built with TypeScript and native browser APIs.",
+  "scripts": {
+    "build": "node --disable-warning=ExperimentalWarning scripts/build.ts",
+    "start": "node --disable-warning=ExperimentalWarning scripts/build.ts && node --disable-warning=ExperimentalWarning server.ts",
+    "check": "node --disable-warning=ExperimentalWarning scripts/selfcheck.ts",
+    "analyze": "node --disable-warning=ExperimentalWarning scripts/analyze-cli.ts"
+  }
+}
