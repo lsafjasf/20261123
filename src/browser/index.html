@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>本地转码任务调度台</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>本地转码任务调度台</h1>
+      <div class="worker-status" id="worker-status">WebCodecs Worker: 未连接</div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2>资源曲线（CPU / 内存 / 临时磁盘）</h2>
+        <canvas id="resource-chart" width="1100" height="240"></canvas>
+        <div class="legend" id="chart-legend"></div>
+      </section>
+
+      <div class="grid-two">
+        <section class="panel">
+          <h2>提交任务</h2>
+          <form id="submit-form">
+            <label>名称 <input name="name" required value="demo-task" /></label>
+            <label>类型
+              <select name="kind">
+                <option value="upload">上传 upload</option>
+                <option value="proxy" selected>代理 proxy</option>
+                <option value="output">成片 output</option>
+                <option value="transcode">WebCodecs 转码 transcode</option>
+              </select>
+            </label>
+            <label>优先级 <input name="priority" type="number" value="5" min="0" max="100" /></label>
+            <div class="form-row">
+              <label>CPU 核 <input name="cpu" type="number" value="2" step="0.5" min="0.1" /></label>
+              <label>内存 MB <input name="memoryMB" type="number" value="256" min="16" /></label>
+              <label>临时盘 MB <input name="tmpMB" type="number" value="128" min="16" /></label>
+            </div>
+            <div class="form-row">
+              <label>分块数 <input name="chunks" type="number" value="10" min="1" /></label>
+              <label>每块耗时 ms <input name="chunkWorkMs" type="number" value="150" min="10" /></label>
+              <label>重试次数 <input name="maxRetries" type="number" value="1" min="0" /></label>
+            </div>
+            <button type="submit">提交排队</button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h2>调度决策流（为什么在等）</h2>
+          <ul class="decision-list" id="decision-list"></ul>
+        </section>
+      </div>
+
+      <section class="panel">
+        <h2>任务队列</h2>
+        <table class="task-table">
+          <thead>
+            <tr>
+              <th>名称</th>
+              <th>类型</th>
+              <th>优先级</th>
+              <th>状态</th>
+              <th>进度</th>
+              <th>等待原因 / 说明</th>
+              <th>尝试</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="task-tbody"></tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>成片预览（MediaSource 播放 WebCodecs 产出的 WebM）</h2>
+        <video id="mse-preview" controls muted playsinline style="width: 480px; max-width: 100%; background: #000; border-radius: 8px;"></video>
+        <div style="margin-top: 10px;">
+          <select id="preview-select" style="background: var(--panel-2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 7px;"></select>
+          <button id="preview-load" class="ghost" type="button">加载播放</button>
+          <span id="preview-status" class="reason-detail" style="margin-left: 10px;"></span>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>

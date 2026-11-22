@@ -1,0 +1,17 @@
+{
+  "name": "local-transcode-scheduler",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "本地转码机任务调度：配额排队、优先级、暂停/取消/断点恢复/重试，零依赖，仅 Node 标准库 + WebCodecs/WebAudio/Canvas/MediaSource",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server/main.ts",
+    "demo": "node --disable-warning=ExperimentalWarning src/server/demo.ts",
+    "test": "node --test --test-concurrency=1 \"test/*.test.ts\""
+  },
+  "keywords": ["scheduler", "transcode", "webcodecs", "priority-queue"],
+  "license": "UNLICENSED"
+}

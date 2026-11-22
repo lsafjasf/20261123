@@ -1,0 +1,152 @@
+:root {
+  --bg: #0f1420;
+  --panel: #182033;
+  --panel-2: #1f2a42;
+  --text: #e6ebf5;
+  --muted: #8b97ad;
+  --accent: #4f8cff;
+  --green: #35c48d;
+  --amber: #f0b450;
+  --red: #ef6464;
+  --purple: #a78bfa;
+  --border: #283350;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar h1 { font-size: 18px; margin: 0; }
+
+.worker-status { color: var(--muted); font-size: 13px; }
+.worker-status.online { color: var(--green); }
+
+main { padding: 20px 24px 48px; max-width: 1180px; margin: 0 auto; }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+
+.panel h2 { font-size: 15px; margin: 0 0 12px; color: var(--muted); font-weight: 600; }
+
+.grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+form label { display: block; margin-bottom: 10px; color: var(--muted); font-size: 13px; }
+form input, form select {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 7px 9px;
+  font-size: 13px;
+}
+.form-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+button {
+  background: var(--accent);
+  color: white;
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 13px;
+}
+button:hover { filter: brightness(1.1); }
+button.ghost { background: var(--panel-2); border: 1px solid var(--border); }
+button.danger { background: var(--red); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.task-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.task-table th, .task-table td {
+  text-align: left;
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.task-table th { color: var(--muted); font-weight: 600; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.state-queued { background: #3a4561; color: #c6d2ea; }
+.state-starting, .state-running { background: rgba(79, 140, 255, 0.2); color: #8db4ff; }
+.state-pausing, .state-paused { background: rgba(240, 180, 80, 0.2); color: var(--amber); }
+.state-cancelling, .state-cancelled { background: rgba(239, 100, 100, 0.18); color: var(--red); }
+.state-completed { background: rgba(53, 196, 141, 0.18); color: var(--green); }
+.state-failed { background: rgba(239, 100, 100, 0.25); color: #ff9b9b; }
+
+.progress-cell { min-width: 130px; }
+.progress-track {
+  height: 7px;
+  background: var(--panel-2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.progress-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
+.progress-fill.done { background: var(--green); }
+
+.wait-reason { color: var(--amber); font-size: 12px; }
+.wait-reason.none { color: var(--muted); }
+.reason-detail { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+.decision-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  font-size: 12px;
+}
+.decision-list li {
+  padding: 7px 4px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+.decision-list .action { color: var(--purple); margin-right: 6px; }
+.decision-list .reason { color: var(--amber); margin-right: 6px; }
+
+.legend { display: flex; gap: 18px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+.legend span::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 5px;
+}
+.legend .l-cpu::before { background: #4f8cff; }
+.legend .l-mem::before { background: #35c48d; }
+.legend .l-tmp::before { background: #f0b450; }
+.legend .l-pres::before { background: #a78bfa; }
+
+#resource-chart { width: 100%; height: 240px; display: block; }
+.actions { display: flex; gap: 6px; }
+.actions button { padding: 5px 10px; font-size: 12px; }
+
+.kind-tag { color: var(--purple); font-size: 12px; }
