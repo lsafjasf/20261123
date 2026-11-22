@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>拟音轨工作室 · Foley Frame Sync</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>拟音轨工作室</h1>
+    <div class="transport">
+      <button id="btn-start" title="回到开头">⏮</button>
+      <button id="btn-prev" title="上一帧">◀</button>
+      <button id="btn-play" class="primary">▶ 播放</button>
+      <button id="btn-next" title="下一帧">▶</button>
+      <button id="btn-loop" title="循环">🔁</button>
+    </div>
+    <div class="readout">
+      <span id="frame-readout">帧 0</span>
+      <span id="tc-readout">00:00:00:00</span>
+      <label>帧率
+        <select id="fps-select"></select>
+      </label>
+      <span id="sr-readout"></span>
+    </div>
+  </header>
+
+  <main>
+    <section class="stage">
+      <canvas id="stage" width="640" height="360"></canvas>
+      <canvas id="timeline" width="640" height="72"></canvas>
+      <div class="range-bar">
+        <label>入点 <input id="range-in" type="number" min="0" value="0" /></label>
+        <label>出点 <input id="range-out" type="number" min="0" value="120" /></label>
+        <button id="btn-set-in">播放头设为入点</button>
+        <button id="btn-set-out">播放头设为出点</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>生成拟音</h2>
+      <div class="row">
+        <button id="btn-gen-scene" class="primary">对齐画面事件生成</button>
+        <span class="hint">脚步 / 碰撞 / 开门自动吸附到动画事件帧</span>
+      </div>
+      <div class="row">
+        <select id="interval-sound"></select>
+        <label>间隔 <input id="interval-frames" type="number" min="1" value="12" /> 帧</label>
+        <button id="btn-gen-interval">按间隔生成</button>
+      </div>
+      <div class="row">
+        <select id="single-sound"></select>
+        <button id="btn-add-single">在播放头添加</button>
+        <button id="btn-clear" class="danger">清空全部</button>
+      </div>
+
+      <h2>拟音清单 <span id="cue-count"></span></h2>
+      <div class="table-wrap">
+        <table id="cue-table">
+          <thead>
+            <tr><th>帧</th><th>偏移(采样)</th><th>音效</th><th>增益</th><th>备注</th><th>微调</th><th></th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <h2>导出 / 载入</h2>
+      <div class="row">
+        <button id="btn-export">下载清单 JSON</button>
+        <label class="file-btn">载入清单文件<input id="file-import" type="file" accept=".json" hidden /></label>
+        <button id="btn-wav">渲染 WAV</button>
+      </div>
+      <div class="row">
+        <input id="save-name" placeholder="清单名称" value="demo" />
+        <button id="btn-save">保存到服务器</button>
+        <select id="saved-list"></select>
+        <button id="btn-load">载入</button>
+      </div>
+      <div class="row">
+        <button id="btn-record">录制动画预览 (WebCodecs→MediaSource)</button>
+        <span id="roundtrip-status" class="hint"></span>
+      </div>
+      <video id="recorded" controls muted width="320"></video>
+    </section>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

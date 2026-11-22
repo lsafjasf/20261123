@@ -1,0 +1,96 @@
+:root {
+  --bg: #0d1117;
+  --panel: #161c24;
+  --line: #2a3138;
+  --text: #dbe2ea;
+  --dim: #8b96a3;
+  --accent: #e8b64c;
+  --accent2: #5ac8fa;
+  --danger: #e5636f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 10px 18px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+h1 { font-size: 17px; margin: 0; color: var(--accent); }
+h2 { font-size: 14px; margin: 18px 0 8px; color: var(--accent2); }
+
+button, .file-btn {
+  background: #232c37;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  font: inherit;
+}
+button:hover, .file-btn:hover { border-color: var(--accent); }
+button.primary { background: #3a3320; border-color: var(--accent); }
+button.danger { border-color: var(--danger); color: var(--danger); }
+button.active { background: var(--accent); color: #111; }
+
+input, select {
+  background: #0f141b;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 4px 7px;
+  font: inherit;
+  width: auto;
+}
+input[type="number"] { width: 76px; }
+
+.transport { display: flex; gap: 6px; }
+.readout { display: flex; gap: 16px; align-items: center; color: var(--dim); }
+.readout span { font-variant-numeric: tabular-nums; }
+#frame-readout, #tc-readout { color: var(--text); font-weight: 600; }
+
+main {
+  display: grid;
+  grid-template-columns: minmax(420px, 660px) 1fr;
+  gap: 18px;
+  padding: 18px;
+  align-items: start;
+}
+
+.stage canvas {
+  display: block;
+  width: 100%;
+  background: #101418;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+#timeline { margin-top: 8px; cursor: crosshair; }
+
+.range-bar { display: flex; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+
+.panel .row { display: flex; gap: 10px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+.hint { color: var(--dim); font-size: 12px; }
+
+.table-wrap { max-height: 300px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 4px 8px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+th { position: sticky; top: 0; background: var(--panel); }
+tr.current td { background: #243042; }
+td .nudge { padding: 1px 6px; margin: 0 1px; font-size: 12px; }
+td input[type="range"] { width: 80px; }
+
+#recorded { display: block; margin-top: 10px; border: 1px solid var(--line); border-radius: 8px; }
+#roundtrip-status.ok { color: #7dd87d; }
+#roundtrip-status.bad { color: var(--danger); }

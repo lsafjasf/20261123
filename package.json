@@ -1,0 +1,12 @@
+{
+  "name": "foley-frame-sync",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline foley track builder: frame-accurate, sample-accurate cue triggering for animation preview. Zero external dependencies.",
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "node build.mjs && node server/server.ts",
+    "test": "node --test test/"
+  }
+}
