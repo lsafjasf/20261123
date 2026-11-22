@@ -1,0 +1,90 @@
+{
+  "formatVersion": 1,
+  "id": "demo-project",
+  "name": "Launch Promo (legacy)",
+  "frameRate": "30000/1001",
+  "audioSampleRate": 48000,
+  "media": [
+    { "id": "m-intro", "path": "media/intro.mp4", "kind": "video", "durationMs": 12000 },
+    { "id": "m-interview", "path": "media/interview.mp4", "kind": "video", "durationMs": 60000 },
+    { "id": "m-broll", "path": "media/broll.mp4", "kind": "video", "durationMs": 30000 },
+    { "id": "m-vo", "path": "media/voiceover.wav", "kind": "audio", "durationMs": 45000, "sampleRate": 48000 },
+    { "id": "m-music", "path": "media/music.wav", "kind": "audio", "durationMs": 90000, "sampleRate": 44100 }
+  ],
+  "sequences": [
+    {
+      "id": "seq-main",
+      "name": "Main",
+      "tracks": [
+        {
+          "id": "v1",
+          "kind": "video",
+          "clips": [
+            {
+              "id": "c-intro",
+              "mediaId": "m-intro",
+              "timelineStartMs": 0,
+              "sourceInMs": 1001,
+              "sourceOutMs": 11011
+            },
+            {
+              "id": "c-interview",
+              "mediaId": "m-interview",
+              "timelineStartMs": 9610,
+              "sourceInMs": 5005,
+              "sourceOutMs": 25025,
+              "transitionIn": { "type": "crossfade", "durationMs": 400 }
+            },
+            {
+              "id": "c-broken",
+              "mediaId": "m-broll",
+              "timelineStartMs": 30000,
+              "sourceInMs": 28000,
+              "sourceOutMs": 45000
+            }
+          ]
+        },
+        {
+          "id": "v2",
+          "kind": "video",
+          "clips": [
+            {
+              "id": "c-speedramp",
+              "mediaId": "m-broll",
+              "timelineStartMs": 4004,
+              "sourceInMs": 0,
+              "sourceOutMs": 12012,
+              "speedSegments": [
+                { "sourceInMs": 0, "sourceOutMs": 4004, "rate": 1 },
+                { "sourceInMs": 4004, "sourceOutMs": 8008, "rate": 2.5 },
+                { "sourceInMs": 8008, "sourceOutMs": 12012, "rate": 0.5 }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a1",
+          "kind": "audio",
+          "clips": [
+            {
+              "id": "c-vo",
+              "mediaId": "m-vo",
+              "timelineStartMs": 2002,
+              "sourceInMs": 0,
+              "sourceOutMs": 20020
+            },
+            {
+              "id": "c-music",
+              "mediaId": "m-music",
+              "timelineStartMs": 21000,
+              "sourceInMs": 10000,
+              "sourceOutMs": 40000,
+              "speed": 1.04,
+              "transitionIn": { "type": "crossfade", "durationMs": 1000 }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

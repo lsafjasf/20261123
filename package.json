@@ -1,0 +1,18 @@
+{
+  "name": "cutline-migrator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Legacy edit-project migrator: integer-ms timelines to frame/sample-accurate timelines. Zero third-party dependencies.",
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "scripts": {
+    "migrate": "node src/cli.ts migrate",
+    "verify": "node src/cli.ts verify",
+    "rollback": "node src/cli.ts rollback",
+    "status": "node src/cli.ts status",
+    "serve": "node web/serve.ts",
+    "test": "node --test test/*.test.ts"
+  }
+}

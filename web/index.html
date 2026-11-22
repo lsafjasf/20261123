@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <title>迁移结果验证器</title>
+    <style>
+      body { font: 14px/1.5 system-ui, sans-serif; margin: 24px; color: #222; }
+      h1 { font-size: 18px; }
+      #timeline { width: 100%; border: 1px solid #ccc; background: #fafafa; }
+      table { border-collapse: collapse; margin-top: 12px; }
+      td, th { border: 1px solid #ddd; padding: 4px 10px; text-align: left; }
+      .ok { color: #0a7d2c; }
+      .bad { color: #b00020; }
+      .warn { color: #9a6a00; }
+      section { margin-top: 20px; }
+      code { background: #f0f0f0; padding: 1px 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>迁移结果验证器（新引擎视角）</h1>
+    <p>
+      加载 <code>/output/project.v2.json</code> 与 <code>/output/report.json</code>，
+      用 Canvas 绘制时间线，用 WebAudio 做采样级时长抽查，
+      用 WebCodecs / MediaSource 做解码能力检查。
+    </p>
+    <canvas id="timeline" height="220"></canvas>
+    <section id="summary"></section>
+    <section id="checks"></section>
+    <section id="quarantine"></section>
+    <script type="module" src="/engine.ts"></script>
+  </body>
+</html>
