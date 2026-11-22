@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>工地延时摄影工作台</title>
+  <link rel="stylesheet" href="/src/client/style.css" />
+</head>
+<body>
+  <header>
+    <h1>工地延时摄影工作台</h1>
+    <div class="toolbar">
+      <button id="btn-reload">重新加载照片</button>
+      <button id="btn-analyze" disabled>分析（对齐 + 曝光）</button>
+      <button id="btn-add-anchor" disabled>添加锚点模式</button>
+      <button id="btn-clear-anchors" disabled>清除锚点</button>
+      <span class="sep"></span>
+      <button id="btn-play" disabled>▶ 预览</button>
+      <label>FPS <input id="fps" type="number" value="12" min="1" max="60" /></label>
+      <span class="sep"></span>
+      <button id="btn-export" disabled>导出视频 + 序列 + 清单</button>
+      <span id="status">载入中…</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="preview-pane">
+      <canvas id="preview" width="640" height="360"></canvas>
+      <div class="frame-info" id="frame-info">—</div>
+      <video id="result-video" controls muted hidden></video>
+    </section>
+
+    <aside class="side-pane">
+      <canvas id="chart-residual" width="300" height="120"></canvas>
+      <canvas id="chart-exposure" width="300" height="140"></canvas>
+      <div class="legend">
+        <span class="sw" style="background:#5ac8fa"></span>对齐残差 (px)
+        <span class="sw" style="background:#ff9f5a"></span>实测 EV
+        <span class="sw" style="background:#7ee787"></span>昼夜趋势
+        <span class="sw" style="background:#c580ff"></span>校正量
+      </div>
+      <h2>异常清单 <span id="anomaly-count"></span></h2>
+      <ul id="anomaly-list"></ul>
+    </aside>
+  </main>
+
+  <section class="frames-pane">
+    <h2>帧序列（点击跳转；「跳过」从导出中移除；「停留 +N」让该帧多停留 N 帧）</h2>
+    <div id="frame-list" class="frame-list"></div>
+  </section>
+
+  <script type="module" src="/src/client/main.ts"></script>
+</body>
+</html>
