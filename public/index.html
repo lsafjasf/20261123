@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>野径直播 · 本地 90 秒回放</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><path d="M5 24.5 12.2 9l5.1 9.7L20.5 14l6.7 10.5Z"/><circle cx="24.5" cy="7.5" r="2.6"/></svg>
+          </span>
+          <div>
+            <p class="eyebrow">TRAIL BROADCAST / LOCAL ONLY</p>
+            <h1>野径直播</h1>
+          </div>
+        </div>
+        <div class="top-badges">
+          <span class="pill pill-local"><i></i>全程本机</span>
+          <span class="pill">WebCodecs</span>
+          <span class="pill">无外部请求</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero-grid">
+          <article class="live-card">
+            <div class="stage">
+              <canvas id="liveCanvas" width="1280" height="720" aria-label="本地直播画面"></canvas>
+              <div class="stage-shade"></div>
+              <div class="stage-top">
+                <span class="live-badge" id="liveBadge"><i></i><b id="liveBadgeText">待机</b></span>
+                <span class="source-chip" id="sourceLabel">本地演示画面</span>
+              </div>
+              <div class="stage-bottom">
+                <span id="sessionClock">00:00:00</span>
+                <span class="stage-separator"></span>
+                <span id="canvasInfo">1280 × 720 · 30 fps</span>
+              </div>
+            </div>
+            <div class="live-toolbar">
+              <button class="button button-primary" id="startButton">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8l8.4-5.4Z"/></svg>
+                开始直播
+              </button>
+              <button class="button button-quiet" id="stopButton" disabled>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="6" y="6" width="8" height="8" rx="1"/></svg>
+                结束
+              </button>
+              <span class="toolbar-line"></span>
+              <button class="button button-replay" id="replayButton" disabled>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 9a6 6 0 1 1 1.4 5.5M4 4v5h5"/></svg>
+                回放最近 90 秒
+              </button>
+              <span class="encoder-readout" id="encoderReadout">缓冲尚未开始</span>
+            </div>
+          </article>
+
+          <aside class="side-panel">
+            <section class="panel buffer-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">RING BUFFER</p>
+                  <h2>缓冲水位</h2>
+                </div>
+                <span class="pressure-badge" id="pressureBadge">空闲</span>
+              </div>
+              <div class="watermark">
+                <strong id="bufferWatermark">0.0<small>s</small></strong>
+                <span>/ 90 秒目标窗口</span>
+              </div>
+              <div class="buffer-ruler" aria-hidden="true">
+                <span>0</span><span>30s</span><span>60s</span><span>90s</span>
+                <i class="buffer-ticks" id="bufferTicks"></i>
+                <div class="buffer-fill" id="bufferFill"></div>
+                <div class="buffer-marker" id="bufferMarker"></div>
+              </div>
+              <dl class="metric-grid">
+                <div><dt>完整 GOP</dt><dd id="gopCount">0</dd></div>
+                <div><dt>关键帧序号</dt><dd id="keyframeCount">—</dd></div>
+                <div><dt>本机内存</dt><dd id="bufferBytes">0 MB</dd></div>
+                <div><dt>音频帧</dt><dd id="audioFrameCount">0</dd></div>
+              </dl>
+              <p class="panel-note" id="ringNote">窗口按关键帧对齐，允许最多一个 GOP 的溢出；活动 GOP 即使超预算也不会被截断。</p>
+            </section>
+
+            <section class="panel encode-panel">
+              <p class="eyebrow">ENCODER</p>
+              <div class="encode-row">
+                <span>实时刻率</span>
+                <strong id="bitrateValue">— kbps</strong>
+              </div>
+              <div class="encode-row">
+                <span>已投影帧</span>
+                <strong id="videoFrameValue">0</strong>
+              </div>
+              <div class="encode-row">
+                <span>丢帧 / 跳过</span>
+                <strong id="skipValue">0</strong>
+              </div>
+              <div class="encode-row">
+                <span>音频源</span>
+                <strong id="audioModeValue">—</strong>
+              </div>
+              <p class="warning-line" id="warningLine" hidden></p>
+            </section>
+          </aside>
+        </section>
+
+        <section class="replay-card" id="replayCard">
+          <div class="replay-video-wrap">
+            <video id="replayVideo" controls playsinline></video>
+            <div class="replay-empty" id="replayEmpty">
+              <span class="empty-icon">
+                <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 20a12 12 0 1 1 2.8 7.6M8 10v8h8"/><path d="m18 14 9 6-9 6Z"/></svg>
+              </span>
+              <h2>精彩镜头，不出本机</h2>
+              <p>开启直播后，编码数据只写入浏览器内存中的 90 秒环形缓冲。按下回放时，从关键帧生成独立 WebM 片段。</p>
+            </div>
+          </div>
+          <div class="replay-copy">
+            <div>
+              <p class="eyebrow">LOCAL REPLAY</p>
+              <h2 id="replayTitle">等待片段</h2>
+              <p id="replayRange" class="replay-range">回放区间会显示在这里</p>
+            </div>
+            <div class="replay-state" id="replayState"><i></i><span>就绪</span></div>
+          </div>
+        </section>
+
+        <section class="panel history-panel">
+          <div class="panel-heading history-heading">
+            <div>
+              <p class="eyebrow">REPLAY LOG</p>
+              <h2>每次回放区间</h2>
+            </div>
+            <span class="history-count" id="historyCount">0 段</span>
+          </div>
+          <div class="history-table-wrap">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>回放区间</th>
+                  <th>时长</th>
+                  <th>起始关键帧</th>
+                  <th>数据量</th>
+                  <th>状态</th>
+                  <th>片段</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody">
+                <tr class="empty-row"><td colspan="7">还没有回放记录。直播开始几秒后即可回放。</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="history-note">重复点击会由互斥锁拦截，不会复制、截断或改写正在编码的环形缓冲。</p>
+        </section>
+      </main>
+
+      <footer>
+        <span>浏览器内存 · WebCodecs VP8 / Opus · MediaSource 回放</span>
+        <span id="footerEndpoint">本机 127.0.0.1</span>
+      </footer>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/app.ts"></script>
+  </body>
+</html>

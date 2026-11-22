@@ -1,0 +1,15 @@
+{
+  "name": "trail-live-replay",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local 90-second live replay ring buffer for outdoor broadcasts",
+  "scripts": {
+    "start": "node --experimental-strip-types server.ts",
+    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "check": "npm test && node --experimental-strip-types scripts/check-server.ts"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}
