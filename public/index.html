@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>镜头暗角平场校正</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>镜头暗角平场校正</h1>
+    <span id="status" class="status">就绪 · 完全离线运行</span>
+  </header>
+  <main>
+    <aside>
+      <section>
+        <h2>1 · 平场素材</h2>
+        <input type="file" id="flatFile" accept="video/*">
+        <video id="flatVideo" class="thumb" muted playsinline></video>
+        <div class="row">
+          <button id="grabFlat">采集当前帧</button>
+          <button id="autoFlat">自动采样</button>
+          <button id="estimate" disabled>估计增益图</button>
+        </div>
+        <div class="row">
+          <button id="exportMap" disabled>导出映射</button>
+          <button id="importMapBtn">导入映射</button>
+          <input type="file" id="importMap" accept=".json,application/json" hidden>
+        </div>
+        <canvas id="mapPreview" width="320" height="180" title="增益图预览"></canvas>
+        <p class="hint" id="flatInfo">尚未采集平场帧</p>
+      </section>
+      <section>
+        <h2>2 · 待校正视频</h2>
+        <input type="file" id="workFiles" accept="video/*" multiple>
+        <select id="workList" size="4"></select>
+        <label>强度 <output id="strengthOut">100%</output>
+          <input type="range" id="strength" min="0" max="150" value="100">
+        </label>
+        <label>高光保护 <output id="shoulderOut">70%</output>
+          <input type="range" id="shoulder" min="0" max="100" value="70">
+        </label>
+        <label>肩部拐点 <output id="kneeOut">85%</output>
+          <input type="range" id="knee" min="60" max="100" value="85">
+        </label>
+        <label class="check">
+          <input type="checkbox" id="lumaLinked" checked> 锁定色彩（亮度联动增益）
+        </label>
+        <p class="hint">每段视频的参数独立保存，切换视频自动恢复。</p>
+      </section>
+      <section>
+        <h2>3 · 预览 <span class="keys">快捷键 1/2/3/4</span></h2>
+        <div class="row modes">
+          <button data-mode="original">原图</button>
+          <button data-mode="corrected" class="on">校正</button>
+          <button data-mode="split">分屏</button>
+          <button data-mode="gainmap">增益图</button>
+        </div>
+        <label id="splitRow" hidden>分屏位置
+          <input type="range" id="splitPos" min="0" max="100" value="50">
+        </label>
+      </section>
+      <section>
+        <h2>4 · 输出</h2>
+        <div class="row">
+          <button id="exportPng" disabled>导出校正帧 PNG</button>
+          <button id="recordToggle" disabled>录制校正视频</button>
+        </div>
+        <video id="monitor" class="thumb" muted playsinline></video>
+        <a id="download" hidden></a>
+      </section>
+    </aside>
+    <section class="stage">
+      <canvas id="view" width="960" height="540"></canvas>
+      <video id="workVideo" hidden playsinline></video>
+      <table id="sampleTable">
+        <thead>
+          <tr><th>区域</th><th>校正前亮度</th><th>校正后亮度</th><th>变化</th></tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <tr><td>角落/中心</td><td id="ratioBefore">—</td><td id="ratioAfter">—</td><td id="ratioDelta">—</td></tr>
+        </tfoot>
+      </table>
+    </section>
+  </main>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

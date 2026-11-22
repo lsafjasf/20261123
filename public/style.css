@@ -1,0 +1,124 @@
+:root {
+  --bg: #14161a;
+  --panel: #1d2026;
+  --edge: #2c313a;
+  --text: #e6e8ec;
+  --dim: #9aa3b0;
+  --accent: #4da3ff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--edge);
+}
+
+header h1 { font-size: 18px; margin: 0; }
+.status { color: var(--dim); font-size: 13px; }
+
+main {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 16px;
+  padding: 16px 20px;
+  align-items: start;
+}
+
+aside section {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
+aside h2 {
+  font-size: 14px;
+  margin: 0 0 10px;
+  color: var(--accent);
+}
+
+.keys { color: var(--dim); font-size: 12px; font-weight: normal; }
+
+.row { display: flex; gap: 8px; margin: 8px 0; flex-wrap: wrap; }
+
+button {
+  background: #262b33;
+  color: var(--text);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:disabled { opacity: 0.4; cursor: default; }
+button.on { background: var(--accent); color: #0b1220; border-color: var(--accent); }
+
+label { display: block; margin: 8px 0; color: var(--dim); }
+label output { color: var(--text); margin-left: 6px; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+input[type="file"] { max-width: 100%; color: var(--dim); }
+select {
+  width: 100%;
+  background: #14171c;
+  color: var(--text);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+.check { color: var(--text); }
+.hint { color: var(--dim); font-size: 12px; margin: 6px 0 0; }
+
+video.thumb, canvas#mapPreview {
+  width: 100%;
+  border-radius: 6px;
+  background: #000;
+  margin-top: 8px;
+  display: block;
+}
+
+.stage { min-width: 0; }
+
+canvas#view {
+  width: 100%;
+  background: #000;
+  border-radius: 8px;
+  border: 1px solid var(--edge);
+  display: block;
+}
+
+table {
+  width: 100%;
+  margin-top: 12px;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+th, td {
+  text-align: right;
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--edge);
+}
+
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--dim); font-weight: normal; }
+tfoot td { color: var(--accent); }
+
+a#download {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--accent);
+}

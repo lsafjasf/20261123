@@ -1,0 +1,13 @@
+{
+  "name": "vignette-corrector",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Flat-field based 2D gain estimation and adjustable vignetting correction. Offline, zero runtime dependencies.",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "node server.mjs",
+    "test": "npm run build && node --test",
+    "smoke": "node scripts/smoke.mjs"
+  }
+}
