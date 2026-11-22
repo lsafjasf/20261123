@@ -1,0 +1,14 @@
+{
+  "name": "portrait-cut",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline landscape-to-portrait interview editor",
+  "scripts": {
+    "start": "node --experimental-strip-types server.ts",
+    "test": "node --experimental-strip-types --test tests/*.test.ts"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}

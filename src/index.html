@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>竖映 Portrait Cut · 离线竖屏访谈剪辑</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark"><span>9</span><i></i><span>16</span></div>
+          <div>
+            <div class="brand-name">竖映 <em>PORTRAIT CUT</em></div>
+            <div class="brand-sub">离线访谈重构图</div>
+          </div>
+        </div>
+        <div class="project-title">
+          <span class="eyebrow">当前项目</span>
+          <strong>把镜头交给真实的人</strong>
+          <span class="version">V1 · 自动构图审阅中</span>
+        </div>
+        <div class="top-status">
+          <span class="status-pill"><i class="dot green"></i>完全离线</span>
+          <span class="status-pill mono">1920×1080 → 1080×1920</span>
+          <button class="icon-btn" id="muteBtn" title="声音开关" aria-label="声音开关">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Z"/></svg>
+          </button>
+          <button class="primary-btn" id="exportOpen">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg>
+            导出交付包
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="panel shots-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">SHOT LIST</span>
+              <h2>镜头清单</h2>
+            </div>
+            <span class="count-badge" id="shotCount">6 句</span>
+          </div>
+          <div class="shot-list" id="shotList"></div>
+          <div class="source-card">
+            <div class="source-thumb"><canvas id="sourceThumb" width="352" height="198"></canvas><span class="thumb-tag">16:9</span></div>
+            <div class="source-meta">
+              <div><strong>程序生成访谈素材</strong><span class="generated-tag">GENERATED</span></div>
+              <p>1920×1080 · 30 fps · 26.6 s</p>
+              <p class="muted">双机位构图 / 动态手势 / 环境声</p>
+            </div>
+          </div>
+          <div class="offline-note">
+            <span class="offline-icon">↯</span>
+            <p>素材、字幕与声音均在本地生成。编辑器不发送任何请求。</p>
+          </div>
+        </aside>
+
+        <section class="stage-panel">
+          <div class="stage-head">
+            <div class="stage-tabs">
+              <button class="stage-tab active" data-view="portrait">竖屏成片</button>
+              <button class="stage-tab" data-view="source">16:9 源画面</button>
+            </div>
+            <div class="stage-tools">
+              <span class="hint" id="frameHint">帧 0000 · 立即合成</span>
+              <button class="ghost-btn active" id="guidesBtn">安全区</button>
+              <button class="ghost-btn" id="captionToggle">字幕</button>
+            </div>
+          </div>
+          <div class="preview-area" id="previewArea">
+            <div class="preview-frame" id="previewFrame">
+              <canvas id="previewCanvas" width="1080" height="1920"></canvas>
+              <div class="preview-corner tl"></div>
+              <div class="preview-corner tr"></div>
+              <div class="preview-corner bl"></div>
+              <div class="preview-corner br"></div>
+              <div class="preview-chip" id="previewChip">拖动画面设置运动目标</div>
+            </div>
+            <div class="source-view" id="sourceView">
+              <canvas id="sourceCanvas" width="1920" height="1080"></canvas>
+              <div class="source-view-label">SOURCE CAM A · 1920×1080</div>
+            </div>
+          </div>
+          <div class="transport">
+            <div class="transport-left">
+              <button class="round-btn" id="prevShot" title="上一镜">
+                <svg viewBox="0 0 24 24"><path d="M6 5v14M18 6l-9 6 9 6V6Z"/></svg>
+              </button>
+              <button class="play-btn" id="playBtn" title="播放 / 暂停">
+                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7L8 5Z"/></svg>
+              </button>
+              <button class="round-btn" id="nextShot" title="下一镜">
+                <svg viewBox="0 0 24 24"><path d="M18 5v14M6 6l9 6-9 6V6Z"/></svg>
+              </button>
+            </div>
+            <div class="timecode"><span id="currentTime">00:00.60</span><i>/</i><span id="totalTime">00:25.60</span></div>
+            <div class="transport-right">
+              <span class="quality-pill">30 FPS</span>
+              <span class="quality-pill">1080 × 1920</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel inspector">
+          <div class="panel-heading inspector-heading">
+            <div>
+              <span class="eyebrow">SHOT PARAMETERS</span>
+              <h2 id="inspectorTitle">镜头 01</h2>
+            </div>
+            <span class="shot-chip" id="inspectorSpeaker">周岚</span>
+          </div>
+
+          <div class="map-card">
+            <div class="map-head">
+              <div><strong>源画幅映射</strong><span>拖框调整主体 · 拖角缩放</span></div>
+              <div class="mode-switch">
+                <button class="mode-btn active" data-mode="subject">主体</button>
+                <button class="mode-btn" data-mode="gesture">手势</button>
+              </div>
+            </div>
+            <canvas id="mapCanvas" width="720" height="405"></canvas>
+            <div class="map-legend">
+              <span><i class="legend-subject"></i>主体框</span>
+              <span><i class="legend-gesture"></i>关键手势</span>
+              <span><i class="legend-crop"></i>裁切窗</span>
+            </div>
+          </div>
+
+          <div class="param-block">
+            <div class="param-title"><span>运动目标</span><span class="param-value" id="targetValue">X 48% · Y 42%</span></div>
+            <div class="axis-row">
+              <label>水平</label>
+              <input id="targetX" type="range" min="18" max="82" value="48" />
+            </div>
+            <div class="axis-row">
+              <label>垂直</label>
+              <input id="targetY" type="range" min="28" max="62" value="42" />
+            </div>
+            <p class="param-note">拖动竖屏画面中的十字标记，可直接移动落点。</p>
+          </div>
+
+          <div class="param-grid">
+            <label class="field">
+              <span>构图缩放</span>
+              <div class="field-line"><input id="zoomRange" type="range" min="90" max="165" value="116" /><output id="zoomValue">1.16×</output></div>
+            </label>
+            <label class="field">
+              <span>镜间平移</span>
+              <div class="field-line"><input id="panRange" type="range" min="0" max="1400" step="40" value="760" /><output id="panValue">760 ms</output></div>
+            </label>
+          </div>
+
+          <div class="param-block compact">
+            <div class="param-title"><span>合成约束</span><span class="safe-pill" id="safePill">全部安全</span></div>
+            <label class="toggle-row"><span><b>字幕安全宽度</b><small>86% 画幅内自动换行</small></span><input type="checkbox" id="captionSafe" checked /></label>
+            <label class="toggle-row"><span><b>关键手势保护</b><small>手势区不越出裁切窗</small></span><input type="checkbox" id="gestureSafe" checked /></label>
+          </div>
+
+          <div class="numeric-boxes">
+            <div class="numeric-head"><span>主体框坐标</span><button id="resetShot">重置本镜</button></div>
+            <div class="numeric-grid">
+              <label>X<input id="boxX" type="number" step="1" /></label>
+              <label>Y<input id="boxY" type="number" step="1" /></label>
+              <label>W<input id="boxW" type="number" step="1" /></label>
+              <label>H<input id="boxH" type="number" step="1" /></label>
+            </div>
+          </div>
+
+          <div class="warning-strip" id="warningStrip">
+            <span>✓</span><p>字幕与手势均在安全区内。</p>
+          </div>
+        </aside>
+      </main>
+
+      <footer class="timeline">
+        <div class="timeline-head">
+          <div class="timeline-title"><span class="eyebrow">TIMELINE</span><strong>句子时间线</strong></div>
+          <div class="timeline-legend">
+            <span><i class="dot orange"></i>周岚</span>
+            <span><i class="dot teal"></i>林越</span>
+            <span><i class="legend-gesture"></i>关键手势</span>
+            <span class="scrub-hint">拖拽任意位置立即刷新帧</span>
+          </div>
+          <div class="timeline-zoom"><button>−</button><span>适应</span><button>＋</button></div>
+        </div>
+        <div class="timeline-body" id="timelineBody">
+          <canvas id="waveCanvas" width="1800" height="52"></canvas>
+          <div class="ruler" id="ruler"></div>
+          <div class="track shots-track" id="shotsTrack"></div>
+          <div class="track caption-track" id="captionTrack"></div>
+          <div class="playhead" id="playhead"><span></span></div>
+        </div>
+      </footer>
+    </div>
+
+    <dialog class="export-dialog" id="exportDialog">
+      <form method="dialog" class="export-sheet">
+        <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+        <div class="export-hero">
+          <span class="eyebrow">DELIVERY PACKAGE</span>
+          <h2>一支成片，<br />连同它的每一处决定。</h2>
+          <p>视频、WebVTT 字幕和逐镜参数将在浏览器内编码打包，不上传任何素材。</p>
+        </div>
+        <div class="deliverable-list">
+          <div><span class="file-type video">WEBM</span><b>portrait-master.webm</b><small>VP8 + Opus · 1080×1920</small></div>
+          <div><span class="file-type sub">VTT</span><b>captions.zh-CN.vtt</b><small>逐句时间码与说话人</small></div>
+          <div><span class="file-type json">JSON</span><b>edit-parameters.json</b><small>主体框 / 手势区 / 裁切 / 平移动画</small></div>
+        </div>
+        <fieldset class="export-options">
+          <legend>交付选项</legend>
+          <label><input type="checkbox" id="burnCaptions" checked /><span>视频内烧录字幕</span></label>
+          <label><input type="checkbox" id="includeAudio" checked /><span>包含程序化声音</span></label>
+          <label><input type="checkbox" id="includeReadme" checked /><span>附带交付说明</span></label>
+        </fieldset>
+        <div class="export-progress" id="exportProgress">
+          <div class="progress-top"><span id="progressLabel">准备编码器</span><strong id="progressValue">0%</strong></div>
+          <div class="progress-bar"><i id="progressBar"></i></div>
+          <div class="codec-line"><span id="codecStatus">检测 WebCodecs…</span><span>MediaSource 预览</span></div>
+        </div>
+        <div class="export-result" id="exportResult">
+          <div class="result-head"><span class="success-dot"></span><strong>交付包已就绪</strong><span id="bundleSize">—</span></div>
+          <video id="exportVideo" controls playsinline></video>
+          <div class="result-files" id="resultFiles"></div>
+        </div>
+        <div class="export-actions">
+          <button value="cancel" class="secondary-btn">关闭</button>
+          <button type="button" class="primary-btn export-run" id="runExport">生成并打包</button>
+          <a class="primary-btn download-bundle hidden" id="downloadBundle" download="portrait-cut-delivery.zip">下载 .zip 交付包</a>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
