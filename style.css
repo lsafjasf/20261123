@@ -1,0 +1,39 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #14171c;
+  color: #e6e9ee;
+}
+main { max-width: 1024px; margin: 0 auto; padding: 16px; }
+h1 { font-size: 20px; }
+h2 { font-size: 15px; margin: 0 0 10px; color: #9fb4d0; }
+.panel {
+  background: #1c2129;
+  border: 1px solid #2a3140;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 8px 0; }
+button {
+  background: #2f6fed; color: #fff; border: 0; border-radius: 6px;
+  padding: 7px 14px; font-size: 14px; cursor: pointer;
+}
+button:disabled { background: #3a4353; cursor: not-allowed; }
+.file input { display: none; }
+.file {
+  border: 1px dashed #4a5568; border-radius: 6px; padding: 6px 12px;
+  cursor: pointer; color: #9fb4d0;
+}
+video, canvas { width: 100%; max-width: 640px; background: #000; border-radius: 6px; display: block; }
+canvas { image-rendering: auto; }
+progress { flex: 1; min-width: 160px; height: 8px; }
+.muted { color: #7c8798; font-size: 13px; }
+label { font-size: 13px; display: flex; flex-direction: column; gap: 4px; }
+input[type="range"] { width: 220px; }
+pre {
+  background: #10141a; border-radius: 6px; padding: 10px;
+  font-size: 12px; max-height: 260px; overflow: auto; white-space: pre-wrap;
+}
+#downloadRow a { color: #6ea8ff; font-size: 13px; }
