@@ -1,0 +1,13 @@
+{
+  "name": "interview-dereverb",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Documentary interview de-reverb: soft spectral suppression, per-sentence control, zero dependencies",
+  "scripts": {
+    "test": "node --test test/*.test.ts",
+    "build": "node tools/build.ts",
+    "demo": "node tools/makedemo.ts",
+    "serve": "node tools/serve.ts"
+  }
+}

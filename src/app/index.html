@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>采访去混响 · De-reverb</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 24px; max-width: 1080px; font-family: system-ui, sans-serif;
+      background: #14171c; color: #dde3ea; font-size: 14px;
+    }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    .sub { color: #8b96a5; margin-bottom: 16px; }
+    .panel {
+      background: #1c2129; border: 1px solid #2a313d; border-radius: 10px;
+      padding: 14px 16px; margin-bottom: 14px;
+    }
+    .row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    button {
+      background: #2f6fed; color: #fff; border: 0; border-radius: 6px;
+      padding: 7px 14px; font-size: 13px; cursor: pointer;
+    }
+    button.ghost { background: #2a313d; }
+    button:disabled { opacity: 0.45; cursor: default; }
+    input[type="range"] { accent-color: #2f6fed; }
+    canvas { width: 100%; border-radius: 6px; background: #10141a; display: block; }
+    .canvasLabel { color: #8b96a5; font-size: 12px; margin: 8px 0 4px; }
+    #segments { max-height: 220px; overflow-y: auto; }
+    .seg {
+      display: grid; grid-template-columns: 130px 1fr 90px 60px;
+      gap: 10px; align-items: center; padding: 5px 4px;
+      border-bottom: 1px solid #232a35; font-variant-numeric: tabular-nums;
+    }
+    .seg .time { color: #8b96a5; font-size: 12px; }
+    .seg .val { text-align: right; color: #9db8e8; font-size: 12px; }
+    .seg.bypassed { opacity: 0.45; }
+    #status { color: #8b96a5; font-size: 12px; min-height: 16px; }
+    progress { width: 180px; }
+    .drop {
+      border: 1.5px dashed #3a4354; border-radius: 8px; padding: 18px;
+      text-align: center; color: #8b96a5; cursor: pointer;
+    }
+    .drop.hover { border-color: #2f6fed; color: #cdd8ea; }
+    audio { width: 260px; height: 32px; }
+    a { color: #7fa8f5; }
+  </style>
+</head>
+<body>
+  <h1>纪录片采访去混响</h1>
+  <div class="sub">软增益谱处理 —— 压低尾音,不切词尾。全部本地计算,零上传。</div>
+
+  <div class="panel">
+    <div class="drop" id="drop">拖入采访音频(WAV / MP3 / M4A / OGG),或点击选择文件</div>
+    <input type="file" id="file" accept="audio/*" hidden />
+    <div style="margin-top:8px; text-align:center">
+      <button class="ghost" id="loadDemo">载入示例:空房间采访(16kHz WAV)</button>
+    </div>
+  </div>
+
+  <div class="panel" id="controls" hidden>
+    <div class="row">
+      <label>全局强度 <input type="range" id="strength" min="0" max="100" value="80" /></label>
+      <label>房间 T60 <input type="range" id="t60" min="20" max="150" value="80" /></label>
+      <span id="t60val">0.8s</span>
+      <button id="process">开始处理</button>
+      <progress id="prog" value="0" max="1" hidden></progress>
+      <label><input type="checkbox" id="bypass" /> 全局旁路(A/B)</label>
+    </div>
+    <div id="status" style="margin-top:8px"></div>
+  </div>
+
+  <div class="panel" id="segPanel" hidden>
+    <div class="canvasLabel">逐句控制(强度 % / 旁路)</div>
+    <div id="segments"></div>
+  </div>
+
+  <div class="panel" id="views" hidden>
+    <div class="canvasLabel">波形:原声(灰) vs 处理后(蓝) —— 点击定位播放</div>
+    <canvas id="wave" height="120"></canvas>
+    <div class="canvasLabel">残余尾音(被移除的部分,橙)与其频谱 —— 确认词尾仍在</div>
+    <canvas id="resid" height="150"></canvas>
+    <div class="row" style="margin-top:10px">
+      <button class="ghost" id="playOrig">▶ 原声</button>
+      <button class="ghost" id="playProc">▶ 处理后</button>
+      <button class="ghost" id="playResid">▶ 只听残余尾音</button>
+      <button class="ghost" id="stop">■ 停止</button>
+    </div>
+  </div>
+
+  <div class="panel" id="exportPanel" hidden>
+    <div class="row">
+      <a id="dlWav" download="dereverb.wav"><button class="ghost">下载 WAV</button></a>
+      <span id="mseBox" class="row">
+        <button class="ghost" id="streamOpus">流式播放 (Opus/WebM via MediaSource)</button>
+        <audio id="mseAudio" controls hidden></audio>
+        <a id="dlWebm" download="dereverb.webm" hidden>下载 WebM</a>
+      </span>
+    </div>
+  </div>
+
+  <script type="module" src="./app/main.js"></script>
+</body>
+</html>
