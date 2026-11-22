@@ -1,0 +1,804 @@
+{
+  "tool": "frame-safe/0.1.0",
+  "generated": "2026-11-22T22:32:30.192Z",
+  "source": {
+    "name": "SYNTH_TEST",
+    "width": 320,
+    "height": 240,
+    "fps": 24,
+    "frameCount": 32
+  },
+  "options": {
+    "repairStrength": 0.78,
+    "grainPreservation": 0.96,
+    "disabledFrames": [
+      9
+    ]
+  },
+  "frames": [
+    {
+      "frame": 0,
+      "timecode": "00:00:00:00",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0000-M0",
+          "kind": "dust",
+          "bbox": {
+            "x": 48,
+            "y": 48,
+            "w": 17,
+            "h": 23
+          },
+          "area": 103,
+          "confidence": 1,
+          "decision": "skipped-motion",
+          "temporal": {
+            "inPrev": false,
+            "inNext": false,
+            "persistence": 0.333
+          },
+          "grainBefore": 0,
+          "grainAfter": 0
+        },
+        {
+          "id": "F0000-M1",
+          "kind": "dust",
+          "bbox": {
+            "x": 61,
+            "y": 53,
+            "w": 16,
+            "h": 22
+          },
+          "area": 100,
+          "confidence": 1,
+          "decision": "skipped-motion",
+          "temporal": {
+            "inPrev": false,
+            "inNext": false,
+            "persistence": 0.333
+          },
+          "grainBefore": 0,
+          "grainAfter": 0
+        }
+      ]
+    },
+    {
+      "frame": 1,
+      "timecode": "00:00:00:01",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0001-M0",
+          "kind": "dust",
+          "bbox": {
+            "x": 52,
+            "y": 50,
+            "w": 17,
+            "h": 23
+          },
+          "area": 103,
+          "confidence": 1,
+          "decision": "skipped-motion",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 1
+          },
+          "grainBefore": 0,
+          "grainAfter": 0
+        },
+        {
+          "id": "F0001-M1",
+          "kind": "dust",
+          "bbox": {
+            "x": 65,
+            "y": 55,
+            "w": 16,
+            "h": 22
+          },
+          "area": 102,
+          "confidence": 1,
+          "decision": "skipped-motion",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 1
+          },
+          "grainBefore": 0,
+          "grainAfter": 0
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "timecode": "00:00:00:02",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 3,
+      "timecode": "00:00:00:03",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 4,
+      "timecode": "00:00:00:04",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 5,
+      "timecode": "00:00:00:05",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0005-M0",
+          "kind": "dust",
+          "bbox": {
+            "x": 37,
+            "y": 197,
+            "w": 7,
+            "h": 7
+          },
+          "area": 29,
+          "confidence": 1,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": false,
+            "inNext": false,
+            "persistence": 0.2
+          },
+          "grainBefore": 3.646663862490391,
+          "grainAfter": 3.646663862490391
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "timecode": "00:00:00:06",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 7,
+      "timecode": "00:00:00:07",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 8,
+      "timecode": "00:00:00:08",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0008-M0",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 428,
+          "confidence": 0.946,
+          "decision": "skipped-motion",
+          "temporal": {
+            "inPrev": false,
+            "inNext": true,
+            "persistence": 0.8916666666666667
+          },
+          "grainBefore": 0,
+          "grainAfter": 0
+        }
+      ]
+    },
+    {
+      "frame": 9,
+      "timecode": "00:00:00:09",
+      "disabled": true,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 10,
+      "timecode": "00:00:00:10",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0010-M0",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 426,
+          "confidence": 0.944,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 0.8875
+          },
+          "grainBefore": 4.309693655670461,
+          "grainAfter": 4.6412085522604976
+        }
+      ]
+    },
+    {
+      "frame": 11,
+      "timecode": "00:00:00:11",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0011-M0",
+          "kind": "dust",
+          "bbox": {
+            "x": 276,
+            "y": 56,
+            "w": 9,
+            "h": 9
+          },
+          "area": 49,
+          "confidence": 1,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": false,
+            "inNext": false,
+            "persistence": 0.2
+          },
+          "grainBefore": 2.9836340693103196,
+          "grainAfter": 2.3206042761302488
+        },
+        {
+          "id": "F0011-M1",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 419,
+          "confidence": 0.936,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 0.8729166666666667
+          },
+          "grainBefore": 4.6412085522604976,
+          "grainAfter": 4.309693655670461
+        }
+      ]
+    },
+    {
+      "frame": 12,
+      "timecode": "00:00:00:12",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0012-M0",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 421,
+          "confidence": 0.939,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 0.8770833333333333
+          },
+          "grainBefore": 4.6412085522604976,
+          "grainAfter": 4.309693655670461
+        }
+      ]
+    },
+    {
+      "frame": 13,
+      "timecode": "00:00:00:13",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0013-M0",
+          "kind": "dust",
+          "bbox": {
+            "x": 70,
+            "y": 17,
+            "w": 4,
+            "h": 1
+          },
+          "area": 4,
+          "confidence": 1,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": false,
+            "inNext": false,
+            "persistence": 0.2
+          },
+          "grainBefore": 4.972723448850533,
+          "grainAfter": 0
+        },
+        {
+          "id": "F0013-M1",
+          "kind": "dust",
+          "bbox": {
+            "x": 43,
+            "y": 52,
+            "w": 5,
+            "h": 1
+          },
+          "area": 5,
+          "confidence": 1,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": false,
+            "inNext": false,
+            "persistence": 0.2
+          },
+          "grainBefore": 4.972723448850533,
+          "grainAfter": 0
+        },
+        {
+          "id": "F0013-M2",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 431,
+          "confidence": 0.949,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 0.8979166666666667
+          },
+          "grainBefore": 4.309693655670461,
+          "grainAfter": 4.309693655670461
+        }
+      ]
+    },
+    {
+      "frame": 14,
+      "timecode": "00:00:00:14",
+      "disabled": false,
+      "manualEdit": true,
+      "masks": [
+        {
+          "id": "F0014-M0",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 457,
+          "confidence": 0.976,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 0.9520833333333333
+          },
+          "grainBefore": 4.6412085522604976,
+          "grainAfter": 4.309693655670461
+        }
+      ]
+    },
+    {
+      "frame": 15,
+      "timecode": "00:00:00:15",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0015-M0",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 460,
+          "confidence": 0.979,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 0.9583333333333334
+          },
+          "grainBefore": 4.6412085522604976,
+          "grainAfter": 4.309693655670461
+        }
+      ]
+    },
+    {
+      "frame": 16,
+      "timecode": "00:00:00:16",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0016-M0",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 480,
+          "confidence": 1,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 1
+          },
+          "grainBefore": 4.6412085522604976,
+          "grainAfter": 4.6412085522604976
+        }
+      ]
+    },
+    {
+      "frame": 17,
+      "timecode": "00:00:00:17",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0017-M0",
+          "kind": "dust",
+          "bbox": {
+            "x": 147,
+            "y": 177,
+            "w": 7,
+            "h": 7
+          },
+          "area": 29,
+          "confidence": 1,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": false,
+            "inNext": false,
+            "persistence": 0.2
+          },
+          "grainBefore": 3.3151489659003555,
+          "grainAfter": 3.646663862490391
+        },
+        {
+          "id": "F0017-M1",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 475,
+          "confidence": 0.995,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 0.9895833333333334
+          },
+          "grainBefore": 4.309693655670461,
+          "grainAfter": 4.309693655670461
+        }
+      ]
+    },
+    {
+      "frame": 18,
+      "timecode": "00:00:00:18",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0018-M0",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 470,
+          "confidence": 0.99,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 0.9791666666666666
+          },
+          "grainBefore": 4.6412085522604976,
+          "grainAfter": 4.972723448850533
+        }
+      ]
+    },
+    {
+      "frame": 19,
+      "timecode": "00:00:00:19",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0019-M0",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 480,
+          "confidence": 1,
+          "decision": "repaired",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 1
+          },
+          "grainBefore": 4.309693655670461,
+          "grainAfter": 3.9781787590804267
+        }
+      ]
+    },
+    {
+      "frame": 20,
+      "timecode": "00:00:00:20",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0020-M0",
+          "kind": "scratch",
+          "bbox": {
+            "x": 100,
+            "y": 0,
+            "w": 2,
+            "h": 240
+          },
+          "area": 475,
+          "confidence": 0.995,
+          "decision": "skipped-motion",
+          "temporal": {
+            "inPrev": true,
+            "inNext": false,
+            "persistence": 0.9895833333333334
+          },
+          "grainBefore": 0,
+          "grainAfter": 0
+        }
+      ]
+    },
+    {
+      "frame": 21,
+      "timecode": "00:00:00:21",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 22,
+      "timecode": "00:00:00:22",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 23,
+      "timecode": "00:00:00:23",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 24,
+      "timecode": "00:00:01:00",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 25,
+      "timecode": "00:00:01:01",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 26,
+      "timecode": "00:00:01:02",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 27,
+      "timecode": "00:00:01:03",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 28,
+      "timecode": "00:00:01:04",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 29,
+      "timecode": "00:00:01:05",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": []
+    },
+    {
+      "frame": 30,
+      "timecode": "00:00:01:06",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0030-M0",
+          "kind": "dust",
+          "bbox": {
+            "x": 164,
+            "y": 106,
+            "w": 16,
+            "h": 22
+          },
+          "area": 100,
+          "confidence": 1,
+          "decision": "skipped-motion",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 1
+          },
+          "grainBefore": 0,
+          "grainAfter": 0
+        },
+        {
+          "id": "F0030-M1",
+          "kind": "dust",
+          "bbox": {
+            "x": 176,
+            "y": 110,
+            "w": 17,
+            "h": 23
+          },
+          "area": 103,
+          "confidence": 1,
+          "decision": "skipped-motion",
+          "temporal": {
+            "inPrev": true,
+            "inNext": true,
+            "persistence": 1
+          },
+          "grainBefore": 0,
+          "grainAfter": 0
+        }
+      ]
+    },
+    {
+      "frame": 31,
+      "timecode": "00:00:01:07",
+      "disabled": false,
+      "manualEdit": false,
+      "masks": [
+        {
+          "id": "F0031-M0",
+          "kind": "dust",
+          "bbox": {
+            "x": 168,
+            "y": 108,
+            "w": 16,
+            "h": 22
+          },
+          "area": 100,
+          "confidence": 1,
+          "decision": "skipped-motion",
+          "temporal": {
+            "inPrev": false,
+            "inNext": false,
+            "persistence": 0.333
+          },
+          "grainBefore": 0,
+          "grainAfter": 0
+        },
+        {
+          "id": "F0031-M1",
+          "kind": "dust",
+          "bbox": {
+            "x": 180,
+            "y": 112,
+            "w": 17,
+            "h": 23
+          },
+          "area": 103,
+          "confidence": 1,
+          "decision": "skipped-motion",
+          "temporal": {
+            "inPrev": false,
+            "inNext": false,
+            "persistence": 0.333
+          },
+          "grainBefore": 0,
+          "grainAfter": 0
+        }
+      ]
+    }
+  ],
+  "lockedLines": [
+    {
+      "x": 250,
+      "frames": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "reason": "vertical line present in long-term reference; locked as picture content"
+    }
+  ],
+  "manualFrames": [
+    14
+  ],
+  "summary": {
+    "repairedMasks": 15,
+    "lockedMasks": 0,
+    "skippedMotion": 10,
+    "disabledFrames": 1,
+    "manualEdits": 1
+  }
+}

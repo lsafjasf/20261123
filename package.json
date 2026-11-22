@@ -1,0 +1,16 @@
+{
+  "name": "frame-safe",
+  "version": "0.1.0",
+  "description": "Offline archival film-scan restoration: temporal dust/hair/scratch repair with grain preservation",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "scripts": {
+    "restore": "node src/node/cli.ts",
+    "test": "node test/synth.ts",
+    "build:web": "node tools/build-web.mjs",
+    "serve": "node tools/serve.mjs"
+  }
+}
