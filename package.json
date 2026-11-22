@@ -1,0 +1,15 @@
+{
+  "name": "apex-tape-stop",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Frame-anchored tape-stop event sound design workstation",
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "start": "node server.ts",
+    "test": "node scripts/build.ts && node --test tests/*.test.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#080b09">
+    <title>APEX / Tape Stop Event Desk</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23080b09'/%3E%3Cpath d='M7 23 15 7h4l8 16h-5l-1.5-3.4h-7L12 23H7Zm7-7h4l-2-4.8L14 16Z' fill='%23d7ff3f'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-word">APEX<span>//</span>AUDIO</span>
+        </div>
+        <div class="breadcrumb">
+          <span>SESSION 04</span>
+          <i></i>
+          <strong>MONZA / REPLAY 07</strong>
+        </div>
+        <div class="topbar-spacer"></div>
+        <div class="engine-state">
+          <span class="live-dot"></span>
+          OFFLINE ENGINE
+        </div>
+        <div class="clock" id="sessionClock">00:00:00</div>
+      </header>
+
+      <main class="workspace">
+        <section class="viewer-column">
+          <div class="monitor" id="monitor">
+            <canvas id="sceneCanvas" aria-label="赛车回放画面"></canvas>
+            <div class="monitor-grain" aria-hidden="true"></div>
+            <div class="monitor-top">
+              <div class="replay-tag">
+                <span class="rec-dot"></span>
+                REPLAY / CAM 04
+              </div>
+              <div class="frame-pill">
+                <span>FRAME</span>
+                <strong id="monitorFrame">078</strong>
+                <em id="monitorFps">30 FPS</em>
+              </div>
+            </div>
+            <div class="telemetry">
+              <span>APPROACH SPEED</span>
+              <div><strong id="speedReadout">312</strong><em>KM/H</em></div>
+              <small>TURN 11 · PARABOLICA</small>
+            </div>
+            <div class="freeze-badge" id="freezeBadge">
+              <span>FRAME HOLD</span>
+              <strong id="freezeFrame">FRAME 138</strong>
+              <em>PICTURE + AUDIO LOCKED</em>
+            </div>
+            <div class="monitor-bottom">
+              <div class="time-readout">
+                <span>TC</span>
+                <strong id="monitorTimecode">00:02:18</strong>
+              </div>
+              <div class="audio-readout">
+                <span class="mini-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+                AUDIO MASTER <strong>48 kHz</strong>
+              </div>
+            </div>
+            <div class="monitor-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          </div>
+
+          <section class="timeline-panel">
+            <div class="timeline-head">
+              <div>
+                <span class="section-kicker">EVENT MAP</span>
+                <strong>Frame-anchored slowdown</strong>
+              </div>
+              <div class="timeline-readout">
+                <span id="playheadTC">00:02:18</span>
+                <em id="playheadSample">SAMPLE 124,800</em>
+              </div>
+              <div class="timeline-actions">
+                <span class="drag-hint">DRAG START / IMPACT</span>
+                <button class="icon-button" id="stopButton" title="停止预览" aria-label="停止预览">
+                  <span class="stop-icon"></span>
+                </button>
+              </div>
+            </div>
+            <canvas id="timelineCanvas" aria-label="帧锚定事件时间轴"></canvas>
+            <div class="timeline-legend">
+              <span><i class="legend-swatch lime"></i>音乐母版</span>
+              <span><i class="legend-swatch orange"></i>速率 / 音高下降</span>
+              <span><i class="legend-dot"></i>拍点穿越</span>
+              <span><i class="legend-hatch"></i>撞击后数字静音</span>
+            </div>
+          </section>
+        </section>
+
+        <aside class="inspector">
+          <div class="inspector-heading">
+            <div>
+              <span class="section-kicker">EVENT SOUND DESIGN</span>
+              <h1>Tape Stop</h1>
+            </div>
+            <span class="version-chip">V1.0 / 48K</span>
+          </div>
+
+          <section class="panel anchor-panel">
+            <div class="panel-title">
+              <span><b>01</b> FRAME ANCHOR</span>
+              <em class="lock-state">LOCKED</em>
+            </div>
+            <div class="impact-block">
+              <div>
+                <span class="field-label">IMPACT FRAME</span>
+                <div class="hero-value"><input id="impactFrameInput" type="number" min="1" step="1" value="138"><span>f</span></div>
+                <small id="impactMeta">00:04:18 · 4.600000 s</small>
+              </div>
+              <label class="select-field">
+                <span class="field-label">VIDEO RATE</span>
+                <select id="fpsSelect" aria-label="视频帧率"></select>
+              </label>
+            </div>
+            <div class="fps-xray" id="fpsXray"></div>
+            <p class="panel-note">时间锚与视频帧率解耦。换帧率后音轨逐样本不变，仅重映射帧号。</p>
+          </section>
+
+          <section class="panel stop-panel">
+            <div class="panel-title">
+              <span><b>02</b> TAPE STOP</span>
+              <em id="beatReadout">4.00 BEATS</em>
+            </div>
+            <div class="start-control">
+              <button class="nudge-button" id="startMinus" aria-label="减速起点提前一帧">−</button>
+              <div class="start-readout">
+                <span>DECEL START</span>
+                <strong id="startFrameReadout">78</strong>
+                <em id="startMeta">FRAME / 2.600000 s</em>
+              </div>
+              <button class="nudge-button" id="startPlus" aria-label="减速起点推后一帧">+</button>
+            </div>
+            <div class="field-grid">
+              <label class="input-field">
+                <span class="field-label">START FRAME</span>
+                <input id="startFrameInput" type="number" min="0" step="1" value="78">
+              </label>
+              <label class="input-field">
+                <span class="field-label">BPM</span>
+                <input id="bpmInput" type="number" min="40" max="240" step="1" value="120">
+              </label>
+              <button class="snap-button" id="snapButton">SNAP 4 BEATS</button>
+            </div>
+            <div class="rate-meter">
+              <span>1.000×</span>
+              <div><i id="rateFill"></i></div>
+              <span>0.000×</span>
+            </div>
+            <div class="start-slider-row">
+              <input id="startSlider" type="range" min="0" max="1000" value="0" aria-label="减速区间长度">
+              <output id="durationReadout">2.000 s</output>
+            </div>
+            <p class="panel-note">线性速降，连续相位重采样；4 ms 终止淡出后于撞击样本硬静音。</p>
+          </section>
+
+          <section class="panel preview-panel">
+            <div class="panel-title">
+              <span><b>03</b> AUDITION</span>
+              <em id="audioState">READY</em>
+            </div>
+            <button class="preview-button" id="previewButton">
+              <span class="play-glyph" aria-hidden="true"></span>
+              <span>PREVIEW TAPE STOP</span>
+              <kbd>SPACE</kbd>
+            </button>
+            <div class="audition-options">
+              <label class="toggle">
+                <input id="autoPreview" type="checkbox" checked>
+                <span class="toggle-track"><i></i></span>
+                AUTO AUDITION ON START EDIT
+              </label>
+              <span class="pre-roll">PRE-ROLL 1.4 s</span>
+            </div>
+            <div class="audition-progress"><i id="auditionProgress"></i></div>
+          </section>
+
+          <section class="panel proof-panel" id="proofPanel">
+            <div class="panel-title">
+              <span><b>04</b> TAIL GATE</span>
+              <em class="pass-state" id="tailVerdict">PASS</em>
+            </div>
+            <div class="proof-hero">
+              <div><strong id="tailNonZero">0</strong><span>post-impact<br>non-zero samples</span></div>
+              <div class="zero-peak"><span>PEAK</span><strong id="tailPeak">0.000000</strong></div>
+            </div>
+            <dl class="proof-grid">
+              <div><dt>IMPACT SAMPLE</dt><dd id="impactSample">220,800</dd></div>
+              <div><dt>LAST NON-ZERO</dt><dd id="lastNonZero">220,799</dd></div>
+              <div><dt>SCAN RANGE</dt><dd id="scanRange">24,000 smp</dd></div>
+              <div><dt>HOLD</dt><dd id="holdReadout">0.500 s</dd></div>
+            </dl>
+            <button class="export-button" id="exportButton">
+              <span>EXPORT PACKAGE</span>
+              <em>WAV + MAP + PROOF</em>
+              <span class="download-glyph" aria-hidden="true"></span>
+            </button>
+            <div class="export-assets" id="exportAssets">
+              <span class="tech-badge" id="webCodecsBadge">WEBCODECS · CHECK</span>
+              <span class="tech-badge" id="mseBadge">MEDIASOURCE · IDLE</span>
+            </div>
+          </section>
+        </aside>
+      </main>
+
+      <footer class="statusbar">
+        <span><i class="status-tick"></i> DETERMINISTIC MASTER / 48,000 Hz / 24-bit</span>
+        <span>TS · NODE STD · WEBAUDIO · CANVAS · WEBCODECS · MEDIASOURCE</span>
+        <span>NO NETWORK · NO PACKAGES</span>
+        <span class="status-keys"><kbd>SPACE</kbd> PREVIEW <kbd>[</kbd><kbd>]</kbd> NUDGE</span>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <audio id="webmPlayer" hidden></audio>
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
