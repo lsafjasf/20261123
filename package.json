@@ -1,0 +1,20 @@
+{
+  "name": "vidpriv",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Privacy cleaner for phone recordings: categorized metadata removal, container-only edits, sample-hash proofs, sidecar warnings. Node stdlib + Web platform APIs only.",
+  "engines": {
+    "node": ">=22.6"
+  },
+  "bin": {
+    "vidpriv": "./src/cli.ts"
+  },
+  "scripts": {
+    "inspect": "node src/cli.ts inspect",
+    "clean": "node src/cli.ts clean",
+    "verify": "node src/cli.ts verify",
+    "serve": "node src/server.ts",
+    "test": "node --experimental-strip-types --test test/clean.test.ts test/safety.test.ts"
+  }
+}

@@ -1,0 +1,4 @@
+node_modules/
+*.hash.json
+demo/out*.mp4
+*.log

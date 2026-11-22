@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>vidpriv 浏览器独立验证</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; max-width: 960px; }
+    h1 { font-size: 1.3rem; }
+    .card { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+    table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+    th, td { border: 1px solid #ddd; padding: 0.35rem 0.5rem; text-align: left; vertical-align: top; }
+    .ok { color: #0a7d28; font-weight: 600; }
+    .warn { color: #b25b00; font-weight: 600; }
+    .bad { color: #b00020; font-weight: 600; }
+    code { word-break: break-all; }
+    .muted { color: #666; }
+  </style>
+</head>
+<body>
+  <h1>vidpriv 浏览器独立验证</h1>
+  <p class="muted">
+    仅使用 WebCodecs、WebAudio、Canvas、MediaSource 与 SubtleCrypto，文件不离开本机。
+    用于独立核对 Node 端清洗结果：容器可解析性、残留隐私项、码流采样哈希、帧/音频指纹。
+  </p>
+  <div class="card">
+    <input id="file" type="file" accept="video/mp4,video/quicktime,.mp4,.mov,.m4v,.3gp" />
+    <p id="status" class="muted">选择清洗后的视频开始验证。</p>
+  </div>
+  <div id="report"></div>
+  <script type="module" src="./app.ts"></script>
+</body>
+</html>
