@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>4K 分块 GPU 滤镜管线</title>
+    <style>
+      :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+      body { margin: 0; display: grid; grid-template-columns: 320px 1fr; height: 100vh; background: #0d1117; color: #e6edf3; }
+      aside { padding: 14px; overflow: auto; border-right: 1px solid #30363d; background: #161b22; }
+      main { display: flex; flex-direction: column; min-width: 0; }
+      h1 { font-size: 16px; margin: 0 0 10px; }
+      h2 { font-size: 13px; margin: 16px 0 6px; color: #7ee787; }
+      label { display: block; font-size: 12px; margin: 8px 0 2px; color: #9da7b3; }
+      input[type="number"], input[type="range"] { width: 100%; box-sizing: border-box; }
+      input[type="number"] { background: #0d1117; color: #e6edf3; border: 1px solid #30363d; border-radius: 6px; padding: 6px; }
+      button { margin: 6px 6px 0 0; padding: 7px 12px; border: 0; border-radius: 6px; background: #238636; color: #fff; cursor: pointer; }
+      button.secondary { background: #30363d; }
+      button:disabled { opacity: 0.5; cursor: not-allowed; }
+      #viewport { flex: 1; overflow: auto; position: relative; background:
+        repeating-linear-gradient(45deg, #0d1117 0 12px, #11161d 12px 24px); }
+      #status { font-size: 12px; color: #79c0ff; min-height: 18px; padding: 6px 10px; border-top: 1px solid #30363d; }
+      table { width: 100%; border-collapse: collapse; font-size: 11px; }
+      th, td { border: 1px solid #30363d; padding: 3px 5px; text-align: right; }
+      th { background: #21262d; position: sticky; top: 0; }
+      .report { max-height: 240px; overflow: auto; border: 1px solid #30363d; border-radius: 6px; }
+      .pill { display: inline-block; background: #21262d; border-radius: 999px; padding: 2px 8px; font-size: 11px; margin: 2px; }
+      video { width: 100%; max-height: 220px; background: #000; border-radius: 6px; }
+      .row { display: flex; gap: 8px; }
+      .row > * { flex: 1; }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <h1>4K 分块 GPU 滤镜</h1>
+      <h2>帧与网格（支持奇数尺寸）</h2>
+      <div class="row">
+        <div><label>宽</label><input id="width" type="number" value="3840" min="1" /></div>
+        <div><label>高</label><input id="height" type="number" value="2160" min="1" /></div>
+      </div>
+      <div class="row">
+        <div><label>列数</label><input id="cols" type="number" value="4" min="1" /></div>
+        <div><label>行数</label><input id="rows" type="number" value="2" min="1" /></div>
+      </div>
+      <label>重叠边界 halo（px）<span id="haloVal">16</span></label>
+      <input id="halo" type="range" value="16" min="0" max="64" step="1" />
+      <div class="row">
+        <div><label>帧数</label><input id="frameCount" type="number" value="12" min="1" /></div>
+        <div><label>FPS</label><input id="fps" type="number" value="30" min="1" /></div>
+      </div>
+
+      <h2>滤镜参数（GPU 组合）</h2>
+      <label>亮度 <span id="bVal">1.08</span></label>
+      <input id="brightness" type="range" value="1.08" min="0.2" max="2" step="0.01" />
+      <label>锐化 <span id="sVal">0.60</span></label>
+      <input id="sharpen" type="range" value="0.6" min="0" max="1.5" step="0.01" />
+      <label>畸变 <span id="dVal">0.12</span></label>
+      <input id="distortion" type="range" value="0.12" min="-0.5" max="0.5" step="0.01" />
+
+      <h2>操作</h2>
+      <button id="build">建立分块</button>
+      <button id="odd" class="secondary" type="button">奇数尺寸样例</button>
+      <button id="exportBtn" disabled>导出并统计</button>
+      <button id="playAudio" class="secondary" type="button">播放音轨</button>
+      <label>显示帧 <span id="frameVal">0</span></label>
+      <input id="frameSlider" type="range" value="0" min="0" max="11" step="1" />
+
+      <h2>滚动定位</h2>
+      <div id="jumpRow"></div>
+
+      <h2>导出统计</h2>
+      <div id="summary"></div>
+      <div class="report" id="tileTable"></div>
+      <h2>MSE 回放</h2>
+      <video id="player" controls muted></video>
+    </aside>
+    <main>
+      <div id="viewport"></div>
+      <div id="status">就绪。点击“建立分块”开始。</div>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "tiled-4k-gpu-filter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "4K 带重叠分块 GPU 滤镜管线（TypeScript + Node stdlib + WebCodecs/WebAudio/Canvas/WebGL/MSE，零第三方依赖）",
+  "scripts": {
+    "test": "node --test --experimental-strip-types tests/*.test.ts",
+    "start": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=22.6.0"
+  }
+}
