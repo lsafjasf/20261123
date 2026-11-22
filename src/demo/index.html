@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>车载语音 · 丢包修复台</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">IN-VEHICLE AUDIO / PACKET REPAIR</p>
+        <h1>车载语音丢包修复台</h1>
+        <p class="lede">前后样本双向过渡，区分停顿与音乐边界；每个补齐区间和状态快照均可追溯。</p>
+      </div>
+      <div class="live-pill"><span></span> 本地运行 · 无云服务</div>
+    </header>
+
+    <main>
+      <section class="control-panel panel">
+        <div class="scenario-control">
+          <label for="scenario">测试场景</label>
+          <select id="scenario">
+            <option value="mixed">综合场景（停顿 / 边界 / 连续丢包 / 采样率）</option>
+            <option value="consecutive">连续丢包（240 ms）</option>
+            <option value="pause">真实停顿</option>
+            <option value="boundary">音乐边界</option>
+            <option value="rate-change">采样率切换后丢包</option>
+            <option value="mono-corruption">单声道 / 整包损坏</option>
+          </select>
+          <button id="reanalyze" class="primary">重新分析</button>
+        </div>
+        <div class="button-row">
+          <button id="playRepaired">试听修复流</button>
+          <button id="playDropped">试听未修复</button>
+          <button id="stopPlayback">停止</button>
+          <button id="exportWav">导出 WAV</button>
+          <button id="exportJson">导出诊断 JSON</button>
+          <button id="encodePreview">MediaSource 预览</button>
+        </div>
+        <p id="status" class="status">准备中…</p>
+      </section>
+
+      <section class="metrics" aria-label="修复指标">
+        <article><span>补齐区间</span><strong id="metricGaps">0</strong><small id="metricMissing">0 个丢失包</small></article>
+        <article><span>补齐时长</span><strong id="metricMs">0</strong><small>毫秒（时长不拉伸）</small></article>
+        <article><span>静音抑制</span><strong id="metricMuted">0</strong><small>毫秒按真实停顿处理</small></article>
+        <article><span>采样率切换</span><strong id="metricRates">0</strong><small id="metricCorrupt">0 个损坏声道</small></article>
+      </section>
+
+      <section class="wave-panel panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CANVAS / WAVEFORM</p>
+            <h2>接收流与修复流</h2>
+          </div>
+          <div class="legend">
+            <span class="speech">语音补齐</span>
+            <span class="boundary">边界过渡</span>
+            <span class="pause">真实停顿</span>
+          </div>
+        </div>
+        <canvas id="waveform" aria-label="音频波形及补齐区间可视化"></canvas>
+        <p class="hint">点击波形或表格中的区间可查看完整分析与状态快照。</p>
+      </section>
+
+      <section class="detail-grid">
+        <article class="panel table-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">INTERVAL LEDGER</p>
+              <h2>补齐区间账本</h2>
+            </div>
+            <span id="intervalCount" class="count-chip">0</span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>序号</th><th>分类</th><th>方法</th><th>帧数</th><th>时长</th><th>状态</th>
+                </tr>
+              </thead>
+              <tbody id="intervalRows"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel inspector">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">INSPECTOR</p>
+              <h2>区间详情</h2>
+            </div>
+          </div>
+          <pre id="intervalDetail" class="json-view">选择一个补齐区间。</pre>
+        </article>
+      </section>
+
+      <section class="detail-grid lower">
+        <article class="panel state-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">ALGORITHM STATE</p>
+              <h2>最终状态快照</h2>
+            </div>
+          </div>
+          <div id="stateGrid" class="state-grid"></div>
+        </article>
+        <article class="panel event-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">AUDIT TRAIL</p>
+              <h2>事件流</h2>
+            </div>
+          </div>
+          <ol id="eventList" class="event-list"></ol>
+        </article>
+      </section>
+
+      <section class="panel media-panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">WEBCODECS → WEBM → MEDIASOURCE</p>
+            <h2>本地媒体预览</h2>
+          </div>
+          <span id="mediaStatus" class="status compact">尚未编码</span>
+        </div>
+        <video id="preview" controls playsinline></video>
+        <p class="hint">编码在浏览器内完成；若当前浏览器不支持 Opus 编码或 MSE，请继续使用 WebAudio 试听与 WAV 导出。</p>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
