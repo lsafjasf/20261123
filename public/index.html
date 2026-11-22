@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>直播讲课音频处理链</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>直播讲课音频处理链</h1>
+  <p class="sub">降噪 → 清晰度 → 限峰（顺序可拖动调整），纯浏览器本地处理，无第三方依赖。</p>
+
+  <section class="panel">
+    <h2>输入设备</h2>
+    <div class="row">
+      <select id="deviceSelect"></select>
+      <button id="btnMic">使用麦克风</button>
+      <label class="monitor">
+        <input type="checkbox" id="monitorToggle" checked> 监听（建议戴耳机，防啸叫）
+      </label>
+    </div>
+    <div id="deviceStatus" class="status">尚未启动。浏览器可能要求麦克风权限。</div>
+  </section>
+
+  <section class="panel">
+    <h2>测试信号（无需麦克风）</h2>
+    <div class="row">
+      <button id="testBreath">▶ 呼吸声</button>
+      <button id="testKnock">▶ 敲击声</button>
+      <button id="testVowel">▶ 长元音 /a/</button>
+      <button id="testStop" class="danger">■ 停止</button>
+    </div>
+    <p class="hint">呼吸声验证降噪；敲击声验证限峰；长元音验证清晰度提升。</p>
+  </section>
+
+  <section class="panel">
+    <h2>处理链（拖动卡片调整顺序）</h2>
+    <div id="chainList" class="chain"></div>
+    <div class="latency">
+      处理延迟（输入→监听输出）：<strong id="latencyValue">—</strong>
+      <div id="latencyBreakdown" class="hint"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>预设</h2>
+    <div class="row">
+      <input id="presetName" type="text" placeholder="预设名称，如：安静书房">
+      <button id="presetSave">保存当前为预设</button>
+    </div>
+    <div id="presetList" class="presets"></div>
+  </section>
+
+  <section class="panel">
+    <h2>输出监测</h2>
+    <canvas id="waveCanvas" width="640" height="100"></canvas>
+    <canvas id="specCanvas" width="640" height="120"></canvas>
+    <div class="row">
+      <button id="recStart">● 录制处理结果</button>
+      <button id="recStop" class="danger">■ 停止并回放</button>
+      <span id="recStatus" class="hint"></span>
+    </div>
+    <audio id="recPlayer" controls></audio>
+  </section>
+
+  <section class="panel">
+    <h2>各模块的失效条件</h2>
+    <dl class="limits">
+      <dt>降噪（谱减法）</dt>
+      <dd>只对<b>近似平稳</b>的背景噪声有效（风扇、空调、电流声）。对突发噪声（关门、敲桌、旁人说话）无效或只能轻微衰减；强度过高会产生"音乐噪声"（水下感、金属尾音），人声发闷。噪声估计需要约 1.5 秒稳定环境音来收敛，环境突变后的瞬间降噪会暂时失效。</dd>
+      <dt>清晰度（临场感 EQ）</dt>
+      <dd>本质是固定 EQ，不能恢复已被削波或过度压缩的语音。提升过量会放大齿音（s/sh 刺耳）和高频底噪；若放在降噪之前，会把高频噪声一起放大，使后续降噪更难收敛。对低频本就浑厚的嗓音，过量提升会显得单薄。</dd>
+      <dt>限峰（前视限幅器）</dt>
+      <dd>只能限制峰值、不能修复已经削波的录音。持续大声输入会导致增益频繁压到底，出现" pumping（呼吸感）"与失真；门限设得过低会让整体响度明显变小。若放在降噪之前，突发爆音虽被限制，但爆音频谱会污染降噪的噪声估计。</dd>
+      <dt>顺序建议</dt>
+      <dd>默认 降噪→清晰度→限峰 是讲课场景的安全顺序：先净化信号，再提升可懂度，最后兜底防爆音。拖动顺序后请用测试信号重新验证。</dd>
+    </dl>
+  </section>
+
+  <script src="main.js"></script>
+</body>
+</html>

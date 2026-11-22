@@ -1,0 +1,12 @@
+{
+  "name": "lecture-audio-chain",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "直播讲课实时音频处理链：降噪 -> 清晰度 -> 限峰，纯 TypeScript + Node 标准库 + 浏览器原生 API",
+  "scripts": {
+    "build": "node build.js",
+    "test": "node test/dsp-test.mjs",
+    "start": "node server.js"
+  }
+}
