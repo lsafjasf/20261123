@@ -1,0 +1,14 @@
+{
+  "name": "gop-frame-review",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline, frame-accurate long-GOP review player",
+  "scripts": {
+    "start": "node --experimental-strip-types server.ts",
+    "test": "node --experimental-strip-types --test test/*.test.ts"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}

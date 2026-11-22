@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>GOP Frame Review</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="brand-name">GOP<span>/</span>REVIEW</span>
+          <span class="brand-sub">逐帧审片台</span>
+        </div>
+        <div class="topbar-meta">
+          <span class="source-name" id="sourceName">正在载入演示素材…</span>
+          <span class="badge" id="engineBadge">WEBCODECS</span>
+          <button class="button ghost compact" id="openButton" type="button">打开本地视频</button>
+          <input id="fileInput" type="file" accept="video/mp4,video/quicktime,.mp4,.mov,.m4v" hidden />
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="stage-panel" aria-label="画面监看">
+          <div class="stage-head">
+            <div class="stage-label">
+              <span class="rec-dot" aria-hidden="true"></span>
+              <span id="trackLabel">V1</span>
+              <span class="dim" id="formatLabel">—</span>
+            </div>
+            <div class="stage-status">
+              <span class="precision-pill" id="precisionPill">准备中</span>
+              <span class="mono" id="decodeClock">0.0 ms</span>
+            </div>
+          </div>
+
+          <div class="viewport" id="viewport">
+            <canvas id="viewer" aria-label="视频画面"></canvas>
+            <canvas id="previewCanvas" class="preview-layer" aria-hidden="true"></canvas>
+            <div class="preview-tag" id="previewTag" hidden>I 帧低清预览</div>
+            <div class="safe-frame" aria-hidden="true"></div>
+            <div class="viewer-idle" id="viewerIdle">
+              <span class="idle-spinner"></span>
+              <strong>建立帧索引</strong>
+              <span>读取 MP4 sample table…</span>
+            </div>
+            <div class="viewer-error" id="viewerError" hidden></div>
+            <div class="frame-watermark">
+              <span>FRAME</span>
+              <strong id="watermarkFrame">0001</strong>
+            </div>
+          </div>
+
+          <div class="stage-foot">
+            <div class="timecode-block">
+              <span class="eyebrow">TIMECODE</span>
+              <strong id="timecode">00:00:00:00</strong>
+            </div>
+            <div class="stage-facts">
+              <div><span>源帧率</span><strong id="fpsFact">—</strong></div>
+              <div><span>GOP</span><strong id="gopFact">—</strong></div>
+              <div><span>解码偏移</span><strong id="offsetFact">—</strong></div>
+            </div>
+          </div>
+
+          <div class="transport">
+            <div class="timeline-wrap" id="timelineWrap">
+              <div class="timeline-tip" id="timelineTip" hidden>
+                <strong id="tipFrame">0000</strong>
+                <span id="tipTime">00:00:00.000</span>
+              </div>
+              <div class="timeline" id="timeline" role="slider" tabindex="0"
+                aria-label="时间轴" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0">
+                <div class="timeline-keyframes" id="keyframeTicks"></div>
+                <div class="timeline-buffer" id="timelineBuffer"></div>
+                <div class="timeline-playhead" id="playhead"></div>
+              </div>
+            </div>
+
+            <div class="transport-row">
+              <div class="transport-controls">
+                <button class="icon-button" id="prevButton" type="button" title="上一帧 (←)" aria-label="上一帧">
+                  <span class="step-icon">−1</span>
+                </button>
+                <button class="play-button" id="playButton" type="button" title="播放 / 暂停 (Space)" aria-label="播放">
+                  <span class="play-glyph" id="playGlyph"></span>
+                </button>
+                <button class="icon-button" id="nextButton" type="button" title="下一帧 (→)" aria-label="下一帧">
+                  <span class="step-icon">+1</span>
+                </button>
+                <span class="transport-divider"></span>
+                <button class="jump-button" id="backJump" type="button" title="后退 10 帧 (Shift+←)">−10</button>
+                <button class="jump-button" id="forwardJump" type="button" title="前进 10 帧 (Shift+→)">+10</button>
+              </div>
+
+              <div class="frame-readout">
+                <span>FRAME</span>
+                <strong id="frameNow">0001</strong>
+                <span class="slash">/</span>
+                <span id="frameTotal">0000</span>
+              </div>
+
+              <div class="audio-controls">
+                <button class="icon-button mute-button" id="muteButton" type="button" title="静音" aria-label="静音">
+                  <span id="muteGlyph">VOL</span>
+                </button>
+                <input id="volume" type="range" min="0" max="100" value="80" aria-label="音量" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="inspector" aria-label="检查器">
+          <section class="inspect-block hero-block">
+            <span class="eyebrow">CURRENT FRAME</span>
+            <div class="hero-frame"><span id="heroFrame">0001</span><small id="heroTotal">/ 0000</small></div>
+            <div class="hero-status" id="heroStatus">建立索引</div>
+          </section>
+
+          <section class="inspect-block">
+            <div class="block-title"><span>GOP 索引</span><span class="mono" id="gopCounter">—</span></div>
+            <div class="gop-scrub"><span id="gopProgress"></span></div>
+            <dl class="data-list">
+              <div><dt>区间</dt><dd id="gopRange">—</dd></div>
+              <div><dt>关键帧</dt><dd id="gopKey">—</dd></div>
+              <div><dt>显示序 / 解码序</dt><dd id="orderFact">—</dd></div>
+            </dl>
+          </section>
+
+          <section class="inspect-block">
+            <div class="block-title"><span>GOP 缓存</span><span class="mono" id="cacheBadge">0 / 3</span></div>
+            <div class="cache-meter"><span id="cacheMeter"></span></div>
+            <div class="cache-grid">
+              <div><span>缓存帧</span><strong id="cacheFrames">0</strong></div>
+              <div><span>显存估算</span><strong id="cacheBytes">0 MB</strong></div>
+            </div>
+            <p class="inspect-note">按 GOP 淘汰；当前帧固定，窗口缩放只重绘 Canvas。</p>
+          </section>
+
+          <section class="inspect-block audio-block">
+            <div class="block-title"><span>音轨</span><span class="mono" id="audioState">READY</span></div>
+            <div class="audio-list" id="audioList"></div>
+            <p class="inspect-note">独立 AudioDecoder + WebAudio 调度，切轨不会清空视频缓存。</p>
+          </section>
+
+          <section class="inspect-block keys-block">
+            <div class="block-title"><span>逐帧操作</span><span class="mono">KEYS</span></div>
+            <div class="key-row"><span><kbd>←</kbd><kbd>→</kbd></span><em>单帧前后</em></div>
+            <div class="key-row"><span><kbd>Shift</kbd><kbd>←</kbd><kbd>→</kbd></span><em>±10 帧</em></div>
+            <div class="key-row"><span><kbd>Space</kbd></span><em>播放 / 暂停</em></div>
+            <div class="key-row"><span><kbd>Home</kbd><kbd>End</kbd></span><em>首帧 / 尾帧</em></div>
+          </section>
+        </aside>
+      </main>
+
+      <footer class="footer">
+        <span>OFFLINE REVIEW PIPELINE</span>
+        <span id="footerStatus">WebCodecs · WebAudio · Canvas · MediaSource-ready</span>
+        <span>NO EXTERNAL LIBRARIES</span>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
