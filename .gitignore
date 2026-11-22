@@ -1,0 +1,5 @@
+data/saved-manifest.json
+public/app/
+.demo-frames/
+node_modules/
+*.log

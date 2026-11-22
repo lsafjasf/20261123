@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="完全本地运行的急救培训分支视频时间线编辑器与同步预览器"
+    />
+    <title>急救分支训练台</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff6b4a'/%3E%3Cpath d='M13 7h6v6h6v6h-6v6h-6v-6H7v-6h6z' fill='%23120b09'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span><span></span>
+          </div>
+          <div>
+            <p class="eyebrow">LOCAL BRANCHING STUDIO / 01</p>
+            <h1>急救分支训练台</h1>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <span id="save-state" class="save-state">
+            <i></i><span>本地清单已恢复</span>
+          </span>
+          <button id="import-button" class="button button-ghost" type="button">
+            导入清单
+          </button>
+          <button id="reset-button" class="button button-ghost" type="button">
+            载入演示
+          </button>
+          <button id="export-button" class="button button-primary" type="button">
+            导出清单
+          </button>
+          <input id="file-input" type="file" accept=".json,application/json" hidden />
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="column editor-column">
+          <div class="column-heading">
+            <div>
+              <p class="eyebrow">TIMELINE / MANIFEST</p>
+              <h2>分支时间线</h2>
+            </div>
+            <button id="add-decision" class="icon-button" type="button" title="新增决策">
+              <span>＋</span> 决策
+            </button>
+          </div>
+
+          <div class="project-card">
+            <label class="field-label" for="project-title">项目标题</label>
+            <input id="project-title" class="title-input" type="text" />
+            <textarea
+              id="project-description"
+              class="description-input"
+              rows="2"
+              aria-label="项目描述"
+            ></textarea>
+            <div id="project-stats" class="project-stats"></div>
+          </div>
+
+          <section class="timeline-card" aria-label="主时间线">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">MAINLINE</p>
+                <h3>主时间线</h3>
+              </div>
+              <span id="mainline-time" class="mono-chip">00:00.000</span>
+            </div>
+            <div id="timeline-ruler" class="timeline-ruler"></div>
+            <div id="timeline-track" class="timeline-track"></div>
+            <div id="decision-lane" class="decision-lane">
+              <span class="lane-label">选项</span>
+            </div>
+            <div id="playhead" class="playhead" aria-hidden="true">
+              <span></span>
+            </div>
+            <div class="timeline-legend">
+              <span><i class="legend-main"></i>主片段</span>
+              <span><i class="legend-choice"></i>选项区间</span>
+              <span><i class="legend-pause"></i>暂停决策点</span>
+            </div>
+          </section>
+
+          <section id="decision-editor" class="decision-editor" aria-label="决策设置"></section>
+
+          <section class="manifest-card">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">RECOVERY</p>
+                <h3>清单恢复</h3>
+              </div>
+              <span id="manifest-revision" class="revision-badge">REV 01</span>
+            </div>
+            <div id="recovery-grid" class="recovery-grid"></div>
+            <p class="recovery-note">
+              编辑内容实时写入 localStorage，并同步保存到本地 Node 数据目录。刷新页面会先恢复未完成清单，再核对片段引用。
+            </p>
+          </section>
+        </section>
+
+        <section class="column stage-column">
+          <div class="column-heading stage-heading">
+            <div>
+              <p class="eyebrow">SYNC PREVIEW / MSE</p>
+              <h2>同步预览</h2>
+            </div>
+            <div id="engine-state" class="engine-state">
+              <i></i><span>音画就绪</span>
+            </div>
+          </div>
+
+          <div class="player-shell">
+            <canvas
+              id="preview-canvas"
+              width="960"
+              height="540"
+              aria-label="分支视频预览画布"
+            ></canvas>
+            <div class="canvas-vignette" aria-hidden="true"></div>
+            <div class="preview-top">
+              <span class="preview-badge"><i></i> PREVIEW</span>
+              <span id="canvas-timecode" class="canvas-timecode">00:00:00</span>
+            </div>
+            <div class="preview-corner" aria-hidden="true">
+              <span class="corner-t">16:9</span>
+              <span class="corner-c">960×540</span>
+            </div>
+
+            <div id="welcome-overlay" class="welcome-overlay">
+              <div class="play-emblem" aria-hidden="true">▶</div>
+              <p>分支剧情已装载</p>
+              <span>点击播放，在决策点选择处置方式</span>
+            </div>
+
+            <div id="choice-overlay" class="choice-overlay" hidden>
+              <div class="choice-panel">
+                <div class="choice-meta">
+                  <span id="choice-number" class="choice-number">决策 01</span>
+                  <span id="choice-time" class="mono-chip">00:05.000</span>
+                </div>
+                <h3 id="choice-title">下一步应该怎么做？</h3>
+                <p id="choice-prompt"></p>
+                <div id="choice-options" class="choice-options"></div>
+                <div id="choice-guard" class="choice-guard">
+                  <span class="guard-icon">✓</span>
+                  <span id="guard-text">相邻片段已预加载，可安全进入分支</span>
+                  <button id="retry-preload" type="button" class="text-button" hidden>
+                    重试预加载
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div id="branch-overlay" class="branch-overlay" hidden>
+              <div class="branch-card">
+                <span id="branch-tag" class="branch-tag">正确处置</span>
+                <h3 id="branch-title">先检查呼吸</h3>
+                <p id="branch-summary"></p>
+                <div id="branch-warning" class="branch-warning" hidden>
+                  <strong>这个选择可能造成二次伤害。</strong>
+                  <span>错误分支播放结束后会自动停在决策点，也可以立即返回重选。</span>
+                </div>
+                <button id="return-decision" class="button button-light" type="button" hidden>
+                  ↩ 回到决策点
+                </button>
+              </div>
+            </div>
+
+            <div id="blocked-overlay" class="blocked-overlay" hidden>
+              <div class="blocked-card">
+                <span class="blocked-symbol">!</span>
+                <p class="eyebrow">SAFE STOP</p>
+                <h3>预加载失败，已停在选择点</h3>
+                <p id="blocked-detail">目标片段不可用，系统拒绝继续跳转以避免播放错误片段。</p>
+                <button id="blocked-retry" class="button button-light" type="button">
+                  重试加载
+                </button>
+              </div>
+            </div>
+
+            <div class="sync-badge">
+              <span class="sync-bars"><i></i><i></i><i></i><i></i></span>
+              <span id="sync-label">AUDIO CLOCK LOCK</span>
+            </div>
+          </div>
+
+          <div class="transport">
+            <button id="play-button" class="play-button" type="button" aria-label="播放">
+              <span id="play-icon">▶</span>
+            </button>
+            <div class="transport-time">
+              <span id="current-time">00:00.000</span>
+              <span class="time-divider">/</span>
+              <span id="total-time">00:18.400</span>
+            </div>
+            <div class="transport-spacer"></div>
+            <button id="mute-button" class="transport-button" type="button" aria-label="静音">
+              <span id="mute-icon">◖</span>
+            </button>
+            <div class="volume-control">
+              <span>音量</span>
+              <input id="volume-slider" type="range" min="0" max="100" value="78" />
+            </div>
+            <span class="fps-chip">30 FPS</span>
+          </div>
+
+          <section class="preload-card">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">ADJACENT MEDIA</p>
+                <h3>相邻片段预加载</h3>
+              </div>
+              <span id="preload-summary" class="preload-summary">等待决策点</span>
+            </div>
+            <div id="preload-list" class="preload-list"></div>
+          </section>
+
+          <section class="tech-strip" aria-label="本地技术栈">
+            <span>MEDIASOURCE</span><i></i>
+            <span>WEBCODECS</span><i></i>
+            <span>WEBAUDIO</span><i></i>
+            <span>CANVAS</span><i></i>
+            <span>0 DEPENDENCIES</span>
+          </section>
+        </section>
+
+        <aside class="column branch-column">
+          <div class="column-heading">
+            <div>
+              <p class="eyebrow">BRANCH TOPOLOGY</p>
+              <h2>分支拓扑</h2>
+            </div>
+            <span id="topology-count" class="revision-badge">1 NODE</span>
+          </div>
+
+          <section id="branch-map" class="branch-map"></section>
+
+          <section class="timeline-inspector">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">INSPECTOR</p>
+                <h3>选项区间</h3>
+              </div>
+              <span id="inspector-state" class="status-dot">可编辑</span>
+            </div>
+            <div id="interval-inspector" class="interval-inspector"></div>
+          </section>
+
+          <section class="runbook-card">
+            <p class="eyebrow">PLAYBACK RULES</p>
+            <h3>播放门禁</h3>
+            <ol>
+              <li><span>01</span>选项区间内暂停，等待学员选择。</li>
+              <li><span>02</span>目标片段与回主线片段全部就绪才可跳转。</li>
+              <li><span>03</span>失败时保持当前位置，显示安全停止提示。</li>
+              <li><span>04</span>错误分支结束或手动返回，均回到决策点。</li>
+            </ol>
+          </section>
+
+          <section class="local-card">
+            <div class="local-orbit" aria-hidden="true">
+              <i></i><i></i><i></i>
+            </div>
+            <div>
+              <p class="eyebrow">LOCAL ONLY</p>
+              <h3>数据不离开本机</h3>
+              <p>清单、媒体与预览均在 localhost 内处理。</p>
+            </div>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/app/client/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "id": "first-aid-breathing",
+  "title": "急救现场：先检查还是先搬动？",
+  "description": "一段分支式急救培训视频。学员在发现伤者后决定下一步处置，并可在错误分支结束后回到决策点重选。",
+  "updatedAt": "2026-11-23T00:00:00.000Z",
+  "canvasWidth": 960,
+  "canvasHeight": 540,
+  "segments": [
+    {
+      "id": "seg_intro",
+      "name": "发现伤者",
+      "src": "/media/scene-intro.mp4",
+      "durationMs": 6400,
+      "kind": "scene",
+      "accent": "#e8654f",
+      "summary": "确认环境安全，靠近伤者并观察意识。"
+    },
+    {
+      "id": "seg_check",
+      "name": "先检查呼吸",
+      "src": "/media/branch-check.mp4",
+      "durationMs": 5000,
+      "kind": "branch",
+      "accent": "#55c98a",
+      "summary": "看、听、感觉，判断伤者是否有正常呼吸。"
+    },
+    {
+      "id": "seg_move",
+      "name": "先搬动伤者",
+      "src": "/media/branch-move.mp4",
+      "durationMs": 4400,
+      "kind": "branch",
+      "accent": "#f2b35d",
+      "summary": "未经评估随意搬动，可能造成二次伤害。"
+    },
+    {
+      "id": "seg_continue",
+      "name": "呼救与胸外按压",
+      "src": "/media/scene-continue.mp4",
+      "durationMs": 8000,
+      "kind": "scene",
+      "accent": "#64b5f6",
+      "summary": "拨打 120，并立即开始高质量胸外按压。"
+    },
+    {
+      "id": "seg_debrief",
+      "name": "训练复盘",
+      "src": "/media/scene-debrief.mp4",
+      "durationMs": 4000,
+      "kind": "ending",
+      "accent": "#b69cff",
+      "summary": "先判断再行动，避免对伤者造成二次伤害。"
+    }
+  ],
+  "mainline": [
+    {
+      "id": "main_intro",
+      "segmentId": "seg_intro"
+    },
+    {
+      "id": "main_continue",
+      "segmentId": "seg_continue"
+    },
+    {
+      "id": "main_debrief",
+      "segmentId": "seg_debrief"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "decision_breathing",
+      "title": "呼吸判断",
+      "prompt": "伤者倒地且意识不清。下一步应该怎么做？",
+      "timelineStartMs": 4200,
+      "timelineEndMs": 6000,
+      "pauseAtMs": 5000,
+      "options": [
+        {
+          "id": "option_check",
+          "label": "先检查呼吸",
+          "hint": "观察胸廓起伏，判断是否有正常呼吸。",
+          "targetSegmentId": "seg_check",
+          "targetEndMs": 4800,
+          "returnToMs": 6400,
+          "correct": true
+        },
+        {
+          "id": "option_move",
+          "label": "先把人扶起来",
+          "hint": "未评估伤情就搬动，可能加重脊柱损伤。",
+          "targetSegmentId": "seg_move",
+          "targetEndMs": 4100,
+          "returnToMs": 4200,
+          "correct": false
+        }
+      ]
+    }
+  ]
+}
