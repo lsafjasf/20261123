@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>手柄输入 ↔ 视频帧 对齐标注台</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>手柄输入 ↔ 视频帧 对齐标注台</h1>
+  <p class="sub">完全离线 · 不假设恒定帧率 · WebCodecs / Canvas / WebAudio / MediaSource</p>
+</header>
+
+<section id="io" class="panel">
+  <h2>1. 载入素材</h2>
+  <div class="row">
+    <label>视频 <input type="file" id="file-video" accept="video/*"></label>
+    <label>手柄日志 <input type="file" id="file-log" accept=".jsonl,.json"></label>
+    <label>锚点(可选) <input type="file" id="file-anchors" accept=".json"></label>
+    <label>连招(可选) <input type="file" id="file-combos" accept=".json"></label>
+  </div>
+  <div class="row">
+    <button id="btn-demo">演示模式：生成演示视频与数据</button>
+    <span id="io-status" class="muted"></span>
+  </div>
+</section>
+
+<section id="stage" class="panel hidden">
+  <h2>2. 帧索引与回看</h2>
+  <div class="stage-wrap">
+    <div class="video-stack">
+      <video id="video" playsinline muted></video>
+      <canvas id="overlay"></canvas>
+    </div>
+    <div class="controls">
+      <button id="btn-scan">扫描帧索引</button>
+      <button id="btn-play" disabled>播放</button>
+      <button id="btn-prev" disabled>◀ 上一帧</button>
+      <button id="btn-next" disabled>下一帧 ▶</button>
+      <label class="muted"><input type="checkbox" id="chk-beep"> 事件提示音</label>
+      <span id="frame-status" class="mono"></span>
+    </div>
+  </div>
+  <canvas id="timeline" height="64"></canvas>
+  <div id="scan-status" class="muted"></div>
+</section>
+
+<section id="anchors" class="panel hidden">
+  <h2>3. 锚点与局部映射</h2>
+  <div class="row">
+    <button id="btn-suggest">从日志检测候选锚点</button>
+    <button id="btn-add-anchor" disabled>在当前帧添加人工锚点</button>
+    <span class="muted">候选锚点点击「定位」后，把视频逐帧走到对应画面再点「确认」。</span>
+  </div>
+  <div id="candidate-list"></div>
+  <table id="anchor-table">
+    <thead><tr><th>类型</th><th>日志 ms</th><th>视频 ms</th><th>置信/残差</th><th>备注</th><th></th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="segment-list" class="mono small"></div>
+</section>
+
+<section id="export" class="panel hidden">
+  <h2>4. 导出</h2>
+  <div class="row">
+    <button id="btn-export-video">导出标注视频 (WebM)</button>
+    <button id="btn-export-events">导出逐事件表 (CSV)</button>
+    <button id="btn-export-mapping">导出映射 (JSON)</button>
+  </div>
+  <progress id="export-progress" value="0" max="1"></progress>
+  <span id="export-status" class="muted"></span>
+  <div class="row">
+    <video id="verify-video" controls muted></video>
+    <span class="muted">← 导出结果经 MediaSource 回放校验</span>
+  </div>
+</section>
+
+<section id="events" class="panel hidden">
+  <h2>逐事件预览（前 200 条）</h2>
+  <div id="event-table-wrap"></div>
+</section>
+
+<script type="module" src="app/web/app.js"></script>
+</body>
+</html>

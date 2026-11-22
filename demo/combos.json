@@ -1,0 +1,20 @@
+[
+  {
+    "id": "hadouken",
+    "name": "波动拳",
+    "steps": [
+      {
+        "btn": "DOWN",
+        "withinMs": 0
+      },
+      {
+        "btn": "FWD",
+        "withinMs": 200
+      },
+      {
+        "btn": "P",
+        "withinMs": 200
+      }
+    ]
+  }
+]

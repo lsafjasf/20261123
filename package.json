@@ -1,0 +1,14 @@
+{
+  "name": "pad-video-sync",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "离线手柄输入日志与录制视频对齐标注工具（零第三方依赖）",
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "serve": "node src/cli/main.ts serve",
+    "sync": "node src/cli/main.ts sync",
+    "gen-demo": "node src/cli/main.ts gen-demo",
+    "test": "node --test tests/"
+  }
+}

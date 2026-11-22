@@ -1,0 +1,18 @@
+[
+  {
+    "id": "startup",
+    "logT": 41000,
+    "videoT": 1000,
+    "kind": "startup",
+    "weight": 1,
+    "note": "启动动作 A×3"
+  },
+  {
+    "id": "run-b",
+    "logT": 60000,
+    "videoT": 20000,
+    "kind": "run",
+    "weight": 1,
+    "note": "连续输入 B×8"
+  }
+]
