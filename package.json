@@ -1,0 +1,19 @@
+{
+  "name": "video-triage",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "本地视频素材筛选系统：黑场/静止/抖动检测、镜头切分、断点续扫与剪辑清单导出（纯 Node 标准库 + 浏览器 WebCodecs/WebAudio/Canvas/MediaSource）",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.ts\"",
+    "demo": "node src/server/cli.ts demo",
+    "serve": "node src/server/cli.ts serve",
+    "resume": "node src/server/cli.ts resume",
+    "export": "node src/server/cli.ts export"
+  },
+  "author": "",
+  "license": "UNLICENSED"
+}

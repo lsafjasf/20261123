@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>本地视频素材筛选台</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>本地视频素材筛选台</h1>
+      <p class="sub">
+        全本地运行 · WebCodecs / WebAudio / Canvas / MediaSource ·
+        黑场 · 静止 · 抖动 · 镜头切分 · 断点续扫
+      </p>
+      <div id="capability" class="capability"></div>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>1. 选择素材</h2>
+        <input type="file" id="filePicker" accept="video/*" multiple />
+        <div class="row">
+          <label>
+            采样间隔（帧，1=逐帧）
+            <input type="number" id="sampleEvery" value="1" min="1" max="30" />
+          </label>
+          <label>
+            上传批次大小（帧）
+            <input type="number" id="batchSize" value="60" min="10" max="600" />
+          </label>
+        </div>
+        <div class="row">
+          <button id="scanBtn" disabled>开始/继续扫描</button>
+          <button id="analyzeBtn" disabled>分析并生成清单</button>
+          <button id="mseBtn" disabled>MSE 播放验证</button>
+          <button id="sampleBtn">打开样本实验室（误判覆盖）</button>
+        </div>
+        <video id="player" muted playsinline></video>
+        <canvas id="grabCanvas" hidden></canvas>
+      </section>
+
+      <section class="card">
+        <h2>2. 扫描进度与检查点</h2>
+        <table id="jobTable">
+          <thead>
+            <tr>
+              <th>文件</th><th>SHA-256</th><th>状态</th><th>进度</th><th>续扫起始帧</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section class="card" id="resultCard" hidden>
+        <h2>3. 分析结果与剪辑清单</h2>
+        <div id="summary"></div>
+        <h3>镜头分配</h3>
+        <table id="shotTable">
+          <thead>
+            <tr><th>#</th><th>时间码入</th><th>时间码出</th><th>时长(s)</th><th>同事</th><th>标签</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <h3>问题区间</h3>
+        <table id="issueTable">
+          <thead>
+            <tr><th>类型</th><th>入</th><th>出</th><th>时长(s)</th><th>严重度</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="row" id="exportRow"></div>
+      </section>
+
+      <section class="card" id="labCard" hidden>
+        <h2>样本实验室：程序化生成 + 误判覆盖验证</h2>
+        <p class="sub">
+          使用 Canvas 合成画面、WebCodecs 编码，生成黑场/静止/抖动/硬切/叠化样本，
+          跑完整检测管线并与预期断言对比。
+        </p>
+        <div class="row">
+          <label>样本时长（帧/段）
+            <input type="number" id="labFrames" value="120" min="60" max="600" />
+          </label>
+          <button id="labRunBtn">生成并跑全部样本</button>
+        </div>
+        <pre id="labOutput"></pre>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
