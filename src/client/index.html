@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>远程排练延迟分段测量</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>远程排练延迟分段测量</h1>
+      <p class="subtitle">
+        同步闪光 + 短促声响标记 · 采集 / 处理 / 上传 / 解码 / 声卡输出五段计时
+      </p>
+    </header>
+
+    <main>
+      <section id="view-home" class="view">
+        <div class="card">
+          <h2>1. 选择或创建测量轮次</h2>
+          <div class="row">
+            <input
+              id="round-label"
+              type="text"
+              placeholder="轮次备注，例如：周三晚排练-机房A"
+            />
+            <button id="btn-create-round" class="primary">新建轮次</button>
+          </div>
+          <div class="row">
+            <input id="round-id-input" type="text" placeholder="或粘贴已有轮次 ID" />
+            <button id="btn-join-round">加入轮次</button>
+          </div>
+          <div>
+            <h3>历史轮次</h3>
+            <ul id="round-list" class="round-list"></ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>2. 选择本机角色</h2>
+          <div class="row">
+            <button id="btn-role-sender" class="role">我是发送端（老师/声源）</button>
+            <button id="btn-role-receiver" class="role">我是接收端（学生/听音）</button>
+          </div>
+          <label class="check">
+            <input id="loopback-mode" type="checkbox" />
+            单机环回模式（无麦克风时用内部信号，本机自发自收）
+          </label>
+          <p id="home-status" class="status"></p>
+        </div>
+      </section>
+
+      <section id="view-sender" class="view hidden">
+        <div class="card">
+          <h2>发送端面板</h2>
+          <p>轮次：<code id="sender-round-id"></code></p>
+          <div class="row">
+            <button id="btn-sender-start" class="primary">开始采集与发送</button>
+            <button id="btn-sender-fire">立即打一个标记</button>
+            <button id="btn-sender-stop">结束本轮</button>
+          </div>
+          <div class="row">
+            <label>
+              自动标记间隔（毫秒）
+              <input id="fire-interval" type="number" value="1000" min="250" step="50" />
+            </label>
+            <button id="btn-auto-fire">开启自动标记</button>
+          </div>
+          <p id="sender-status" class="status"></p>
+          <canvas id="flash-canvas" width="640" height="180"></canvas>
+        </div>
+        <div class="card">
+          <h2>分段耗时趋势</h2>
+          <canvas id="sender-line" width="900" height="260"></canvas>
+        </div>
+      </section>
+
+      <section id="view-receiver" class="view hidden">
+        <div class="card">
+          <h2>接收端面板</h2>
+          <p>轮次：<code id="receiver-round-id"></code></p>
+          <div class="row">
+            <button id="btn-receiver-start" class="primary">开始接收与播放</button>
+            <button id="btn-receiver-stop">停止</button>
+            <button id="btn-refresh-report">刷新报告</button>
+          </div>
+          <p id="receiver-status" class="status"></p>
+          <audio id="playback" controls></audio>
+          <canvas id="receiver-flash" width="640" height="120"></canvas>
+        </div>
+        <div class="card">
+          <h2>分段耗时趋势</h2>
+          <canvas id="receiver-line" width="900" height="260"></canvas>
+        </div>
+      </section>
+
+      <section id="view-report" class="view hidden">
+        <div class="card">
+          <h2>轮次报告</h2>
+          <p>轮次：<code id="report-round-id"></code></p>
+          <div id="report-summary"></div>
+          <canvas id="report-bars" width="900" height="300"></canvas>
+          <h3>逐标记明细</h3>
+          <div class="table-wrap">
+            <table id="marker-table">
+              <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>总延迟(ms)</th>
+                  <th>采集</th>
+                  <th>处理</th>
+                  <th>上传</th>
+                  <th>解码</th>
+                  <th>声卡输出</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <h3>丢样事件</h3>
+          <ul id="drop-list"></ul>
+          <div class="row">
+            <button id="btn-export-json">导出 JSON 报告</button>
+            <button id="btn-back-home">返回首页</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/app.ts"></script>
+  </body>
+</html>

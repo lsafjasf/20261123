@@ -1,0 +1,14 @@
+{
+  "name": "rehearsal-latency-probe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "远程排练端到端音频延迟分段测量工具（全本地、零第三方依赖）",
+  "engines": {
+    "node": ">=23.6.0"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server/server.ts",
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/**/*.test.ts\""
+  }
+}

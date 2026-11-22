@@ -1,0 +1,202 @@
+:root {
+  color-scheme: light;
+  font-family:
+    'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+  background: #f4f6f8;
+  color: #1f2933;
+}
+
+body {
+  margin: 0;
+}
+
+header {
+  padding: 20px 28px 8px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.subtitle {
+  color: #52606d;
+  margin: 6px 0 0;
+}
+
+main {
+  padding: 12px 28px 40px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.view.hidden {
+  display: none;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e1e5ea;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+input[type='text'],
+input[type='number'] {
+  padding: 8px 10px;
+  border: 1px solid #b8c0cc;
+  border-radius: 6px;
+  font-size: 14px;
+  flex: 1;
+  min-width: 220px;
+}
+
+button {
+  padding: 8px 14px;
+  border: 1px solid #8a94a3;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background: #eef2f6;
+}
+
+button.primary {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+button.primary:hover {
+  background: #1d4ed8;
+}
+
+button.role {
+  flex: 1;
+  min-height: 64px;
+  font-size: 15px;
+}
+
+.check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.status {
+  color: #0f766e;
+  min-height: 20px;
+}
+
+canvas {
+  border: 1px solid #d9dee5;
+  border-radius: 6px;
+  background: #fbfcfd;
+  max-width: 100%;
+}
+
+#flash-canvas,
+#receiver-flash {
+  background: #111;
+}
+
+.round-list {
+  max-height: 220px;
+  overflow: auto;
+  padding-left: 18px;
+}
+
+.round-list li {
+  margin: 6px 0;
+}
+
+.round-list button {
+  margin-left: 8px;
+  padding: 3px 8px;
+  font-size: 12px;
+}
+
+.table-wrap {
+  overflow: auto;
+  max-height: 420px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+
+th,
+td {
+  border: 1px solid #d9dee5;
+  padding: 6px 8px;
+  text-align: right;
+}
+
+th:first-child,
+td:first-child {
+  text-align: left;
+}
+
+thead th {
+  background: #eef2f6;
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.metric {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.metric .value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.metric .label {
+  color: #64748b;
+  font-size: 12px;
+}
+
+code {
+  background: #eef2f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+#drop-list {
+  max-height: 200px;
+  overflow: auto;
+}
