@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>纪录片运镜工作台</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      body {
+        margin: 0;
+        background: #111317;
+        color: #e8eaed;
+      }
+      main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      h1 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0 0 16px;
+      }
+      .stage {
+        background: #000;
+        border: 1px solid #2a2f37;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+      }
+      .toolbar {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 14px 4px;
+        flex-wrap: wrap;
+      }
+      button {
+        background: #2f6fed;
+        color: #fff;
+        border: 0;
+        border-radius: 8px;
+        padding: 9px 18px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: progress;
+      }
+      .clock {
+        font-variant-numeric: tabular-nums;
+        color: #9aa0a6;
+      }
+      .scrubber {
+        width: 100%;
+        accent-color: #2f6fed;
+      }
+      .progress {
+        color: #c6dafc;
+        min-height: 20px;
+        font-size: 13px;
+      }
+      .result {
+        margin-top: 18px;
+        display: grid;
+        gap: 10px;
+      }
+      .result a {
+        color: #8ab4f8;
+      }
+      .hint {
+        color: #9aa0a6;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>纪录片 Ken Burns 运镜工作台</h1>
+      <div class="stage">
+        <canvas data-canvas></canvas>
+      </div>
+      <div class="toolbar">
+        <button data-play>播放</button>
+        <button data-export>导出 WebM 与参数</button>
+        <span class="clock" data-clock>0.00 / 0.00s</span>
+      </div>
+      <input class="scrubber" data-scrub type="range" min="0" max="1000" value="0" step="1" />
+      <div class="progress" data-progress>正在加载 18 张高分辨率照片…</div>
+      <div class="result" data-result></div>
+      <p class="hint">
+        运镜取景框始终限制在每张照片的“可用画幅”内并覆盖重点框；转场为交叉溶解，画面全程铺满画布不露边。
+        旁白较长的照片会自动延长停留，图片顺序保持不变。
+      </p>
+    </main>
+    <script type="module" src="/src/web/app.ts"></script>
+  </body>
+</html>

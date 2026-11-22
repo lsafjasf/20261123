@@ -1,0 +1,399 @@
+{
+  "title": "十八张照片的纪录片",
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "bitrate": 8000000,
+    "codec": "vp9"
+  },
+  "narration": {
+    "baseHoldSeconds": 4.5,
+    "minHoldSeconds": 2.5,
+    "maxHoldSeconds": 16,
+    "charsPerSecond": 4.2,
+    "audioSlackSeconds": 0.45,
+    "transitionSeconds": 0.9,
+    "fullNarrationSrc": "/fixtures/audio/narration.wav"
+  },
+  "images": [
+    {
+      "id": "img-1",
+      "src": "/fixtures/images/img-1.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.18,
+        "y": 0.22,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "push-in",
+      "narrationText": "这是一段较长的纪录片旁白，用来验证系统会依据文本长度自动延长该照片的停留时间，同时保持图片顺序不变。",
+      "narrationSrc": "/fixtures/audio/seg-1.wav"
+    },
+    {
+      "id": "img-2",
+      "src": "/fixtures/images/img-2.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.33999999999999997,
+        "y": 0.36,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "pan",
+      "narrationText": "短促的一句。",
+      "narrationSrc": "/fixtures/audio/seg-2.wav"
+    },
+    {
+      "id": "img-3",
+      "src": "/fixtures/images/img-3.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.5,
+        "y": 0.5,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "pull-out",
+      "narrationText": "镜头在重点区域之间缓慢移动，交叉溶解过程中两张照片始终铺满画布，任何时刻都不会露出黑边或画面边界。",
+      "narrationSrc": "/fixtures/audio/seg-3.wav"
+    },
+    {
+      "id": "img-4",
+      "src": "/fixtures/images/img-4.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.6599999999999999,
+        "y": 0.22,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "auto",
+      "narrationText": "",
+      "narrationSrc": "/fixtures/audio/seg-4.wav"
+    },
+    {
+      "id": "img-5",
+      "src": "/fixtures/images/img-5.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.18,
+        "y": 0.36,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "push-in",
+      "narrationText": "这是一段较长的纪录片旁白，用来验证系统会依据文本长度自动延长该照片的停留时间，同时保持图片顺序不变。",
+      "narrationSrc": "/fixtures/audio/seg-5.wav"
+    },
+    {
+      "id": "img-6",
+      "src": "/fixtures/images/img-6.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.33999999999999997,
+        "y": 0.5,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "pan",
+      "narrationText": "短促的一句。",
+      "narrationSrc": "/fixtures/audio/seg-6.wav"
+    },
+    {
+      "id": "img-7",
+      "src": "/fixtures/images/img-7.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.5,
+        "y": 0.22,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "pull-out",
+      "narrationText": "镜头在重点区域之间缓慢移动，交叉溶解过程中两张照片始终铺满画布，任何时刻都不会露出黑边或画面边界。",
+      "narrationSrc": "/fixtures/audio/seg-7.wav"
+    },
+    {
+      "id": "img-8",
+      "src": "/fixtures/images/img-8.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.6599999999999999,
+        "y": 0.36,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "auto",
+      "narrationText": "",
+      "narrationSrc": "/fixtures/audio/seg-8.wav"
+    },
+    {
+      "id": "img-9",
+      "src": "/fixtures/images/img-9.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.18,
+        "y": 0.5,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "push-in",
+      "narrationText": "这是一段较长的纪录片旁白，用来验证系统会依据文本长度自动延长该照片的停留时间，同时保持图片顺序不变。",
+      "narrationSrc": "/fixtures/audio/seg-9.wav"
+    },
+    {
+      "id": "img-10",
+      "src": "/fixtures/images/img-10.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.33999999999999997,
+        "y": 0.22,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "pan",
+      "narrationText": "短促的一句。",
+      "narrationSrc": "/fixtures/audio/seg-10.wav"
+    },
+    {
+      "id": "img-11",
+      "src": "/fixtures/images/img-11.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.5,
+        "y": 0.36,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "pull-out",
+      "narrationText": "镜头在重点区域之间缓慢移动，交叉溶解过程中两张照片始终铺满画布，任何时刻都不会露出黑边或画面边界。",
+      "narrationSrc": "/fixtures/audio/seg-11.wav"
+    },
+    {
+      "id": "img-12",
+      "src": "/fixtures/images/img-12.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.6599999999999999,
+        "y": 0.5,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "auto",
+      "narrationText": "",
+      "narrationSrc": "/fixtures/audio/seg-12.wav"
+    },
+    {
+      "id": "img-13",
+      "src": "/fixtures/images/img-13.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.18,
+        "y": 0.22,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "push-in",
+      "narrationText": "这是一段较长的纪录片旁白，用来验证系统会依据文本长度自动延长该照片的停留时间，同时保持图片顺序不变。",
+      "narrationSrc": "/fixtures/audio/seg-13.wav"
+    },
+    {
+      "id": "img-14",
+      "src": "/fixtures/images/img-14.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.33999999999999997,
+        "y": 0.36,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "pan",
+      "narrationText": "短促的一句。",
+      "narrationSrc": "/fixtures/audio/seg-14.wav"
+    },
+    {
+      "id": "img-15",
+      "src": "/fixtures/images/img-15.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.5,
+        "y": 0.5,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "pull-out",
+      "narrationText": "镜头在重点区域之间缓慢移动，交叉溶解过程中两张照片始终铺满画布，任何时刻都不会露出黑边或画面边界。",
+      "narrationSrc": "/fixtures/audio/seg-15.wav"
+    },
+    {
+      "id": "img-16",
+      "src": "/fixtures/images/img-16.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.6599999999999999,
+        "y": 0.22,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "auto",
+      "narrationText": "",
+      "narrationSrc": "/fixtures/audio/seg-16.wav"
+    },
+    {
+      "id": "img-17",
+      "src": "/fixtures/images/img-17.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.18,
+        "y": 0.36,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "push-in",
+      "narrationText": "这是一段较长的纪录片旁白，用来验证系统会依据文本长度自动延长该照片的停留时间，同时保持图片顺序不变。",
+      "narrationSrc": "/fixtures/audio/seg-17.wav"
+    },
+    {
+      "id": "img-18",
+      "src": "/fixtures/images/img-18.png",
+      "pixelWidth": 3840,
+      "pixelHeight": 2160,
+      "focusBox": {
+        "x": 0.33999999999999997,
+        "y": 0.5,
+        "width": 0.16,
+        "height": 0.22
+      },
+      "usableFrame": {
+        "x": 0.04,
+        "y": 0.05,
+        "width": 0.92,
+        "height": 0.9
+      },
+      "motion": "pan",
+      "narrationText": "短促的一句。",
+      "narrationSrc": "/fixtures/audio/seg-18.wav"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "kenburns-documentary",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Zero-dependency Ken Burns documentary renderer (TypeScript + WebCodecs + WebAudio + Canvas + MediaSource)",
+  "scripts": {
+    "fixtures": "node tools/make-fixtures.ts",
+    "test": "node --test test/*.test.ts",
+    "check": "node tools/check-syntax.ts",
+    "start": "node src/server/server.ts"
+  },
+  "engines": {
+    "node": ">=23.6.0"
+  }
+}
