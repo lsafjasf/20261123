@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>离线 LUT 视频调色台</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>离线 LUT 视频调色台</h1>
+      <div class="engine-badge" id="engine-badge">引擎检测中…</div>
+    </header>
+
+    <main class="layout">
+      <section class="stage">
+        <div class="canvas-wrap">
+          <canvas id="display" width="960" height="540"></canvas>
+          <div class="stats-overlay" id="stats-overlay">等待画面</div>
+        </div>
+        <div class="transport">
+          <button id="play-btn" type="button">播放</button>
+          <button id="stop-btn" type="button">停止</button>
+          <input id="scrub" type="range" min="0" max="1000" value="0" />
+          <span id="time-label">0.00 / 0.00 s</span>
+          <label class="volume">音量
+            <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5" />
+          </label>
+          <meter id="level-meter" min="0" max="1" value="0"></meter>
+        </div>
+        <div class="timeline-panel">
+          <div class="timeline-head">
+            <span>颜色节点时间线</span>
+            <button id="add-node-btn" type="button">在播放头添加节点</button>
+          </div>
+          <div class="timeline-track" id="timeline-track">
+            <div class="playhead" id="playhead"></div>
+          </div>
+          <div class="node-editor" id="node-editor">
+            <p class="hint">点击时间线上的节点进行编辑，或先添加一个节点。</p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>画面源</h2>
+          <button id="synthetic-btn" type="button">使用离线合成画面</button>
+          <label class="file-label">导入 WebM 视频
+            <input id="file-input" type="file" accept="video/webm,.webm" hidden />
+          </label>
+          <p class="hint" id="source-info">未加载</p>
+        </section>
+
+        <section class="panel">
+          <h2>LUT 库</h2>
+          <label class="file-label">导入 .cube / .3dl
+            <input id="lut-input" type="file" accept=".cube,.3dl,.dat" multiple hidden />
+          </label>
+          <ul class="lut-list" id="lut-list"></ul>
+          <p class="hint" id="lut-hint">相同文件重复导入会被幂等去重。</p>
+        </section>
+
+        <section class="panel">
+          <h2>调色参数</h2>
+          <label>强度 <span id="intensity-value">100%</span>
+            <input id="intensity" type="range" min="0" max="1" step="0.01" value="1" />
+          </label>
+          <label>过曝阈值 <span id="threshold-value">100%</span>
+            <input id="threshold" type="range" min="0.5" max="1" step="0.01" value="1" />
+          </label>
+          <label class="check"><input id="highlight-toggle" type="checkbox" checked /> 标记越界 / 过曝像素</label>
+          <fieldset>
+            <legend>前后对比</legend>
+            <label class="check"><input type="radio" name="compare" value="off" /> 关闭</label>
+            <label class="check"><input type="radio" name="compare" value="slider" checked /> 擦拭滑块</label>
+            <label class="check"><input type="radio" name="compare" value="split" /> 左右分屏</label>
+            <input id="compare-position" type="range" min="0" max="1" step="0.01" value="0.5" />
+          </fieldset>
+        </section>
+
+        <section class="panel">
+          <h2>顺序解释</h2>
+          <select id="order-a"></select>
+          <select id="order-b"></select>
+          <button id="compare-order-btn" type="button">对比 A→B 与 B→A</button>
+          <p class="hint" id="order-result">选择两个 LUT 后点击对比。</p>
+        </section>
+      </aside>
+    </main>
+
+    <video id="mse-video" playsinline muted hidden></video>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

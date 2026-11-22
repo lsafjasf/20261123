@@ -1,0 +1,15 @@
+{
+  "name": "lut-video-grader",
+  "version": "1.0.0",
+  "private": true,
+  "description": "离线零依赖的浏览器 3D LUT 视频调色台（TypeScript + Node 标准库 + WebCodecs/WebAudio/Canvas/MediaSource）",
+  "type": "module",
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test \"tests/*.test.ts\"",
+    "serve": "node scripts/serve.mjs"
+  }
+}
