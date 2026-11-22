@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>会议录音体检</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>会议录音体检</h1>
+  <label class="file-btn">选择录音文件
+    <input type="file" id="file" accept="audio/*,.wav,.mp3,.m4a,.mp4">
+  </label>
+  <button id="demo">载入示例</button>
+  <button id="export">导出报告</button>
+  <span id="status">未加载文件</span>
+</header>
+<div id="progressbar"><div id="progress"></div></div>
+<main>
+  <aside>
+    <h2>检测阈值</h2>
+    <div id="thresholds"></div>
+    <div id="recompute" class="muted"></div>
+    <h2>停顿白名单</h2>
+    <div id="whitelist"></div>
+  </aside>
+  <section>
+    <canvas id="overview"></canvas>
+    <canvas id="detail"></canvas>
+    <audio id="audio" controls></audio>
+    <div id="counts"></div>
+    <div id="segments"></div>
+  </section>
+</main>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
