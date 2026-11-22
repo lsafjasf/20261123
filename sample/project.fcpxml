@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.10">
+  <resources>
+    <format id="r1" name="FFVideoFormat720p30" frameDuration="1/30s" width="1280" height="720"/>
+    <asset id="r2" name="IMG_4821.MOV" start="0s" duration="150/30s" hasVideo="1" hasAudio="1" format="r1">
+      <media-rep kind="original-media" src="file:///Volumes/Office_Old/Footage/IMG_4821.MOV"/>
+    </asset>
+    <asset id="r3" name="IMG_4822.MOV" start="0s" duration="180/30s" hasVideo="1" hasAudio="1" format="r1">
+      <media-rep kind="original-media" src="file:///Volumes/Office_Old/Footage/IMG_4822.MOV"/>
+    </asset>
+    <asset id="r4" name="IMG_4823.MOV" start="0s" duration="210/30s" hasVideo="1" hasAudio="1" format="r1">
+      <media-rep kind="original-media" src="file:///Volumes/Office_Old/Footage/IMG_4823.MOV"/>
+    </asset>
+    <asset id="r5" name="IMG_4824.MOV" start="0s" duration="90/30s" hasVideo="1" hasAudio="1" format="r1">
+      <media-rep kind="original-media" src="file:///Volumes/Office_Old/Footage/IMG_4824.MOV"/>
+    </asset>
+    <asset id="r6" name="IMG_4825.MOV" start="0s" duration="120/30s" hasVideo="1" hasAudio="1" format="r1">
+      <media-rep kind="original-media" src="file:///Volumes/Office_Old/Footage/IMG_4825.MOV"/>
+    </asset>
+    <asset id="r7" name="IMG_4826.MOV" start="0s" duration="120/30s" hasVideo="1" hasAudio="1" format="r1">
+      <media-rep kind="original-media" src="file:///Volumes/Office_Old/Footage/IMG_4826.MOV"/>
+    </asset>
+    <asset id="r8" name="BROLL_0001.MP4" start="0s" duration="150/30s" hasVideo="1" hasAudio="1" format="r1">
+      <media-rep kind="original-media" src="file:///Volumes/Office_Old/Footage/BROLL_0001.MP4"/>
+    </asset>
+  </resources>
+  <library>
+    <event name="Office Cut">
+      <project name="Office Cut 2026">
+        <sequence format="r1" duration="950/30s" tcStart="0s" tcFormat="NDF">
+          <spine>
+            <asset-clip ref="r2" offset="0s" start="0s" duration="150/30s" id="clip-01"/>
+            <asset-clip ref="r3" offset="150/30s" start="0s" duration="180/30s" id="clip-02"/>
+            <asset-clip ref="r4" offset="330/30s" start="0s" duration="210/30s" id="clip-03"/>
+            <asset-clip ref="r5" offset="540/30s" start="0s" duration="90/30s" id="clip-04"/>
+            <asset-clip ref="r6" offset="630/30s" start="0s" duration="120/30s" id="clip-05"/>
+            <asset-clip ref="r7" offset="750/30s" start="0s" duration="100/30s" id="clip-06"/>
+            <asset-clip ref="r2" offset="900/30s" start="20/30s" duration="60/30s" id="clip-07"/>
+            <asset-clip ref="r8" offset="950/30s" start="0s" duration="150/30s" id="clip-08"/>
+          </spine>
+        </sequence>
+      </project>
+    </event>
+  </library>
+</fcpxml>

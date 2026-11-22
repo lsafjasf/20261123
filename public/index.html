@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0b0e11">
+  <title>Relink Desk · 素材重连工作台</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Relink Desk 首页">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" role="img"><path d="M8 10.5h8.5a5.5 5.5 0 0 1 0 11H14"/><path d="M24 21.5h-8.5a5.5 5.5 0 0 1 0-11H18"/><circle cx="8" cy="10.5" r="2.5"/><circle cx="24" cy="21.5" r="2.5"/></svg>
+      </span>
+      <span class="brand-copy"><strong>RELINK</strong><small>素材重连台</small></span>
+    </a>
+    <div class="topbar-actions">
+      <span class="pill"><span class="live-dot"></span>仅本机处理</span>
+      <span class="pill pill-muted">工程只读</span>
+      <button class="ghost-button" id="openSetupButton" type="button">路径设置</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero" id="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">MEDIA RECOVERY / LOCAL ONLY</p>
+        <h1>把断掉的素材链，<br><span>重新接对。</span></h1>
+        <p class="hero-lede">同名手机视频不再靠猜。时长、媒体参数、SHA-256、短音频与画面指纹共同排序；证据不够时，逐条确认。</p>
+        <div class="tech-chips" aria-label="分析技术">
+          <span>WebCodecs</span><span>WebAudio</span><span>Canvas</span><span>MediaSource</span><span>Node stdlib</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="path-card path-old">
+          <span class="path-label">旧路径</span>
+          <code>/Volumes/Office_Old/Footage/IMG_4821.MOV</code>
+          <span class="path-state">断链</span>
+        </div>
+        <div class="evidence-stack">
+          <span class="evidence-line"><i></i>时长 <b>00:05:12</b></span>
+          <span class="evidence-line"><i></i>参数 <b>1280×720</b></span>
+          <span class="evidence-line"><i></i>哈希 <b>9FA2…D071</b></span>
+          <span class="evidence-line"><i></i>音频 <b>FP 0.998</b></span>
+        </div>
+        <div class="path-card path-new">
+          <span class="path-label">新路径</span>
+          <code>新盘 / A-CAM / IMG_4821.MOV</code>
+          <span class="path-state ok">已重连</span>
+        </div>
+        <span class="visual-rail rail-left"></span>
+        <span class="visual-rail rail-right"></span>
+      </div>
+    </section>
+
+    <section class="setup-card" id="setupCard">
+      <div class="setup-heading">
+        <div>
+          <p class="section-kicker">01 / WORKSPACE</p>
+          <h2>指定工程与新盘</h2>
+        </div>
+        <button class="text-button" id="demoButton" type="button">载入示例工程 →</button>
+      </div>
+      <div class="setup-grid">
+        <label class="field">
+          <span>工程文件</span>
+          <input id="projectPathInput" type="text" spellcheck="false" placeholder="例如 /projects/cut.fcpxml">
+          <small>支持 FCPXML、Premiere XML、JSON 清单；原文件不会被写入。</small>
+        </label>
+        <label class="field">
+          <span>新素材根目录</span>
+          <input id="newRootInput" type="text" spellcheck="false" placeholder="例如 /Volumes/Office_New">
+          <small>递归扫描视频、音频与图片；跳过隐藏目录和系统目录。</small>
+        </label>
+        <label class="field">
+          <span>旧盘参考目录 <em>可选</em></span>
+          <input id="oldRootInput" type="text" spellcheck="false" placeholder="旧盘仍可读时，用于哈希和指纹比对">
+          <small>没有旧盘也能匹配；同名多候选会被强制转入人工确认。</small>
+        </label>
+      </div>
+      <div class="setup-actions">
+        <p id="setupHint">路径只发送到本机 Node 服务，不会上传。</p>
+        <button class="primary-button" id="runButton" type="button">
+          <span>扫描并排序候选</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="progress-card" id="progressPanel" hidden aria-live="polite">
+      <div class="progress-top">
+        <div>
+          <p class="section-kicker">ANALYZING</p>
+          <h3 id="progressLabel">正在扫描素材…</h3>
+        </div>
+        <strong id="progressValue">0%</strong>
+      </div>
+      <div class="progress-track"><span id="progressBar"></span></div>
+      <div class="progress-foot">
+        <span id="progressDetail">读取目录与媒体容器参数</span>
+        <span id="progressCount"></span>
+      </div>
+      <div class="scan-log" id="scanLog"></div>
+    </section>
+
+    <section class="dashboard" id="dashboard" hidden>
+      <div class="summary-grid">
+        <article class="stat-card">
+          <span class="stat-label">时间线引用</span>
+          <strong id="statTotal">0</strong>
+          <small id="statTotalNote">来自工程素材节点</small>
+        </article>
+        <article class="stat-card stat-good">
+          <span class="stat-label">安全匹配</span>
+          <strong id="statMatched">0</strong>
+          <small>哈希或唯一元数据确认</small>
+        </article>
+        <article class="stat-card stat-warn">
+          <span class="stat-label">待人工确认</span>
+          <strong id="statReview">0</strong>
+          <small>同名多候选或证据不足</small>
+        </article>
+        <article class="stat-card stat-danger">
+          <span class="stat-label">仍缺文件</span>
+          <strong id="statMissing">0</strong>
+          <small>新盘无同名候选</small>
+        </article>
+      </div>
+
+      <div class="workbench">
+        <section class="match-panel">
+          <div class="match-toolbar">
+            <div class="filter-tabs" role="tablist" aria-label="匹配状态筛选">
+              <button class="filter-tab is-active" data-filter="review" type="button">待确认 <span id="reviewTabCount">0</span></button>
+              <button class="filter-tab" data-filter="matched" type="button">已匹配 <span id="matchedTabCount">0</span></button>
+              <button class="filter-tab" data-filter="missing" type="button">缺失 <span id="missingTabCount">0</span></button>
+              <button class="filter-tab" data-filter="all" type="button">全部 <span id="allTabCount">0</span></button>
+            </div>
+            <div class="toolbar-right">
+              <label class="search-box">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="5.5"/><path d="m13 13 4 4"/></svg>
+                <input id="searchInput" type="search" placeholder="搜索文件名或路径" aria-label="搜索">
+              </label>
+              <button class="secondary-button" id="rerunButton" type="button">重新分析</button>
+              <button class="primary-button compact" id="exportButton" type="button">保存映射</button>
+            </div>
+          </div>
+          <div class="table-head" aria-hidden="true">
+            <span>状态</span><span>素材</span><span>时长</span><span>匹配候选 / 相对路径</span><span>置信度</span>
+          </div>
+          <div class="match-list" id="matchList"></div>
+          <div class="empty-filter" id="emptyFilter" hidden>当前筛选没有项目。</div>
+        </section>
+
+        <aside class="inspector" id="inspector">
+          <div class="inspector-placeholder" id="inspectorPlaceholder">
+            <div class="placeholder-orbit"><span></span><span></span><span></span></div>
+            <p class="section-kicker">EVIDENCE INSPECTOR</p>
+            <h3>选择一条素材</h3>
+            <p>查看候选排名、时长偏差、媒体参数、哈希与音频指纹，再决定是否接上。</p>
+          </div>
+          <div id="inspectorContent" hidden></div>
+        </aside>
+      </div>
+      <p class="readonly-note"><span></span>时间线结构、剪辑点、特效与素材入出点均未修改。导出仅生成独立路径映射。</p>
+    </section>
+
+    <section class="method-strip" id="methodStrip">
+      <div><span>01</span><strong>容器探针</strong><p>Node 标准库读取 MP4/MOV 轨道参数，不依赖云端。</p></div>
+      <div><span>02</span><strong>内容证据</strong><p>流式 SHA-256，配合 WebAudio 短频谱与 Canvas 画面指纹。</p></div>
+      <div><span>03</span><strong>保守决策</strong><p>证据不充分时绝不自动接线，逐条人工确认。</p></div>
+      <div><span>04</span><strong>可移植输出</strong><p>映射按工程目录保存，缺失与待确认单独列出。</p></div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="exportModal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
+      <button class="modal-close" id="closeExportButton" type="button" aria-label="关闭">×</button>
+      <p class="section-kicker">04 / PORTABLE OUTPUT</p>
+      <h2 id="exportTitle">保存可移植映射</h2>
+      <p class="modal-lede">只写入独立导出目录。原工程、时间线和已匹配素材都不会被改动。</p>
+      <div class="export-summary" id="exportSummary"></div>
+      <div class="export-result" id="exportResult" hidden></div>
+      <div class="modal-actions">
+        <button class="secondary-button" id="cancelExportButton" type="button">返回复核</button>
+        <button class="primary-button" id="confirmExportButton" type="button">生成映射文件</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "relink-desk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-first media relink workbench for editing projects",
+  "scripts": {
+    "build": "node --disable-warning=ExperimentalWarning scripts/build.mjs",
+    "start": "npm run build && node --disable-warning=ExperimentalWarning --experimental-strip-types server.ts",
+    "test": "node --disable-warning=ExperimentalWarning --experimental-strip-types --test tests/*.test.ts"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}
