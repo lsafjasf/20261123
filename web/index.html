@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>SeamLab · 游戏录像撕裂取证</title>
+    <link rel="icon" href="/web/favicon.svg" />
+    <link rel="stylesheet" href="/web/styles.css" />
+    <script type="module" src="/web/app.ts"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="SeamLab 首页">
+          <span class="brand-mark" aria-hidden="true">
+            <i></i><i></i><i></i>
+          </span>
+          <span class="brand-copy">
+            <strong>SEAMLAB</strong>
+            <small>FRAME FORENSICS</small>
+          </span>
+        </a>
+        <div class="topbar-divider"></div>
+        <div class="source-breadcrumb">
+          <span class="status-dot" id="sourceDot"></span>
+          <span id="sourceName">正在准备本地样例…</span>
+          <span class="source-meta" id="sourceMeta">DEMO / 24 FPS</span>
+        </div>
+        <div class="topbar-actions">
+          <span class="offline-pill" title="所有处理均在本机浏览器完成">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.2a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0 2.1v4.2l2.7 1.6" /></svg>
+            离线处理
+          </span>
+          <button class="btn ghost" id="openSourceBtn" type="button">
+            <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M9 12.5V3.2m0 0L5.8 6.4M9 3.2l3.2 3.2M3.2 11.5v2.2a1.1 1.1 0 0 0 1.1 1.1h9.4a1.1 1.1 0 0 0 1.1-1.1v-2.2" /></svg>
+            导入录像
+          </button>
+          <div class="export-menu">
+            <button class="btn solid" id="exportBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+              <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M9 2.8v8.8m0 0 3.1-3.1M9 11.6 5.9 8.5M3.3 14.7h11.4" /></svg>
+              导出结果
+            </button>
+            <div class="menu" id="exportMenu" role="menu" hidden>
+              <button type="button" data-export="csv" role="menuitem"><strong>逐帧 CSV</strong><span>含分数、断层与标签</span></button>
+              <button type="button" data-export="json" role="menuitem"><strong>完整 JSON</strong><span>可复现的检测证据</span></button>
+              <button type="button" data-export="stats" role="menuitem"><strong>分类统计 CSV</strong><span>五类计数与占比</span></button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="notice-bar" id="noticeBar">
+        <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M9 2.6 16 15H2L9 2.6Z" /><path d="M9 6.8v4.1M9 13v.1" /></svg>
+        <span id="noticeText">正在生成本地合成样例，并执行逐帧断层检测…</span>
+        <div class="progress-track"><span id="progressBar"></span></div>
+        <button type="button" id="noticeClose" aria-label="收起提示">×</button>
+      </div>
+
+      <main class="workspace">
+        <section class="review-column">
+          <div class="summary-strip" aria-label="检测分类统计">
+            <button class="summary-card tear is-active" type="button" data-filter="tear">
+              <span class="summary-icon"><svg viewBox="0 0 20 20"><path d="M2 7h16M2 13h16" /><path d="m5 4 4 12M15 4l-4 12" /></svg></span>
+              <span class="summary-copy"><small>采集撕裂</small><strong id="countTear">—</strong></span>
+              <span class="summary-ratio" id="ratioTear">—</span>
+            </button>
+            <button class="summary-card block" type="button" data-filter="encode-block">
+              <span class="summary-icon"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z" /></svg></span>
+              <span class="summary-copy"><small>编码块错误</small><strong id="countBlock">—</strong></span>
+              <span class="summary-ratio" id="ratioBlock">—</span>
+            </button>
+            <button class="summary-card vfx" type="button" data-filter="vfx-glitch">
+              <span class="summary-icon"><svg viewBox="0 0 20 20"><path d="M2 4h16M2 8h11M7 12h11M2 16h14" /></svg></span>
+              <span class="summary-copy"><small>游戏特效</small><strong id="countVfx">—</strong></span>
+              <span class="summary-ratio" id="ratioVfx">—</span>
+            </button>
+            <button class="summary-card uncertain" type="button" data-filter="uncertain">
+              <span class="summary-icon"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" /><path d="M8 8.2a2.1 2.1 0 1 1 3.3 1.7c-.8.5-1.3 1-1.3 2M10 14.6v.1" /></svg></span>
+              <span class="summary-copy"><small>证据不足</small><strong id="countUncertain">—</strong></span>
+              <span class="summary-ratio" id="ratioUncertain">—</span>
+            </button>
+            <div class="summary-total">
+              <small>检测帧数</small>
+              <strong id="totalFrames">—</strong>
+              <span id="durationLabel">—</span>
+            </div>
+          </div>
+
+          <section class="stage-card" aria-label="逐帧审查画面">
+            <div class="stage-header">
+              <div>
+                <div class="eyebrow"><span id="frameIndexLabel">FRAME 000</span><span class="eyebrow-sep">/</span><span id="timecodeLabel">00:00.000</span></div>
+                <div class="stage-title-row">
+                  <h1 id="stageVerdict">等待检测</h1>
+                  <span class="verdict-pill" id="verdictPill">—</span>
+                </div>
+              </div>
+              <div class="stage-header-right">
+                <div class="frame-nav">
+                  <button class="icon-btn" id="prevFrameBtn" type="button" aria-label="上一帧" title="上一帧 ←">
+                    <svg viewBox="0 0 18 18"><path d="m11 4-5 5 5 5" /></svg>
+                  </button>
+                  <button class="icon-btn play" id="playBtn" type="button" aria-label="播放" title="播放/暂停 空格">
+                    <svg viewBox="0 0 18 18" class="play-icon"><path d="m6 4 8 5-8 5V4Z" /></svg>
+                    <svg viewBox="0 0 18 18" class="pause-icon"><path d="M5 4h3v10H5zM10 4h3v10h-3z" /></svg>
+                  </button>
+                  <button class="icon-btn" id="nextFrameBtn" type="button" aria-label="下一帧" title="下一帧 →">
+                    <svg viewBox="0 0 18 18"><path d="m7 4 5 5-5 5" /></svg>
+                  </button>
+                </div>
+                <div class="zoom-group" role="group" aria-label="缩放">
+                  <button type="button" data-zoom="1" class="is-active">适应</button>
+                  <button type="button" data-zoom="2">2×</button>
+                  <button type="button" data-zoom="4">4×</button>
+                  <button type="button" data-zoom="8">8×</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="viewport" id="viewport">
+              <div class="canvas-stack" id="canvasStack">
+                <canvas id="frameCanvas" width="960" height="540"></canvas>
+                <div class="seam-overlay" id="seamOverlay">
+                  <span class="seam-line"></span>
+                  <span class="seam-tag" id="seamTag">SEAM</span>
+                  <span class="seam-arrow left"></span>
+                  <span class="seam-arrow right"></span>
+                </div>
+                <div class="tear-tint top"></div>
+                <div class="tear-tint bottom"></div>
+              </div>
+              <div class="viewport-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <div class="loupe" id="loupe">
+                <div class="loupe-head"><span>4× 断层透镜</span><span id="loupeCoord">x 480 · y 232</span></div>
+                <canvas id="loupeCanvas" width="188" height="106"></canvas>
+                <span class="loupe-cross x"></span><span class="loupe-cross y"></span>
+              </div>
+              <div class="viewport-hint" id="viewportHint">滚轮缩放 · 放大后拖拽查看</div>
+            </div>
+
+            <div class="scrub-row">
+              <span class="timecode" id="scrubTime">00:00.000</span>
+              <input type="range" id="frameScrubber" min="0" max="0" value="0" aria-label="帧位置" />
+              <span class="timecode muted" id="scrubDuration">00:00.000</span>
+            </div>
+
+            <div class="timeline-wrap">
+              <div class="timeline-labels">
+                <span>帧序列</span>
+                <div class="legend">
+                  <span><i class="dot tear"></i>撕裂</span>
+                  <span><i class="dot block"></i>编码块</span>
+                  <span><i class="dot vfx"></i>特效</span>
+                  <span><i class="dot uncertain"></i>存疑</span>
+                </div>
+              </div>
+              <div class="filmstrip-scroller" id="filmstripScroller">
+                <div class="filmstrip" id="filmstrip"></div>
+              </div>
+              <div class="waveform-row">
+                <span class="wave-label">AUDIO</span>
+                <canvas id="audioCanvas" height="42"></canvas>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <aside class="inspector" aria-label="判定证据与统计">
+          <section class="panel verdict-panel">
+            <div class="panel-kicker">当前帧判定 <span id="reviewState">自动</span></div>
+            <div class="verdict-main">
+              <div class="verdict-emblem" id="verdictEmblem">
+                <svg viewBox="0 0 30 30" aria-hidden="true"><path d="M3 10h24M3 20h24" /><path d="m8 5 7 20M22 5l-7 20" /></svg>
+              </div>
+              <div class="verdict-copy">
+                <strong id="verdictTitle">等待分析</strong>
+                <span id="verdictSub">尚无帧数据</span>
+              </div>
+              <div class="confidence-dial" id="confidenceDial">
+                <span id="confidenceValue">—</span>
+                <small>置信度</small>
+              </div>
+            </div>
+            <p class="verdict-note" id="verdictNote">检测器将联合评估帧内水平位移与跨帧时差。</p>
+            <div class="tags" id="evidenceTags"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading"><h2>分类证据</h2><span>SCORE / 1.00</span></div>
+            <div class="score-list">
+              <div class="score-row tear"><div><span>采集撕裂</span><b id="tearScore">0.00</b></div><div class="meter"><i id="tearMeter"></i></div></div>
+              <div class="score-row block"><div><span>编码块错误</span><b id="blockScore">0.00</b></div><div class="meter"><i id="blockMeter"></i></div></div>
+              <div class="score-row vfx"><div><span>游戏故障特效</span><b id="vfxScore">0.00</b></div><div class="meter"><i id="vfxMeter"></i></div></div>
+            </div>
+          </section>
+
+          <section class="panel evidence-panel">
+            <div class="panel-heading"><h2>断层测量</h2><span>ANALYSIS PLANE</span></div>
+            <div class="metric-grid">
+              <div class="metric"><small>水平位移</small><strong id="metricShift">—</strong><span id="metricShiftSub">需 ≥ 2 px</span></div>
+              <div class="metric"><small>整幅支持度</small><strong id="metricSupport">—</strong><span>全宽窗带投票</span></div>
+              <div class="metric"><small>跨帧偏斜</small><strong id="metricSkew">—</strong><span>上下半幅时差</span></div>
+              <div class="metric"><small>横线密度</small><strong id="metricLines">—</strong><span id="metricLinesSub">相对片段基线</span></div>
+              <div class="metric"><small>块状异常</small><strong id="metricBlock">—</strong><span>8–24 px 周期</span></div>
+              <div class="metric"><small>缝隙匹配增益</small><strong id="metricGain">—</strong><span>位移后残差下降</span></div>
+            </div>
+          </section>
+
+          <section class="panel rule-panel">
+            <div class="panel-heading"><h2>排除路径</h2><span>WHY NOT</span></div>
+            <ul class="rule-list" id="ruleList">
+              <li><i></i><span>等待帧数据</span><em>—</em></li>
+            </ul>
+          </section>
+
+          <section class="panel review-panel">
+            <label for="reviewSelect">人工复核</label>
+            <select id="reviewSelect">
+              <option value="">保持自动判定</option>
+              <option value="tear">采集撕裂</option>
+              <option value="encode-block">编码块错误</option>
+              <option value="vfx-glitch">游戏故障特效</option>
+              <option value="uncertain">证据不足</option>
+              <option value="normal">正常</option>
+            </select>
+          </section>
+
+          <button class="export-wide" id="exportWideBtn" type="button">
+            <span><strong>导出本次取证</strong><small id="exportSummary">逐帧 CSV · JSON · 分类统计</small></span>
+            <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4 9h10M10 5l4 4-4 4" /></svg>
+          </button>
+        </aside>
+      </main>
+
+      <footer class="statusbar">
+        <span><i class="status-dot"></i>本地会话 · 未上传</span>
+        <span id="engineLabel">Canvas / WebCodecs 就绪 · 零第三方依赖</span>
+        <span>SeamLab 1.0 · Offline</span>
+      </footer>
+    </div>
+
+    <dialog id="sourceDialog" class="source-dialog">
+      <form method="dialog" class="dialog-card">
+        <div class="dialog-head">
+          <div><span class="panel-kicker">LOCAL INGEST</span><h2>导入游戏录像</h2></div>
+          <button class="icon-btn" value="cancel" aria-label="关闭">×</button>
+        </div>
+        <label class="drop-zone" id="dropZone">
+          <input type="file" id="fileInput" accept="video/mp4,video/webm,video/quicktime,video/*" />
+          <span class="drop-icon"><svg viewBox="0 0 28 28"><path d="M14 19V5m0 0-5 5m5-5 5 5M5 18v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4" /></svg></span>
+          <strong>拖入 MP4 / WebM，或点击选择</strong>
+          <span>视频只在当前浏览器内解码，不会上传。建议先检测前 1–3 分钟。</span>
+        </label>
+        <div class="dialog-options">
+          <label><input type="checkbox" id="fastIngest" checked /> 快速采样（12 fps）</label>
+          <label>最多分析 <select id="maxFrames"><option>240</option><option selected>480</option><option>900</option></select> 帧</label>
+        </div>
+        <div class="dialog-foot">
+          <span><i class="status-dot"></i><b id="codecStatus">正在检查 WebCodecs / MediaSource</b></span>
+          <button class="btn ghost" value="cancel">取消</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
