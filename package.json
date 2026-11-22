@@ -1,0 +1,17 @@
+{
+  "name": "six-cue-audio-director",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline six-camera live director console driven by field audio evidence.",
+  "scripts": {
+    "build": "node --experimental-strip-types --no-warnings scripts/build.ts",
+    "start": "node --experimental-strip-types --no-warnings scripts/build.ts && node dist/server.js",
+    "dev": "node --experimental-strip-types --no-warnings scripts/dev.ts",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "check": "node --experimental-strip-types --no-warnings scripts/build.ts && node --experimental-strip-types --no-warnings scripts/check.ts"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}

@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#071014" />
+    <meta
+      name="description"
+      content="六机位直播声场导播台：本地音频证据、最短停留、迟滞与可撤销切换。"
+    />
+    <title>SIX/CUE · 声场导播台</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="SIX CUE 首页">
+          <span class="brand-mark" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </span>
+          <span class="brand-word">SIX<span>/</span>CUE</span>
+          <span class="brand-sub">声场导播台</span>
+        </a>
+        <div class="session-meta">
+          <span class="status-chip"><i></i> OFFLINE · LOCAL</span>
+          <span class="session-name">城市杯 · 男单 1/4 决赛</span>
+          <span class="session-clock" id="session-clock">00:00</span>
+        </div>
+        <div class="top-actions">
+          <button class="ghost-button" id="audio-toggle" type="button" aria-pressed="true">
+            <span class="button-icon" aria-hidden="true">◖</span>
+            <span id="audio-toggle-label">现场声开启</span>
+          </button>
+          <button class="ghost-button" id="review-top" type="button">
+            <span class="button-icon" aria-hidden="true">▤</span>
+            证据回放
+          </button>
+          <button class="icon-button" id="fullscreen-btn" type="button" aria-label="全屏">
+            <span aria-hidden="true">⛶</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="program-column" aria-label="节目输出">
+          <div class="program-heading">
+            <div class="heading-main">
+              <span class="live-tag"><i></i> PROGRAM</span>
+              <span class="heading-title">节目输出</span>
+            </div>
+            <div class="program-health">
+              <span><i class="health-dot"></i> 6 路信号正常</span>
+              <span>1080p · 50fps</span>
+              <span>延迟 <b id="latency-readout">38</b>ms</span>
+            </div>
+          </div>
+
+          <div class="program-frame" id="program-frame">
+            <canvas id="program-canvas" aria-label="当前节目画面"></canvas>
+            <div class="program-grade" aria-hidden="true"></div>
+            <div class="program-flash" id="program-flash" aria-hidden="true"></div>
+
+            <div class="program-topline">
+              <div class="program-live">
+                <span class="live-pulse"></span>
+                LIVE
+                <span class="program-format">PGM 1</span>
+              </div>
+              <div class="audio-focus-chip" id="audio-focus-chip">
+                <span class="chip-label">声场焦点</span>
+                <strong id="focus-chip-camera">CAM 3</strong>
+                <span id="focus-chip-db">+7.4 dB</span>
+              </div>
+            </div>
+
+            <div class="scorebug" aria-label="比分">
+              <div class="score-team score-left">
+                <span class="team-code">LY</span>
+                <span class="team-name">林野</span>
+              </div>
+              <div class="score-numbers">
+                <strong id="score-left">8</strong>
+                <span>:</span>
+                <strong id="score-right">7</strong>
+              </div>
+              <div class="score-team score-right">
+                <span class="team-name">周川</span>
+                <span class="team-code">ZC</span>
+              </div>
+              <div class="score-meta">
+                <span>GAME <b>3</b></span>
+                <span>MATCH POINT</span>
+              </div>
+            </div>
+
+            <div class="program-bottom">
+              <div class="program-camera-id">
+                <span class="camera-big" id="program-camera-code">CAM 3</span>
+                <span class="camera-role" id="program-camera-name">左底线</span>
+                <span class="camera-scene" id="program-scene-label">林野反手拧拉得手</span>
+              </div>
+              <div class="program-cue-readout" id="program-cue-readout">
+                <span class="cue-line"></span>
+                <span id="program-cue-text">焦点稳定 · 无需切换</span>
+              </div>
+            </div>
+
+            <div class="takeover-ribbon" id="takeover-ribbon">
+              <span>MANUAL</span> 导播已接管 · 声场建议仅提示
+              <button id="resume-auto-inline" type="button">恢复自动</button>
+            </div>
+          </div>
+
+          <div class="transport">
+            <div class="transport-context">
+              <span class="transport-kicker">ON AIR</span>
+              <strong id="transport-camera">CAM 3 · 左底线</strong>
+              <span id="transport-tag">林野反手拧拉得手</span>
+            </div>
+            <div class="transport-actions">
+              <button class="action-button" id="takeover-btn" type="button">
+                <span class="action-key">T</span>
+                <span>接管</span>
+              </button>
+              <button class="action-button" id="undo-btn" type="button" disabled>
+                <span class="action-key">Z</span>
+                <span>撤销</span>
+              </button>
+              <button class="action-button" id="marker-btn" type="button">
+                <span class="action-key">M</span>
+                <span>补标记</span>
+              </button>
+              <button class="action-button action-button-accent" id="review-btn" type="button">
+                <span class="action-key">R</span>
+                <span>看证据</span>
+              </button>
+            </div>
+            <div class="transport-meters">
+              <span class="meter-caption">MASTER</span>
+              <span class="master-meter"><i></i></span>
+              <span class="meter-db" id="master-db">−18.2</span>
+            </div>
+          </div>
+
+          <div class="camera-rack" id="camera-rack">
+            <button class="camera-card" data-camera="1" type="button" aria-label="切换至 CAM 1 全景">
+              <canvas class="camera-canvas" data-camera-canvas="1"></canvas>
+              <span class="camera-shade"></span>
+              <span class="camera-card-top"><b>1</b><span>CAM 1</span><em>全景</em></span>
+              <span class="camera-card-bottom"><span id="meter-name-1">高台</span><strong id="meter-1">−42.1</strong></span>
+              <span class="camera-meter"><i id="bar-1"></i></span>
+              <span class="camera-on-air">ON AIR</span>
+            </button>
+            <button class="camera-card" data-camera="2" type="button" aria-label="切换至 CAM 2 主机位">
+              <canvas class="camera-canvas" data-camera-canvas="2"></canvas>
+              <span class="camera-shade"></span>
+              <span class="camera-card-top"><b>2</b><span>CAM 2</span><em>主机位</em></span>
+              <span class="camera-card-bottom"><span id="meter-name-2">正拍</span><strong id="meter-2">−42.1</strong></span>
+              <span class="camera-meter"><i id="bar-2"></i></span>
+              <span class="camera-on-air">ON AIR</span>
+            </button>
+            <button class="camera-card" data-camera="3" type="button" aria-label="切换至 CAM 3 左底线">
+              <canvas class="camera-canvas" data-camera-canvas="3"></canvas>
+              <span class="camera-shade"></span>
+              <span class="camera-card-top"><b>3</b><span>CAM 3</span><em>左底线</em></span>
+              <span class="camera-card-bottom"><span id="meter-name-3">林野</span><strong id="meter-3">−42.1</strong></span>
+              <span class="camera-meter"><i id="bar-3"></i></span>
+              <span class="camera-on-air">ON AIR</span>
+            </button>
+            <button class="camera-card" data-camera="4" type="button" aria-label="切换至 CAM 4 右底线">
+              <canvas class="camera-canvas" data-camera-canvas="4"></canvas>
+              <span class="camera-shade"></span>
+              <span class="camera-card-top"><b>4</b><span>CAM 4</span><em>右底线</em></span>
+              <span class="camera-card-bottom"><span id="meter-name-4">周川</span><strong id="meter-4">−42.1</strong></span>
+              <span class="camera-meter"><i id="bar-4"></i></span>
+              <span class="camera-on-air">ON AIR</span>
+            </button>
+            <button class="camera-card" data-camera="5" type="button" aria-label="切换至 CAM 5 网侧">
+              <canvas class="camera-canvas" data-camera-canvas="5"></canvas>
+              <span class="camera-shade"></span>
+              <span class="camera-card-top"><b>5</b><span>CAM 5</span><em>网侧</em></span>
+              <span class="camera-card-bottom"><span id="meter-name-5">击球点</span><strong id="meter-5">−42.1</strong></span>
+              <span class="camera-meter"><i id="bar-5"></i></span>
+              <span class="camera-on-air">ON AIR</span>
+            </button>
+            <button class="camera-card" data-camera="6" type="button" aria-label="切换至 CAM 6 反打">
+              <canvas class="camera-canvas" data-camera-canvas="6"></canvas>
+              <span class="camera-shade"></span>
+              <span class="camera-card-top"><b>6</b><span>CAM 6</span><em>反打</em></span>
+              <span class="camera-card-bottom"><span id="meter-name-6">气氛</span><strong id="meter-6">−42.1</strong></span>
+              <span class="camera-meter"><i id="bar-6"></i></span>
+              <span class="camera-on-air">ON AIR</span>
+            </button>
+          </div>
+          <p class="rack-hint">点击预监直接接管 · 数字键 1–6 切换 · T 接管 / 恢复自动 · Z 撤销 · M 标记</p>
+        </section>
+
+        <aside class="director-rail" aria-label="导播建议">
+          <section class="panel cue-panel" id="cue-panel">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">AUDIO CUE</span>
+                <h2>声场建议</h2>
+              </div>
+              <div class="mode-switch" role="group" aria-label="自动模式">
+                <button type="button" class="mode-button is-active" data-mode="auto">自动</button>
+                <button type="button" class="mode-button" data-mode="assist">提示</button>
+              </div>
+            </div>
+
+            <div class="cue-idle" id="cue-idle">
+              <div class="radar" aria-hidden="true">
+                <i></i><i></i><i></i><i></i>
+                <span></span>
+              </div>
+              <strong>六路声场监听中</strong>
+              <p id="idle-reason">等待持续领先与稳定起音</p>
+              <div class="dwell-line">
+                <span>最短停留</span>
+                <b id="idle-dwell">2.4s</b>
+              </div>
+            </div>
+
+            <div class="cue-live" id="cue-live" hidden>
+              <div class="cue-target">
+                <div class="cue-ring" id="cue-ring"><span id="cue-confidence">86</span><small>%</small></div>
+                <div class="cue-camera">
+                  <span class="eyebrow" id="cue-kicker">建议切至</span>
+                  <strong id="cue-camera-code">CAM 3</strong>
+                  <span id="cue-camera-name">左底线</span>
+                </div>
+                <span class="cue-state" id="cue-state">确认中</span>
+              </div>
+              <p class="cue-reason" id="cue-reason">CAM 3 能量持续领先，起音密度上升。</p>
+              <div class="cue-metrics">
+                <div><span>领先次席</span><strong id="cue-lead">+7.2 dB</strong></div>
+                <div><span>起音强度</span><strong id="cue-onset">82%</strong></div>
+                <div><span>持续领先</span><strong id="cue-sustain">1.4s</strong></div>
+              </div>
+              <div class="dwell-block">
+                <div class="dwell-copy">
+                  <span id="dwell-label">稳定确认</span>
+                  <b id="dwell-value">0.4 / 0.65s</b>
+                </div>
+                <div class="dwell-track"><i id="dwell-fill"></i></div>
+              </div>
+              <div class="cue-actions">
+                <button class="primary-button" id="accept-btn" type="button">采纳切换 <span>↵</span></button>
+                <button class="secondary-button" id="dismiss-btn" type="button">忽略本次</button>
+              </div>
+              <p class="cue-footnote" id="cue-footnote">自动模式：满足条件后直接切换</p>
+            </div>
+          </section>
+
+          <section class="panel audio-panel">
+            <div class="panel-head compact">
+              <div>
+                <span class="eyebrow">FIELD AUDIO</span>
+                <h2>现场声 · 6 CH</h2>
+              </div>
+              <span class="audio-state" id="audio-state"><i></i> 离线回退</span>
+            </div>
+            <canvas class="energy-chart" id="energy-chart" aria-label="六路能量与起音"></canvas>
+            <div class="channel-legend" id="channel-legend"></div>
+            <div class="audio-readout">
+              <span>检测 <b id="detected-count">0</b> 次起音</span>
+              <span>领先 <b id="lead-duration">0.0s</b></span>
+              <span>混音 <b id="mix-mode">LOCAL</b></span>
+            </div>
+          </section>
+
+          <section class="panel settings-panel">
+            <div class="panel-head compact">
+              <div>
+                <span class="eyebrow">GUARDRAILS</span>
+                <h2>切换护栏</h2>
+              </div>
+              <button class="text-button" id="reset-config" type="button">恢复默认</button>
+            </div>
+            <label class="range-row">
+              <span>最短停留 <b id="min-dwell-value">2.4s</b></span>
+              <input id="min-dwell" type="range" min="1200" max="5000" step="100" value="2400" />
+            </label>
+            <label class="range-row">
+              <span>迟滞 <b id="hysteresis-value">4.5 dB</b></span>
+              <input id="hysteresis" type="range" min="1.5" max="9" step="0.5" value="4.5" />
+            </label>
+            <label class="range-row">
+              <span>确认窗 <b id="confirm-value">650ms</b></span>
+              <input id="confirm" type="range" min="200" max="1500" step="50" value="650" />
+            </label>
+            <div class="guardrail-note">
+              <span class="lock-icon">⌁</span>
+              <p>音频仅在浏览器内分析。每次建议保存前后 4.8 秒的六通道证据，不上传云端。</p>
+            </div>
+          </section>
+        </aside>
+      </main>
+
+      <section class="timeline-panel" aria-label="切换时间线">
+        <div class="timeline-head">
+          <div>
+            <span class="eyebrow">SESSION LOG</span>
+            <h2>切换与证据时间线</h2>
+          </div>
+          <div class="timeline-summary" id="timeline-summary">
+            <span><i class="legend-dot suggestion"></i>建议 <b id="count-suggestions">0</b></span>
+            <span><i class="legend-dot cut"></i>切换 <b id="count-cuts">0</b></span>
+            <span><i class="legend-dot marker"></i>标记 <b id="count-markers">0</b></span>
+          </div>
+          <span class="timeline-window-label">最近 90 秒</span>
+        </div>
+        <div class="timeline">
+          <div class="timeline-axis">
+            <span class="axis-spacer"></span>
+            <div class="axis-ticks" id="axis-ticks"></div>
+            <span class="axis-now">NOW</span>
+          </div>
+          <div class="timeline-lane">
+            <span class="lane-label">CUE</span>
+            <div class="lane-track" id="cue-track"></div>
+          </div>
+          <div class="timeline-lane">
+            <span class="lane-label">MARK</span>
+            <div class="lane-track" id="marker-track"></div>
+          </div>
+          <div class="timeline-readout" id="timeline-readout">
+            <span class="readout-time">--:--</span>
+            <span class="readout-text">等待第一条声场建议</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <dialog class="review-dialog" id="review-dialog">
+      <div class="dialog-shell">
+        <header class="dialog-head">
+          <div>
+            <span class="eyebrow">AUDIO EVIDENCE / LOCAL</span>
+            <h2 id="review-title">建议回放与音频证据</h2>
+          </div>
+          <button class="icon-button" id="review-close" type="button" aria-label="关闭">×</button>
+        </header>
+        <div class="review-layout">
+          <aside class="review-list-wrap">
+            <div class="review-list-head">
+              <span>本场记录</span>
+              <b id="review-count">0</b>
+            </div>
+            <div class="review-list" id="review-list"></div>
+          </aside>
+          <div class="review-main">
+            <div class="review-stage-wrap">
+              <canvas id="replay-canvas" aria-label="建议时刻节目回放"></canvas>
+              <div class="replay-badge"><i></i> REPLAY</div>
+              <div class="replay-time" id="replay-time">00:00.0</div>
+              <div class="replay-camera" id="replay-camera">CAM 3 · 左底线</div>
+            </div>
+            <div class="replay-controls">
+              <button class="primary-button small" id="replay-play" type="button">播放</button>
+              <div class="replay-progress"><i id="replay-progress"></i></div>
+              <span id="replay-window-label">−2.4s / +2.4s</span>
+              <button class="secondary-button small" id="audition-btn" type="button">试听证据</button>
+            </div>
+            <div class="evidence-card">
+              <div class="evidence-head">
+                <div>
+                  <span class="eyebrow">6-CH ENERGY / ONSET</span>
+                  <h3>建议时刻的音频证据</h3>
+                </div>
+                <div class="evidence-verdict" id="evidence-verdict">
+                  <span>置信度</span><strong id="evidence-confidence">86%</strong>
+                </div>
+              </div>
+              <canvas class="evidence-chart" id="evidence-chart" aria-label="六个通道的能量证据"></canvas>
+              <div class="evidence-legend" id="evidence-legend"></div>
+              <p class="evidence-reason" id="evidence-reason">选择一条记录查看建议依据。</p>
+              <div class="evidence-facts" id="evidence-facts"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="marker-dialog" id="marker-dialog">
+      <form method="dialog" class="marker-shell" id="marker-form">
+        <div class="dialog-head">
+          <div>
+            <span class="eyebrow">DIRECTOR MARK</span>
+            <h2>补标记</h2>
+          </div>
+          <button class="icon-button" value="cancel" type="submit" aria-label="关闭">×</button>
+        </div>
+        <p class="marker-copy">标记会固定当前声场证据，可在回放中复查。</p>
+        <div class="marker-tags" role="group" aria-label="标记类型">
+          <label><input type="radio" name="marker-type" value="精彩球" checked /><span>精彩球</span></label>
+          <label><input type="radio" name="marker-type" value="争议" /><span>争议</span></label>
+          <label><input type="radio" name="marker-type" value="战术" /><span>战术</span></label>
+          <label><input type="radio" name="marker-type" value="失误" /><span>失误</span></label>
+        </div>
+        <label class="marker-note">
+          <span>备注</span>
+          <textarea id="marker-note" rows="3" maxlength="120" placeholder="例如：林野反手变线，建议补一个近身机位"></textarea>
+        </label>
+        <div class="marker-actions">
+          <button class="secondary-button" value="cancel" type="submit">取消</button>
+          <button class="primary-button" id="marker-save" value="save" type="submit">保存标记 <span>M</span></button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+    <script type="module" src="/app/main.js"></script>
+  </body>
+</html>

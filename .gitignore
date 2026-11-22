@@ -1,0 +1,4 @@
+dist/
+public/app/
+.DS_Store
+*.log
