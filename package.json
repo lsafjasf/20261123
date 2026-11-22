@@ -1,0 +1,15 @@
+{
+  "name": "nimbus-controlled-offline-player",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A dependency-free controlled offline training player prototype.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "npm run build --silent && node dist/server/index.js",
+    "test": "npm run build --silent && node --test tests/*.test.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>NIMBUS · 离线受控播放</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true">
+      <span class="ambient__orb ambient__orb--one"></span>
+      <span class="ambient__orb ambient__orb--two"></span>
+      <span class="ambient__grid"></span>
+    </div>
+
+    <div class="app" id="app">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="NIMBUS 首页">
+          <span class="brand__mark">N</span>
+          <span class="brand__copy">
+            <strong>NIMBUS</strong>
+            <small>OFFLINE ACADEMY</small>
+          </span>
+        </a>
+        <div class="topbar__course">
+          <span class="eyebrow">CONTROLLED PLAYBACK / 2026</span>
+          <h1>密钥轮换与许可边界</h1>
+        </div>
+        <div class="topbar__status">
+          <span class="status-pill" id="network-pill">
+            <span class="status-pill__dot"></span>
+            <span id="network-label">本地联机</span>
+          </span>
+          <span class="status-pill status-pill--quiet" id="pipeline-pill">
+            <span class="status-pill__dot"></span>
+            <span>WebCodecs</span>
+          </span>
+          <button class="icon-button" id="offline-toggle" type="button" aria-pressed="false" title="切换模拟断网">
+            <span class="icon-button__icon" aria-hidden="true">⇄</span>
+            <span>模拟断网</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="player-card" aria-label="受控播放器">
+          <div class="video-shell" id="video-shell">
+            <video id="player" playsinline preload="metadata"></video>
+            <div class="video-shell__vignette" aria-hidden="true"></div>
+
+            <div class="boot-panel" id="boot-panel">
+              <div class="boot-panel__scan" aria-hidden="true"></div>
+              <span class="eyebrow">LOCAL MEDIA FACTORY</span>
+              <h2 id="boot-title">正在生成受控媒体</h2>
+              <p id="boot-label">读取本地清单与许可策略…</p>
+              <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="boot-progress">
+                <span id="boot-progress-bar"></span>
+              </div>
+              <div class="boot-panel__meta">
+                <span>Canvas → WebCodecs → AES-GCM</span>
+                <span id="boot-percent">0%</span>
+              </div>
+            </div>
+
+            <div class="start-panel" id="start-panel" hidden>
+              <span class="eyebrow">PREFLIGHT COMPLETE</span>
+              <h2>缓存、许可与密钥代次已就绪</h2>
+              <p>播放按片段解封。许可窗口 30 秒，暂停不会暂停时钟。</p>
+              <div class="start-panel__facts">
+                <span><b id="start-segments">4</b> 个加密片段</span>
+                <span><b>2</b> 次密钥代次</span>
+                <span><b>0</b> 个外部依赖</span>
+              </div>
+              <button class="primary-button" id="start-button" type="button">
+                <span class="primary-button__play" aria-hidden="true"></span>
+                开始受控播放
+              </button>
+            </div>
+
+            <div class="pause-warning" id="pause-warning" hidden>
+              <span class="eyebrow">LICENSE WINDOW CLOSED</span>
+              <h2>许可已过期</h2>
+              <p>暂停期间许可仍在计时。继续操作会被拒绝并进入错误页。</p>
+              <button class="danger-button" id="expired-resume" type="button">尝试继续</button>
+            </div>
+
+            <div class="completion-panel" id="completion-panel" hidden>
+              <span class="eyebrow">PLAYBACK COMPLETE</span>
+              <h2>全部片段均已通过受控闸门</h2>
+              <p>两次密钥代次切换成功，播放器在最后一次许可边界内完成收敛。</p>
+              <button class="secondary-button" id="reload-button" type="button">重置演示</button>
+            </div>
+
+            <div class="video-shell__watermark" aria-hidden="true">
+              <span>LOCAL / NO CLOUD</span>
+              <span>SEGMENT-SCOPED KEYS</span>
+            </div>
+          </div>
+
+          <div class="transport">
+            <div class="transport__main">
+              <button class="play-button" id="play-button" type="button" aria-label="播放" disabled>
+                <span class="play-button__icon" id="play-icon" aria-hidden="true"></span>
+              </button>
+              <div class="transport__now">
+                <span class="eyebrow" id="now-chapter">等待预热</span>
+                <strong id="now-title">—</strong>
+              </div>
+              <div class="transport__clock">
+                <span id="current-time">00:00</span>
+                <span class="transport__slash">/</span>
+                <span id="total-time">00:16</span>
+              </div>
+            </div>
+            <div class="timeline" id="timeline" aria-label="片段进度">
+              <div class="timeline__segments" id="timeline-segments"></div>
+              <div class="timeline__playhead" id="timeline-playhead"></div>
+            </div>
+            <div class="transport__meta">
+              <span class="key-badge" id="active-key-badge">
+                <span class="key-badge__dot"></span>
+                <span id="active-key-label">KEY —</span>
+              </span>
+              <span class="transport__hint" id="transport-hint">播放器将在片段边界校验许可</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="rail" aria-label="播放控制与状态">
+          <section class="rail-card license-card">
+            <div class="rail-card__head">
+              <div>
+                <span class="eyebrow">LICENSE WINDOW</span>
+                <h3>许可剩余</h3>
+              </div>
+              <span class="mini-tag" id="license-state">待签发</span>
+            </div>
+            <div class="license-clock">
+              <svg class="license-clock__ring" viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="license-clock__track" cx="60" cy="60" r="51"></circle>
+                <circle class="license-clock__value" id="license-ring" cx="60" cy="60" r="51"></circle>
+              </svg>
+              <div class="license-clock__copy">
+                <strong id="license-seconds">30.0</strong>
+                <span>秒</span>
+              </div>
+            </div>
+            <div class="license-card__legend">
+              <span class="legend-row">30s 含暂停窗口</span>
+              <span class="legend-row">8s 预警阈值</span>
+              <span class="legend-row">到期立即停止解封</span>
+            </div>
+            <p class="rail-note">窗口含暂停与后台停留。到期后缓存不可再解封。</p>
+          </section>
+
+          <section class="rail-card">
+            <div class="rail-card__head">
+              <div>
+                <span class="eyebrow">KEY LEDGER</span>
+                <h3>片段密钥代次</h3>
+              </div>
+              <span class="mini-tag mini-tag--muted" id="epoch-tag">EPOCH 01</span>
+            </div>
+            <div class="key-ledger" id="key-ledger"></div>
+          </section>
+
+          <section class="rail-card cache-card">
+            <div class="rail-card__head">
+              <div>
+                <span class="eyebrow">OFFLINE POSTURE</span>
+                <h3>离线缓存</h3>
+              </div>
+              <span class="mini-tag" id="cache-state">校验中</span>
+            </div>
+            <div class="cache-meter">
+              <span id="cache-meter-bar"></span>
+            </div>
+            <div class="cache-stats">
+              <div><strong id="cached-count">0/4</strong><span>片段已缓存</span></div>
+              <div><strong id="cached-size">0 KB</strong><span>加密载荷</span></div>
+            </div>
+            <p class="rail-note" id="cache-note">离线模式只允许读取已缓存且许可有效的片段。</p>
+          </section>
+
+          <section class="rail-card demo-card">
+            <div class="rail-card__head">
+              <div>
+                <span class="eyebrow">FAILURE DRILL</span>
+                <h3>故障演练</h3>
+              </div>
+            </div>
+            <button class="drill-button" id="inject-failure" type="button">
+              <span class="drill-button__icon">!</span>
+              <span>
+                <strong>下一片段切换失败</strong>
+                <small>验证错误页而非白屏</small>
+              </span>
+            </button>
+            <button class="drill-button drill-button--quiet" id="rebuild-cache" type="button">
+              <span class="drill-button__icon">↻</span>
+              <span>
+                <strong>重建离线缓存</strong>
+                <small>重新生成媒体与密钥材料</small>
+              </span>
+            </button>
+          </section>
+
+          <section class="rail-card event-card">
+            <div class="rail-card__head">
+              <div>
+                <span class="eyebrow">EVENT TRACE</span>
+                <h3>受控事件</h3>
+              </div>
+              <span class="mini-tag mini-tag--muted">LIVE</span>
+            </div>
+            <ol class="event-log" id="event-log"></ol>
+          </section>
+        </aside>
+      </main>
+
+      <footer class="footer">
+        <span>NIMBUS LOCAL AUTHORITY</span>
+        <span>清单驱动 · 逐片段许可 · 失败闭合</span>
+        <span id="footer-time">—</span>
+      </footer>
+    </div>
+
+    <section class="error-screen" id="error-screen" hidden aria-live="assertive">
+      <div class="error-screen__panel">
+        <div class="error-screen__brand">
+          <span class="brand__mark">N</span>
+          <span>CONTROLLED FAILURE</span>
+        </div>
+        <span class="error-code" id="error-code">LICENSE_EXPIRED</span>
+        <h1 id="error-title">许可已到期，材料停止解封</h1>
+        <p id="error-guidance">暂停期间许可照常计时。缓存仍在本机，但必须重新联机申请新许可。</p>
+        <div class="error-facts">
+          <div><span>片段</span><strong id="error-segment">—</strong></div>
+          <div><span>播放位置</span><strong id="error-position">—</strong></div>
+          <div><span>本地时间</span><strong id="error-time">—</strong></div>
+        </div>
+        <details class="error-details">
+          <summary>技术现场</summary>
+          <pre id="error-technical">—</pre>
+        </details>
+        <div class="error-actions">
+          <button class="primary-button" id="error-reload" type="button">保留缓存并重新联机</button>
+          <button class="secondary-button" id="error-cache" type="button">清除缓存并重建</button>
+        </div>
+        <p class="error-screen__foot">播放器已停止。没有白屏，也没有继续消费过期材料。</p>
+      </div>
+    </section>
+
+    <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
