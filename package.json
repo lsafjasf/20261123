@@ -1,0 +1,27 @@
+{
+  "name": "dual-mic-debleed",
+  "version": "1.0.0",
+  "description": "双人访谈双领夹麦串音处理：软衰减去串音 + 衰减段可视化 + 单独旁路 + 回归测试",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc && node dist/node/regression.js",
+    "serve": "tsc && node dist/node/serve.js",
+    "demo": "tsc && node dist/node/make-demo.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lsafjasf/20261123.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/lsafjasf/20261123/issues"
+  },
+  "homepage": "https://github.com/lsafjasf/20261123#readme",
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

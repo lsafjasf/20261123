@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>双领夹麦串音处理</title>
+<style>
+  :root { color-scheme: dark; }
+  body { font-family: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+         margin: 0; background: #16181d; color: #d7dae0; }
+  header { padding: 14px 20px; border-bottom: 1px solid #2a2e36; }
+  header h1 { font-size: 17px; margin: 0; }
+  header p { font-size: 12px; color: #8b919c; margin: 4px 0 0; }
+  main { padding: 16px 20px; max-width: 1100px; margin: 0 auto; }
+  .panel { background: #1d2026; border: 1px solid #2a2e36; border-radius: 8px;
+           padding: 14px 16px; margin-bottom: 14px; }
+  .row { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+  label { font-size: 13px; color: #aab0bb; }
+  input[type="file"] { font-size: 12px; color: #8b919c; }
+  button { background: #2f6feb; color: #fff; border: 0; border-radius: 6px;
+           padding: 7px 16px; font-size: 13px; cursor: pointer; }
+  button:disabled { background: #3a3f49; cursor: default; }
+  button.sub { background: #3a3f49; }
+  canvas { display: block; width: 100%; background: #101216; border-radius: 6px;
+           cursor: crosshair; }
+  .lane-label { font-size: 12px; color: #8b919c; margin: 8px 0 4px; }
+  .lane-label b { color: #d7dae0; }
+  table { border-collapse: collapse; font-size: 12px; width: 100%; }
+  th, td { text-align: left; padding: 3px 10px 3px 0; color: #aab0bb; }
+  th { color: #8b919c; font-weight: normal; }
+  td.t { color: #7ea6f8; cursor: pointer; }
+  td.t:hover { text-decoration: underline; }
+  .stat { font-size: 12px; color: #8b919c; }
+  .stat b { color: #d7dae0; }
+  .bypass { display: inline-flex; align-items: center; gap: 5px; }
+  #status { font-size: 12px; color: #7ea6f8; min-height: 16px; }
+  .segs { max-height: 130px; overflow-y: auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>双领夹麦串音处理（软衰减 · 非破坏性）</h1>
+  <p>原始录音不会被修改：处理在内存中进行，导出为新文件。红色区域为被衰减时段，可单独旁路每支麦。</p>
+</header>
+<main>
+  <div class="panel row">
+    <label>麦 A <input type="file" id="fileA" accept="audio/*"></label>
+    <label>麦 B <input type="file" id="fileB" accept="audio/*"></label>
+    <label>最大衰减 <input type="range" id="maxAtten" min="6" max="20" value="14" step="1">
+      <span id="maxAttenVal">14</span> dB</label>
+    <label class="bypass"><input type="checkbox" id="levelMatch" checked> 电平匹配（缓解切机位音量跳变）</label>
+    <button id="processBtn" disabled>开始处理</button>
+  </div>
+  <div id="status"></div>
+  <div class="panel">
+    <div class="lane-label"><b>麦 A</b> <span id="infoA"></span>
+      <label class="bypass" style="float:right"><input type="checkbox" id="bypassA"> 旁路 A（播放/导出用原录音）</label></div>
+    <canvas id="canvasA" height="130"></canvas>
+    <div class="lane-label"><b>麦 B</b> <span id="infoB"></span>
+      <label class="bypass" style="float:right"><input type="checkbox" id="bypassB"> 旁路 B（播放/导出用原录音）</label></div>
+    <canvas id="canvasB" height="130"></canvas>
+  </div>
+  <div class="panel row">
+    <button id="playBtn" disabled>播放</button>
+    <button id="stopBtn" class="sub" disabled>停止</button>
+    <button id="exportA" class="sub" disabled>导出 A (WAV)</button>
+    <button id="exportB" class="sub" disabled>导出 B (WAV)</button>
+    <span class="stat" id="playPos"></span>
+  </div>
+  <div class="panel row" style="align-items:flex-start">
+    <div style="flex:1;min-width:300px">
+      <div class="lane-label"><b>麦 A 被衰减时段</b> <span id="statA" class="stat"></span></div>
+      <div class="segs"><table id="segA"></table></div>
+    </div>
+    <div style="flex:1;min-width:300px">
+      <div class="lane-label"><b>麦 B 被衰减时段</b> <span id="statB" class="stat"></span></div>
+      <div class="segs"><table id="segB"></table></div>
+    </div>
+  </div>
+</main>
+<script type="module" src="./dist/web/app.js"></script>
+</body>
+</html>
