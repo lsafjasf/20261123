@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>精确媒体时间轴审计器</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0d1117;
+        --panel: #161b22;
+        --line: #30363d;
+        --text: #e6edf3;
+        --muted: #8b949e;
+        --cut: #f0883e;
+        --subtitle: #3fb950;
+        --audio: #58a6ff;
+        --bad: #ff7b72;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      main { max-width: 1160px; margin: 0 auto; padding: 28px 20px 60px; }
+      h1 { font-size: 24px; margin: 0 0 6px; letter-spacing: -0.02em; }
+      .lede { color: var(--muted); margin: 0 0 24px; max-width: 900px; }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 18px;
+        margin-bottom: 16px;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(120px, 1fr));
+        gap: 12px;
+        align-items: end;
+      }
+      label { color: var(--muted); display: grid; gap: 5px; font-size: 12px; }
+      input, button {
+        font: inherit;
+        border-radius: 6px;
+        border: 1px solid var(--line);
+        background: #0d1117;
+        color: var(--text);
+        padding: 8px 10px;
+      }
+      button { cursor: pointer; background: #21262d; }
+      button:hover { border-color: #8b949e; }
+      button.primary { background: #238636; border-color: #2ea043; }
+      .buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+      canvas {
+        width: 100%;
+        height: 280px;
+        display: block;
+        background: #0b0f14;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .card { border: 1px solid var(--line); border-radius: 8px; padding: 12px; min-width: 0; }
+      .card b { display: block; color: var(--muted); font-size: 11px; font-weight: 500; }
+      .card span { display: block; overflow-wrap: anywhere; margin-top: 5px; }
+      pre {
+        margin: 0;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        color: #c9d1d9;
+      }
+      .legend { display: flex; gap: 18px; color: var(--muted); font-size: 12px; margin: 10px 0; }
+      .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+      .cut { background: var(--cut); }
+      .subtitle { background: var(--subtitle); }
+      .audio { background: var(--audio); }
+      .bad { color: var(--bad); }
+      @media (max-width: 820px) {
+        .controls, .cards { grid-template-columns: 1fr 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>精确媒体时间轴审计器</h1>
+      <p class="lede">
+        源帧率、显示帧率、音频采样率和编辑时间全部保存为约分后的 bigint 比例。
+        仅在 WebCodecs 微秒、Canvas 显示帧、WebAudio 输出采样和 MediaSource
+        定位处各量化一次；不提供全局偏移。
+      </p>
+
+      <section class="panel">
+        <div class="controls">
+          <label>源帧率比例
+            <input id="source-fps" value="30000/1001" spellcheck="false" />
+          </label>
+          <label>显示帧率比例
+            <input id="display-fps" value="30000/1001" spellcheck="false" />
+          </label>
+          <label>音频采样率
+            <input id="audio-rate" value="48000" spellcheck="false" />
+          </label>
+          <label>序列末帧
+            <input id="span-frames" value="100000000" spellcheck="false" />
+          </label>
+          <label>检查事件数
+            <input id="event-count" value="240" spellcheck="false" />
+          </label>
+        </div>
+        <div class="buttons">
+          <button class="primary" id="run">生成并审计长序列</button>
+          <button id="clicks">播放采样点击</button>
+          <button id="mse">计算 MediaSource 定位</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="legend">
+          <span><i class="dot cut"></i>切点</span>
+          <span><i class="dot subtitle"></i>字幕</span>
+          <span><i class="dot audio"></i>音频</span>
+          <span>横轴：绝对显示帧</span>
+        </div>
+        <canvas id="ruler"></canvas>
+        <div class="cards">
+          <div class="card"><b>目标显示帧残差</b><span id="frame-residual">-</span></div>
+          <div class="card"><b>目标采样残差</b><span id="sample-residual">-</span></div>
+          <div class="card"><b>旧式 33ms 累计偏差</b><span id="legacy-drift">-</span></div>
+          <div class="card"><b>WebCodecs 时间戳</b><span id="webcodecs-ts">-</span></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <pre id="report">等待运行。</pre>
+      </section>
+    </main>
+    <script type="module" src="/dist/browser/main.js"></script>
+  </body>
+</html>

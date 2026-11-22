@@ -1,0 +1,25 @@
+{
+  "sourceFps": "30000/1001",
+  "displayFps": "30000/1001",
+  "audioSampleRate": "48000",
+  "events": [
+    {
+      "id": "cut-1001s",
+      "kind": "cut",
+      "at": "1001",
+      "sourceFrame": "30000"
+    },
+    {
+      "id": "subtitle-1001s",
+      "kind": "subtitle",
+      "start": "1001",
+      "end": "1002"
+    },
+    {
+      "id": "audio-1001s",
+      "kind": "audio",
+      "at": "1001",
+      "end": "1002"
+    }
+  ]
+}

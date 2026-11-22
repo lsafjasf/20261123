@@ -1,0 +1,22 @@
+{
+  "name": "exact-media-timeline",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Exact rational timeline for WebCodecs, WebAudio, Canvas and MediaSource",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.ts",
+    "check": "node --test test/*.test.ts && node scripts/build.mjs --check",
+    "build": "node scripts/build.mjs",
+    "prove": "node src/proof/long-sequence.ts",
+    "checker": "node src/checker/cli.ts",
+    "demo": "node scripts/build.mjs && node scripts/serve.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
