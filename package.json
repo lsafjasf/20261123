@@ -1,0 +1,19 @@
+{
+  "name": "course-mix-checker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local heuristic checker for dialogue masking/clipping across approximate playback conditions",
+  "engines": {
+    "node": ">=24"
+  },
+  "bin": {
+    "mixcheck": "src/cli/index.ts"
+  },
+  "scripts": {
+    "start": "node --no-warnings src/server/index.ts",
+    "analyze": "node --no-warnings src/cli/index.ts",
+    "selftest": "node --no-warnings src/cli/index.ts --selftest",
+    "test": "node --no-warnings test/run-tests.ts"
+  }
+}

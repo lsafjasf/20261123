@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>课程混音本地检查器</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>课程混音本地检查器</h1>
+      <p class="model-banner" id="model-banner">加载中…</p>
+    </header>
+
+    <main class="layout">
+      <section class="panel" id="loader-panel">
+        <h2>1. 选择分轨（本地处理，不上传）</h2>
+        <div class="stem-loaders">
+          <label class="stem-loader">
+            <span>对白</span>
+            <input type="file" data-stem="dialogue" accept=".wav,audio/*" />
+            <code class="file-name" data-name="dialogue">未选择</code>
+          </label>
+          <label class="stem-loader">
+            <span>音乐</span>
+            <input type="file" data-stem="music" accept=".wav,audio/*" />
+            <code class="file-name" data-name="music">未选择</code>
+          </label>
+          <label class="stem-loader">
+            <span>效果声</span>
+            <input type="file" data-stem="effects" accept=".wav,audio/*" />
+            <code class="file-name" data-name="effects">未选择</code>
+          </label>
+        </div>
+        <div class="actions">
+          <button id="load-demo" type="button">载入内置演示信号</button>
+          <button id="run-analysis" type="button" class="primary" disabled>
+            运行检查
+          </button>
+          <span id="loader-status" class="status"></span>
+        </div>
+        <p class="hint">
+          建议提供分轨 WAV；浏览器无法解码的格式会给出明确提示。至少一个分轨即可。
+        </p>
+      </section>
+
+      <section class="panel" id="control-panel" hidden>
+        <h2>2. 分轨开关 / 增益与播放条件</h2>
+        <div class="stem-controls" id="stem-controls"></div>
+        <div class="device-controls">
+          <label for="device-select">近似播放条件</label>
+          <select id="device-select"></select>
+          <label class="level-match">
+            <input type="checkbox" id="level-match" />
+            <span>
+              响度对齐（仅监听 A/B，静态整体增益；不参与掩蔽/削波判定，默认关闭）
+            </span>
+          </label>
+        </div>
+        <div class="transport">
+          <button id="play" type="button" disabled>播放</button>
+          <button id="stop" type="button" disabled>停止</button>
+          <span id="transport-status" class="status"></span>
+        </div>
+      </section>
+
+      <section class="panel wide" id="visual-panel" hidden>
+        <h2>3. 时间线：波形、掩蔽与削波时段</h2>
+        <canvas id="timeline" width="1100" height="260"></canvas>
+        <div class="legend">
+          <span><i class="swatch mask-warn"></i>掩蔽（警告）</span>
+          <span><i class="swatch mask-crit"></i>掩蔽（严重）</span>
+          <span><i class="swatch clip"></i>硬削波</span>
+          <span><i class="swatch soft"></i>限幅器介入</span>
+          <span><i class="swatch playhead"></i>播放头</span>
+        </div>
+      </section>
+
+      <section class="panel wide" id="meter-panel" hidden>
+        <h2>4. 响度与逐设备指标</h2>
+        <div id="level-table"></div>
+        <div id="device-summary"></div>
+      </section>
+
+      <section class="panel wide" id="event-panel" hidden>
+        <h2>5. 事件清单（点击跳转时间线）</h2>
+        <table id="event-table">
+          <thead>
+            <tr>
+              <th>条件</th><th>类型</th><th>严重度</th>
+              <th>开始</th><th>结束</th><th>说明</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="actions">
+          <button id="export-json" type="button">导出 JSON 报告</button>
+          <button id="export-md" type="button">导出 Markdown 报告</button>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>
