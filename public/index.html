@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>汇报厅扩声啸叫抑制演示</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>扩声啸叫检测与受控陷波</h1>
+    <p class="sub">持续窄带增长识别 · 风险前介入 · 逐项旁路 · 低延迟监听</p>
+  </header>
+
+  <section class="panel">
+    <h2>信号源（程序生成素材）</h2>
+    <div class="row">
+      <select id="material">
+        <option value="sweep">扫频 100Hz→8kHz</option>
+        <option value="tone">持续长音 880Hz（带颤音）</option>
+        <option value="speech">合成讲话</option>
+        <option value="howl">啸叫注入（讲话 + 增长窄带）</option>
+        <option value="mix" selected>混合素材（扫频+长音+讲话+啸叫）</option>
+      </select>
+      <button id="play">▶ 播放素材</button>
+      <button id="mic">🎙 使用麦克风</button>
+      <button id="stop" disabled>■ 停止</button>
+    </div>
+    <div class="row">
+      <label>监听音量 <input type="range" id="monitor" min="0" max="100" value="60"></label>
+      <label>检测灵敏度 <input type="range" id="sensitivity" min="0" max="100" value="50"></label>
+      <label class="chk"><input type="checkbox" id="suppress" checked> 启用自动陷波</label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>频谱与触发标记</h2>
+    <canvas id="spectrum" width="960" height="320"></canvas>
+    <div class="legend">
+      <span class="lg cur">━ 当前频谱（陷波后）</span>
+      <span class="lg notch">┃ 活动陷波</span>
+      <span class="lg trig">▲ 触发频率</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>陷波器列表（逐项旁路）</h2>
+    <table id="notchTable">
+      <thead>
+        <tr><th>#</th><th>频率</th><th>状态</th><th>恢复进度</th><th>旁路</th></tr>
+      </thead>
+      <tbody id="notchBody">
+        <tr class="empty"><td colspan="5">暂无陷波器</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2>事件日志</h2>
+    <ul id="log" class="log"></ul>
+  </section>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
