@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>统一媒体时钟 · 会议直播声画同步演示（离线）</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #0d1117;
+        color: #e6edf3;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 16px;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(320px, 480px) 1fr;
+        gap: 20px;
+      }
+      canvas {
+        width: 100%;
+        background: #000;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+      }
+      .panel {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        padding: 14px;
+      }
+      .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 12px 0;
+      }
+      button {
+        background: #21262d;
+        color: #e6edf3;
+        border: 1px solid #3d444d;
+        border-radius: 6px;
+        padding: 7px 12px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      button:hover {
+        background: #30363d;
+      }
+      button.primary {
+        border-color: #1f6feb;
+      }
+      .stat {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 4px 10px;
+        font-size: 13px;
+        font-variant-numeric: tabular-nums;
+      }
+      .stat b {
+        color: #7ee787;
+        font-weight: 600;
+      }
+      #log {
+        height: 420px;
+        overflow: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        line-height: 1.5;
+        background: #010409;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        padding: 8px;
+      }
+      .log-line {
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .log-rejected {
+        color: #ffa657;
+      }
+      .log-applied {
+        color: #79c0ff;
+      }
+      .hint {
+        color: #8b949e;
+        font-size: 12px;
+        margin-top: 8px;
+      }
+      label {
+        font-size: 12px;
+        color: #8b949e;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>统一媒体时钟 · 声画同步引擎（离线合成源，无外部服务）</h1>
+    <div class="layout">
+      <section class="panel">
+        <canvas id="screen" width="480" height="270"></canvas>
+        <div class="buttons">
+          <button id="btn-start" class="primary">开始直播</button>
+          <button id="btn-pause">暂停</button>
+          <button id="btn-resume">恢复</button>
+          <button id="btn-hidden">切后台</button>
+          <button id="btn-visible">回前台</button>
+        </div>
+        <div class="buttons">
+          <button id="btn-bt">模拟蓝牙耳机 (+210ms)</button>
+          <button id="btn-wired">切回有线 (30ms)</button>
+        </div>
+        <div class="buttons">
+          <label>目标位置(ms) <input id="seek-input" type="number" value="5000" min="0" step="500" style="width:90px" /></label>
+          <button id="btn-seek">用户拖动</button>
+          <button id="btn-catchup">触发追直播</button>
+          <button id="btn-conflict">冲突演练</button>
+        </div>
+        <div class="stat">
+          <span>状态</span><b id="stat-state">-</b>
+          <span>媒体时间</span><b id="stat-media">-</b>
+          <span>直播边缘</span><b id="stat-edge">-</b>
+          <span>输出延迟</span><b id="stat-latency">-</b>
+          <span>滞后量</span><b id="stat-lag">-</b>
+          <span>缓冲深度</span><b id="stat-depth">-</b>
+        </div>
+        <p class="hint">
+          暂停 / 切后台 / 缓冲时画面与声音在同一 PTS 冻结；蓝牙耳机只改变音频调度补偿，不改变媒体锚点。
+          所有事件的触发顺序、缓冲状态与误差均记录在右侧日志。
+        </p>
+      </section>
+      <section class="panel">
+        <div id="log"></div>
+      </section>
+    </div>
+    <script type="module" src="./src/browser/demo-main.ts"></script>
+  </body>
+</html>

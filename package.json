@@ -1,0 +1,15 @@
+{
+  "name": "unified-media-clock",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "统一媒体时钟驱动的会议直播声画同步引擎（零依赖 TypeScript / Node 标准库 / WebCodecs / WebAudio / Canvas / MediaSource）",
+  "scripts": {
+    "test": "node --test \"test/**/*.test.ts\"",
+    "check": "node scripts/typecheck.mjs",
+    "serve": "node src/server/dev-server.mjs"
+  },
+  "engines": {
+    "node": ">=22.6.0"
+  }
+}
