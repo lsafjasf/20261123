@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>婚礼多机位修复验证</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; max-width: 960px; }
+    h1 { font-size: 1.3rem; }
+    section { margin: 1rem 0; padding: 1rem; border: 1px solid #ccc; border-radius: 8px; }
+    table { border-collapse: collapse; font-size: 0.85rem; }
+    td, th { border: 1px solid #ddd; padding: 2px 8px; }
+    .ok { color: #0a7d00; } .bad { color: #c00; }
+    video, canvas { max-width: 200px; background: #000; }
+    code { background: #f4f4f4; padding: 0 4px; }
+  </style>
+</head>
+<body>
+  <h1>修复分片验证（WebCodecs / MediaSource / Canvas / WebAudio）</h1>
+  <section>
+    <p>选择 <code>repaired/</code> 下的分片 MP4（可多选）。页面将：
+      解析样本表并校验单调性 → 经 MSE 播放 → 经 WebCodecs 逐帧解码核对时间戳 →
+      Canvas 绘制首帧 → WebAudio 测量音频电平（静音素材应为 -∞ dB）。</p>
+    <input id="files" type="file" multiple accept=".mp4" />
+  </section>
+  <section>
+    <video id="player" controls muted></video>
+    <canvas id="frame" width="160" height="160"></canvas>
+  </section>
+  <section id="results"></section>
+  <script type="module" src="./app.ts"></script>
+</body>
+</html>

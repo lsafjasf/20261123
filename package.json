@@ -1,0 +1,17 @@
+{
+  "name": "wedding-multicam-repair",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "四机位婚礼素材时间线核查与修复：整数时间戳、零第三方依赖",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "gen": "node src/cli.ts gen",
+    "align": "node src/cli.ts align",
+    "repair": "node src/cli.ts repair",
+    "serve": "node src/serve.ts",
+    "test": "node --test test/*.test.ts"
+  }
+}
