@@ -1,0 +1,16 @@
+{
+  "name": "spliceframe-gapless-concert",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline, sample-accurate playlist builder for AAC concert segments",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "start": "node tools/build.mjs && node tools/serve.mjs",
+    "test": "node tools/build.mjs && node --test tests/*.test.mjs",
+    "check": "node tools/build.mjs && node tools/check.mjs"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}

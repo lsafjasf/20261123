@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101310">
+    <title>Spliceframe · 演出接缝台</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c100d'/%3E%3Cpath d='M8 22V12m6 10V7m6 15V10m6 12V14' stroke='%23f2b45f' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Spliceframe 首页">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><strong>SPLICEFRAME</strong><small>LIVE CONTINUITY LAB</small></span>
+      </a>
+      <div class="topbar-mid">
+        <span class="live-dot"></span>
+        <span id="session-label">GLASSHOUSE / 2026.11.23</span>
+      </div>
+      <div class="topbar-right">
+        <span class="mono" id="decode-path">DECODE —</span>
+        <span class="offline-badge">OFFLINE · 0 DEPS</span>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">AAC CONCERT SEGMENT FORENSICS</p>
+          <h1>让每个切点，<br><em>回到样本。</em></h1>
+          <p class="lede">
+            不剪固定毫秒。逐段读取编码 edit list、解码帧总数与波形边界，
+            只保留可被证据核实的预滚之后与填充之前的真实音频。
+          </p>
+        </div>
+        <div class="hero-score">
+          <div class="score-ring" id="score-ring">
+            <span id="score-number">—</span>
+            <small>SEAMS PASS</small>
+          </div>
+          <div class="score-meta">
+            <div><span>确认片段</span><strong id="confirmed-count">—</strong></div>
+            <div><span>待核验</span><strong class="warning" id="unconfirmed-count">—</strong></div>
+            <div><span>净音频</span><strong id="total-duration">—</strong></div>
+            <div><span>移除预滚 / 填充</span><strong id="trimmed-samples">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="transport-card" aria-labelledby="timeline-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-index">01 / PLAYBACK</p>
+            <h2 id="timeline-heading">无缝播放清单</h2>
+          </div>
+          <div class="section-tools">
+            <span class="legend"><i class="legend-wave"></i>保留波形</span>
+            <span class="legend"><i class="legend-seam"></i>可验证接缝</span>
+            <span class="legend"><i class="legend-hold"></i>未纳入</span>
+          </div>
+        </div>
+        <div class="timeline-wrap">
+          <canvas id="timeline" aria-label="无缝播放清单波形时间轴"></canvas>
+          <div class="timeline-empty" id="timeline-empty">正在读取容器时间轴…</div>
+        </div>
+        <div class="transport">
+          <div class="transport-left">
+            <button class="icon-button" id="back-button" type="button" aria-label="后退 2 秒">−2s</button>
+            <button class="play-button" id="play-button" type="button" aria-label="播放" disabled>
+              <span id="play-icon" aria-hidden="true">▶</span>
+            </button>
+            <button class="icon-button" id="forward-button" type="button" aria-label="前进 2 秒">+2s</button>
+          </div>
+          <div class="clock">
+            <strong id="current-time">00:00.000</strong>
+            <span>/</span>
+            <span id="duration-time">00:00.000</span>
+          </div>
+          <div class="transport-right">
+            <span class="mono" id="segment-clock">SEG — / —</span>
+            <button class="text-button" id="next-seam" type="button" disabled>下一接缝 ↗</button>
+          </div>
+        </div>
+        <div class="meter-row">
+          <span class="mono">OUTPUT</span>
+          <div class="meter"><i id="meter-fill"></i></div>
+          <span class="mono" id="play-state">IDLE</span>
+        </div>
+      </section>
+
+      <section class="workbench">
+        <div class="segment-column">
+          <div class="section-heading">
+            <div>
+              <p class="section-index">02 / SEGMENT EXAM</p>
+              <h2>逐段样本体检</h2>
+            </div>
+            <span class="mono muted" id="segment-summary">—</span>
+          </div>
+          <div class="segment-list" id="segment-list">
+            <div class="loading-row"><span class="spinner"></span><span>解析 MP4 样本表并解码 AAC…</span></div>
+          </div>
+        </div>
+
+        <aside class="audit-column">
+          <div class="section-heading">
+            <div>
+              <p class="section-index">03 / SEAM AUDIT</p>
+              <h2>接缝验收</h2>
+            </div>
+            <span class="status-pill pass" id="seam-status">等待解码</span>
+          </div>
+          <p class="audit-note">
+            连续性按 <code>|s[n] − s[n−1]|</code> 与接缝邻域步长、
+            高频二阶差分共同判定。跳接缝测试直接渲染 WebAudio 定位后的真实输出。
+          </p>
+          <div class="seam-list" id="seam-list">
+            <div class="empty-panel">尚未生成接缝</div>
+          </div>
+          <button class="primary-button" id="seek-test" type="button" disabled>
+            <span>连续跳接缝 10 次</span>
+            <small>OFFLINE AUDIO RENDER</small>
+          </button>
+          <div class="trial-summary">
+            <div><span>完成</span><strong id="trial-count">0 / 10</strong></div>
+            <div><span>样本一致</span><strong id="trial-pass">—</strong></div>
+          </div>
+          <div class="trial-log" id="trial-log" aria-live="polite">
+            <p class="log-placeholder">运行后记录每次 WebAudio 定位的接缝样本差。</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="unconfirmed-section" id="unconfirmed-section" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="section-index">04 / HOLD LIST</p>
+            <h2>无法确认 · 不进入播放清单</h2>
+          </div>
+          <span class="mono warning" id="hold-summary">—</span>
+        </div>
+        <div class="hold-grid" id="hold-list"></div>
+      </section>
+
+      <section class="method-section">
+        <div class="method-intro">
+          <p class="section-index">05 / METHOD</p>
+          <h2>证据优先，不猜切点。</h2>
+          <p>
+            每个片段先保留原始解码 PCM，再从容器声明反算预滚、有效长度和尾填充。
+            判定链不通过时，片段留在待核验区；播放清单只拼接已确认区间。
+          </p>
+        </div>
+        <ol class="method-steps">
+          <li><span>01</span><div><strong>解复用</strong><p>读取 MP4 sample table、AAC decoder config、edit list 与 iTunSMPB。</p></div></li>
+          <li><span>02</span><div><strong>原生解码</strong><p>WebCodecs 解码全部 AAC 帧，不用固定毫秒裁掉编码器预滚。</p></div></li>
+          <li><span>03</span><div><strong>样本反算</strong><p>保留区间 = edit duration；尾部填充 = 解码总样本 − 预滚 − 有效样本。</p></div></li>
+          <li><span>04</span><div><strong>接缝验收</strong><p>拼接后逐点检查波形连续性，并用 WebAudio 实际跳接缝十次。</p></div></li>
+        </ol>
+        <div class="system-strip">
+          <span><b>RUNTIME</b><span id="system-runtime">—</span></span>
+          <span><b>MSE</b><span id="system-mse">probing…</span></span>
+          <span><b>PACKAGES</b><span>0 · Node stdlib only</span></span>
+          <span><b>BUILD</b><span>TypeScript → stripped ES modules</span></span>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>SPLICEFRAME / SAMPLE-ACCURATE CONCERT SPLICER</span>
+      <span>No network. No analytics. No external packages.</span>
+    </footer>
+
+    <script type="module" src="./modules/app.js"></script>
+  </body>
+</html>

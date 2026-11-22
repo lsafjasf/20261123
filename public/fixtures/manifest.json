@@ -1,0 +1,71 @@
+{
+  "title": "Glasshouse / Live Continuity",
+  "codec": "AAC-LC 48 kHz",
+  "generated": "2026-11-23",
+  "segments": [
+    {
+      "id": "glass-overture",
+      "title": "Glass Overture",
+      "file": "glass-overture.m4a",
+      "fragmentedFile": "glass-overture-frag.mp4",
+      "color": "#f3b35b",
+      "ordinal": 1
+    },
+    {
+      "id": "pulse-grid",
+      "title": "Pulse Grid",
+      "file": "pulse-grid.m4a",
+      "fragmentedFile": "pulse-grid-frag.mp4",
+      "color": "#e98262",
+      "ordinal": 2
+    },
+    {
+      "id": "low-ceiling",
+      "title": "Low Ceiling",
+      "file": "low-ceiling.m4a",
+      "fragmentedFile": "low-ceiling-frag.mp4",
+      "color": "#d75d77",
+      "ordinal": 3
+    },
+    {
+      "id": "hands-0412",
+      "title": "Hands / 04:12",
+      "file": "hands-0412.m4a",
+      "fragmentedFile": "hands-0412-frag.mp4",
+      "color": "#b35b9c",
+      "ordinal": 4
+    },
+    {
+      "id": "riser-field",
+      "title": "Riser Field",
+      "file": "riser-field.m4a",
+      "fragmentedFile": "riser-field-frag.mp4",
+      "color": "#7a68bd",
+      "ordinal": 5
+    },
+    {
+      "id": "rebar",
+      "title": "Encore: Rebar",
+      "file": "rebar.m4a",
+      "fragmentedFile": "rebar-frag.mp4",
+      "color": "#4e84c4",
+      "ordinal": 6
+    },
+    {
+      "id": "house-left",
+      "title": "House Left / Unknown",
+      "file": "house-left.m4a",
+      "fragmentedFile": "house-left-frag.mp4",
+      "color": "#3fa3a7",
+      "ordinal": 7
+    },
+    {
+      "id": "crowd-bleed",
+      "title": "Crowd Bleed / Unknown",
+      "file": "crowd-bleed.m4a",
+      "fragmentedFile": "crowd-bleed-frag.mp4",
+      "color": "#65a86e",
+      "ordinal": 8
+    }
+  ]
+}

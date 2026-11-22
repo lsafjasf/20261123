@@ -1,0 +1,62 @@
+{
+  "sampleRate": 48000,
+  "totalSamples": 1814400,
+  "segments": [
+    {
+      "id": "glass-overture",
+      "cutStart": 0,
+      "cutEnd": 228960,
+      "sourceSamples": 228960,
+      "hasEditList": true
+    },
+    {
+      "id": "pulse-grid",
+      "cutStart": 228960,
+      "cutEnd": 431040,
+      "sourceSamples": 202080,
+      "hasEditList": true
+    },
+    {
+      "id": "low-ceiling",
+      "cutStart": 431040,
+      "cutEnd": 701280,
+      "sourceSamples": 270240,
+      "hasEditList": true
+    },
+    {
+      "id": "hands-0412",
+      "cutStart": 701280,
+      "cutEnd": 933120,
+      "sourceSamples": 231840,
+      "hasEditList": true
+    },
+    {
+      "id": "riser-field",
+      "cutStart": 933120,
+      "cutEnd": 1177440,
+      "sourceSamples": 244320,
+      "hasEditList": true
+    },
+    {
+      "id": "rebar",
+      "cutStart": 1177440,
+      "cutEnd": 1392000,
+      "sourceSamples": 214560,
+      "hasEditList": true
+    },
+    {
+      "id": "house-left",
+      "cutStart": 1392000,
+      "cutEnd": 1613760,
+      "sourceSamples": 221760,
+      "hasEditList": false
+    },
+    {
+      "id": "crowd-bleed",
+      "cutStart": 1613760,
+      "cutEnd": 1814400,
+      "sourceSamples": 200640,
+      "hasEditList": false
+    }
+  ]
+}
