@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>多段母带动态实验室</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>多段母带动态实验室</h1>
+  <div class="io">
+    <label class="btn file">
+      加载音频<input type="file" id="fileInput" accept="audio/*">
+    </label>
+    <button data-signal="drums">鼓点</button>
+    <button data-signal="sweep">扫频</button>
+    <button data-signal="sustainedLow">持续低频</button>
+    <span id="sourceInfo" class="dim">未加载信号</span>
+  </div>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>总目标</h2>
+    <div class="grid" id="masterControls"></div>
+    <h2>分频段动态 <span class="dim" id="xoInfo"></span></h2>
+    <div class="bands" id="bandControls"></div>
+    <div class="actions">
+      <button id="process" class="primary" disabled>处理</button>
+      <button id="playOriginal" disabled>播放原始</button>
+      <button id="playProcessed" disabled>播放处理后</button>
+      <button id="stopPlay" disabled>停止</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>波形与峰值线</h2>
+    <canvas id="waveCanvas" width="960" height="180"></canvas>
+    <h2>每段增益变化（dB）</h2>
+    <canvas id="gainCanvas" width="960" height="260"></canvas>
+    <h2>每段短时能量与峰值</h2>
+    <canvas id="energyCanvas" width="960" height="200"></canvas>
+  </section>
+
+  <section class="panel">
+    <h2>响度统计</h2>
+    <table id="loudnessTable"></table>
+    <h2>瞬态损失报告</h2>
+    <table id="transientTable"></table>
+    <div class="actions">
+      <button id="exportWav" disabled>导出 WAV</button>
+      <button id="exportLoudness" disabled>导出响度统计</button>
+      <button id="exportTransient" disabled>导出瞬态报告</button>
+    </div>
+  </section>
+</main>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

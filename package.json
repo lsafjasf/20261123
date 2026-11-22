@@ -1,0 +1,12 @@
+{
+  "name": "multiband-mastering-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline multiband dynamics / loudness / transient lab. Zero runtime dependencies.",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "node server.mjs",
+    "test": "node build.mjs && node test/run.mjs"
+  }
+}
