@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>sync-lab · 双机录音漂移对齐</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>sync-lab</h1>
+      <p>本地离线 · 分段偏移曲线 · 置信度 · 逐段试听 · 后期导出</p>
+    </header>
+
+    <section class="loader card">
+      <label class="file">
+        <span>相机/机头参考音</span>
+        <input id="cameraFile" type="file" accept=".wav,.mp3,.m4a,.aac,.mp4,audio/*" />
+        <strong id="cameraMeta">未加载</strong>
+      </label>
+      <label class="file">
+        <span>独立收音机录音</span>
+        <input id="recorderFile" type="file" accept=".wav,.mp3,.m4a,.aac,.mp4,audio/*" />
+        <strong id="recorderMeta">未加载</strong>
+      </label>
+      <button id="analyzeBtn" disabled>分析漂移</button>
+      <span id="status" class="status"></span>
+    </section>
+
+    <section class="params card" id="paramsPanel" hidden>
+      <label>窗口 <output id="windowVal">2.0s</output>
+        <input id="windowSec" type="range" min="1" max="5" step="0.5" value="2" /></label>
+      <label>跳幅 <output id="hopVal">1.0s</output>
+        <input id="hopSec" type="range" min="0.5" max="2.5" step="0.5" value="1" /></label>
+      <label>最大偏移 <output id="maxOffsetVal">600ms</output>
+        <input id="maxOffsetMs" type="range" min="100" max="2000" step="50" value="600" /></label>
+      <label>静音阈值 <output id="silenceVal">-55dB</output>
+        <input id="silenceDb" type="range" min="-80" max="-35" step="1" value="-55" /></label>
+      <label>音乐周期性 <output id="periodicityVal">0.45</output>
+        <input id="periodicityLimit" type="range" min="0.2" max="0.8" step="0.05" value="0.45" /></label>
+      <label>最大分段 <output id="segmentsVal">6</output>
+        <input id="maxSegments" type="range" min="1" max="10" step="1" value="6" /></label>
+      <button id="reanalyzeBtn">重新分析</button>
+    </section>
+
+    <section class="views card" id="viewsPanel" hidden>
+      <canvas id="waveCanvas" width="1200" height="180"></canvas>
+      <canvas id="curveCanvas" width="1200" height="260"></canvas>
+      <div class="legend">
+        <span><i style="background:#facc15"></i>拍手/瞬态</span>
+        <span><i style="background:#38bdf8"></i>环境声</span>
+        <span><i style="background:#a855f7"></i>音乐(排除)</span>
+        <span><i style="background:#4b5563"></i>静音(排除)</span>
+        <span><i style="background:#34d399"></i>拟合曲线</span>
+        <span><i style="background:#fb7185"></i>播放头</span>
+      </div>
+    </section>
+
+    <section class="transport card" id="transportPanel" hidden>
+      <div class="modes">
+        <label><input type="radio" name="mode" value="reference" checked /> 机头</label>
+        <label><input type="radio" name="mode" value="recorded" /> 原录音</label>
+        <label><input type="radio" name="mode" value="aligned" /> 修正后</label>
+        <label><input type="radio" name="mode" value="overlay" /> 叠加监听</label>
+      </div>
+      <button id="playBtn">播放</button>
+      <button id="stopBtn">停止</button>
+      <label><input type="checkbox" id="loopWindow" checked /> 循环当前窗口</label>
+      <span id="playTime">00:00:00.000</span>
+    </section>
+
+    <section class="review card" id="reviewPanel" hidden>
+      <div class="review-head">
+        <h2>逐段复核</h2>
+        <div>
+          <button id="prevBtn">上一窗</button>
+          <button id="nextBtn">下一窗</button>
+          <button id="excludeBtn">排除/恢复</button>
+          <button id="nudgeMinusBtn">偏移 -1ms</button>
+          <button id="nudgePlusBtn">偏移 +1ms</button>
+          <button id="toggleSegmentBtn">启用/停用分段</button>
+        </div>
+      </div>
+      <div id="windowDetails" class="details"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>时间</th><th>类型</th><th>偏移 ms</th><th>相关 z</th>
+              <th>置信度</th><th>状态</th><th>分段</th>
+            </tr>
+          </thead>
+          <tbody id="windowRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="export card" id="exportPanel" hidden>
+      <h2>确认后导出</h2>
+      <p class="hint">偏移符号约定：正数表示独立机声音更晚；渲染器将其前移。关键帧 CSV 可导入后期做时间重映射，WAV 为已渲染结果。</p>
+      <div class="buttons">
+        <button id="exportWav">修正 WAV</button>
+        <button id="exportKeyframes">关键帧 CSV</button>
+        <button id="exportWindows">窗口表 CSV</button>
+        <button id="exportSegments">分段表 CSV</button>
+        <button id="exportJson">工程 JSON</button>
+        <button id="exportLabels">标签 TXT</button>
+      </div>
+    </section>
+
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>

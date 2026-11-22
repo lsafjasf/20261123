@@ -1,0 +1,16 @@
+{
+  "name": "sync-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local dual-recorder drift alignment: piecewise offset estimation, confidence, audition and export. No external dependencies.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "serve": "node src/server/server.ts",
+    "analyze": "node src/server/cli.ts analyze",
+    "fixtures": "node src/server/cli.ts fixtures",
+    "selftest": "node src/server/selftest.ts"
+  }
+}
