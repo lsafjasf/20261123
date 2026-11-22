@@ -1,0 +1,17 @@
+{
+  "name": "frametrace-source-watermark",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline multi-frame source watermarking and forensic verification",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node server.ts",
+    "test": "node --test test/*.test.ts",
+    "check": "node --test test/*.test.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

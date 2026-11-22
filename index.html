@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="帧源 FrameTrace：本地视频多帧低可见水印与来源取证工具。"
+    />
+    <title>帧源 FrameTrace · 视频来源水印</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="帧源首页">
+          <span class="brand-mark" aria-hidden="true">
+            <i></i><i></i><i></i><i></i>
+          </span>
+          <span class="brand-copy">
+            <strong>帧源</strong>
+            <small>FRAMETRACE</small>
+          </span>
+        </a>
+        <nav class="mode-nav" aria-label="主导航">
+          <button class="nav-item is-active" data-view="mark">
+            <span class="nav-index">01</span>标记来源
+          </button>
+          <button class="nav-item" data-view="verify">
+            <span class="nav-index">02</span>验证片段
+          </button>
+          <button class="nav-item" data-view="method">
+            <span class="nav-index">03</span>方法说明
+          </button>
+        </nav>
+        <div class="privacy-pill">
+          <span class="pulse-dot"></span>
+          <span>本地离线处理</span>
+          <strong>0 上传</strong>
+        </div>
+      </header>
+
+      <div class="workspace">
+        <aside class="side-rail">
+          <div class="rail-section">
+            <p class="eyebrow">PROVENANCE PIPELINE</p>
+            <ol class="workflow" id="workflow">
+              <li class="workflow-step is-active" data-step="mark">
+                <span class="step-no">1</span>
+                <div>
+                  <strong>载入母版</strong>
+                  <p>视频只在当前浏览器内解码。</p>
+                </div>
+              </li>
+              <li class="workflow-step" data-step="mark">
+                <span class="step-no">2</span>
+                <div>
+                  <strong>写入来源码</strong>
+                  <p>96 位多帧重复水印。</p>
+                </div>
+              </li>
+              <li class="workflow-step" data-step="verify">
+                <span class="step-no">3</span>
+                <div>
+                  <strong>核验二创片段</strong>
+                  <p>几何搜索后读取证据。</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="rail-card boundary-card">
+            <div class="rail-card-head">
+              <span class="shield-icon" aria-hidden="true"></span>
+              <strong>安全边界</strong>
+            </div>
+            <p>仅写入与读取来源标识，不提供任何去除他人水印的能力。</p>
+            <div class="boundary-tags">
+              <span>无云端</span><span>无样例答案</span><span>可解释证据</span>
+            </div>
+          </div>
+
+          <div class="rail-card telemetry-card">
+            <div class="telemetry-row">
+              <span>处理引擎</span>
+              <strong id="engine-status">Canvas / WebAudio</strong>
+            </div>
+            <div class="telemetry-row">
+              <span>编码探测</span>
+              <strong id="codec-status">检测中</strong>
+            </div>
+            <div class="telemetry-row">
+              <span>版本</span>
+              <strong class="mono">FT-96 / v1</strong>
+            </div>
+          </div>
+          <p class="rail-foot">ZERO DEPENDENCY · TS / NODE</p>
+        </aside>
+
+        <main class="main-stage">
+          <section class="view is-visible" id="view-mark" aria-labelledby="mark-title">
+            <div class="view-heading">
+              <div>
+                <p class="eyebrow">EMBED / SOURCE MARKING</p>
+                <h1 id="mark-title">把创建者身份写入画面</h1>
+                <p class="lede">
+                  将编号铺进多帧的低可见结构。即使片段被裁剪、缩放、压扁或截短，
+                  仍可从残留帧中恢复来源与置信度。
+                </p>
+              </div>
+              <div class="heading-meta">
+                <span>96 BIT</span>
+                <span>12 × 8 CELLS</span>
+                <span>CRC24</span>
+              </div>
+            </div>
+
+            <div class="mark-grid">
+              <article class="panel preview-panel">
+                <div class="panel-head">
+                  <div>
+                    <p class="panel-kicker">SOURCE PREVIEW</p>
+                    <h2>母版监视器</h2>
+                  </div>
+                  <span class="status-chip" id="mark-file-chip">未载入</span>
+                </div>
+                <div class="drop-zone" id="mark-drop">
+                  <input type="file" id="mark-file" accept="video/*" hidden />
+                  <div class="drop-grid" aria-hidden="true"></div>
+                  <div class="drop-content">
+                    <span class="upload-glyph" aria-hidden="true"></span>
+                    <strong>拖入视频，或选择本地文件</strong>
+                    <p>MP4 / WebM / MOV · 不上传到服务器</p>
+                    <button class="ghost-button" id="mark-choose" type="button">选择视频</button>
+                  </div>
+                </div>
+                <div class="monitor" id="mark-monitor" hidden>
+                  <canvas id="mark-canvas"></canvas>
+                  <div class="monitor-top">
+                    <span class="rec-dot"></span>
+                    <span>WATERMARK PREVIEW</span>
+                    <span id="monitor-timecode">00:00:00</span>
+                  </div>
+                  <div class="monitor-bottom">
+                    <span id="monitor-id">CREATOR #——</span>
+                    <span id="monitor-geometry">CELL ——</span>
+                  </div>
+                  <button class="monitor-replace" id="mark-replace" type="button">更换视频</button>
+                </div>
+                <div class="preview-caption" id="mark-caption">
+                  <span class="caption-line"></span>
+                  <p>预览仅显示首帧的写入效果。导出时会对每一帧重复铺设同一来源码。</p>
+                </div>
+              </article>
+
+              <aside class="panel control-panel">
+                <div class="panel-head">
+                  <div>
+                    <p class="panel-kicker">ENCODE PROFILE</p>
+                    <h2>来源码参数</h2>
+                  </div>
+                  <span class="micro-badge">LOW VISIBILITY</span>
+                </div>
+
+                <label class="field-label" for="creator-id">创建者编号</label>
+                <div class="id-field">
+                  <span class="hash">#</span>
+                  <input
+                    id="creator-id"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    maxlength="10"
+                    value="88420719"
+                    aria-describedby="id-help"
+                  />
+                  <button id="random-id" type="button" title="生成随机编号">随机</button>
+                </div>
+                <p class="field-help" id="id-help">1 – 4,294,967,295 · 32 位编号直接写入，不做外部映射。</p>
+
+                <div class="field-label row-label">
+                  <span>写入强度</span>
+                  <output id="strength-output">均衡</output>
+                </div>
+                <div class="segmented" id="strength-control" role="radiogroup" aria-label="写入强度">
+                  <button data-strength="subtle" role="radio" aria-checked="false">隐蔽</button>
+                  <button data-strength="balanced" role="radio" aria-checked="true" class="is-selected">均衡</button>
+                  <button data-strength="resilient" role="radio" aria-checked="false">强韧</button>
+                </div>
+                <div class="strength-scale"><span>更隐蔽</span><i></i><span>更耐压缩</span></div>
+
+                <div class="code-summary">
+                  <div><span>同步码</span><strong>16 bit</strong></div>
+                  <div><span>编号保护</span><strong>Hamming 7,4</strong></div>
+                  <div><span>完整性</span><strong>CRC24</strong></div>
+                  <div><span>时间冗余</span><strong>每帧重复</strong></div>
+                </div>
+
+                <div class="source-stats" id="mark-stats">
+                  <div><span>分辨率</span><strong>—</strong></div>
+                  <div><span>时长</span><strong>—</strong></div>
+                  <div><span>单元尺寸</span><strong>—</strong></div>
+                  <div><span>音频</span><strong>—</strong></div>
+                </div>
+
+                <button class="primary-button" id="mark-export" type="button" disabled>
+                  <span class="button-icon" aria-hidden="true"></span>
+                  生成带源视频
+                </button>
+                <p class="action-note" id="mark-action-note">
+                  导出使用 Canvas 帧渲染、WebAudio 音轨保留与浏览器媒体编码。
+                </p>
+                <div class="progress-wrap" id="mark-progress-wrap" hidden>
+                  <div class="progress-label">
+                    <span id="mark-progress-label">正在写入每一帧…</span>
+                    <strong id="mark-progress-value">0%</strong>
+                  </div>
+                  <div class="progress-track"><i id="mark-progress-bar"></i></div>
+                </div>
+              </aside>
+            </div>
+
+            <div class="result-dock" id="mark-result" hidden>
+              <div class="result-mark">
+                <span class="result-icon" aria-hidden="true"></span>
+                <div>
+                  <p class="eyebrow">SOURCE COPY READY</p>
+                  <h3>来源副本已生成</h3>
+                  <p id="mark-result-name">—</p>
+                </div>
+              </div>
+              <div class="result-mini-stats">
+                <div><span>写入帧</span><strong id="result-frames">—</strong></div>
+                <div><span>输出格式</span><strong id="result-format">—</strong></div>
+                <div><span>文件大小</span><strong id="result-size">—</strong></div>
+              </div>
+              <a class="download-button" id="mark-download" href="#" download>
+                下载来源副本
+                <span aria-hidden="true">↓</span>
+              </a>
+            </div>
+          </section>
+
+          <section class="view" id="view-verify" aria-labelledby="verify-title" hidden>
+            <div class="view-heading">
+              <div>
+                <p class="eyebrow">VERIFY / FORENSIC READOUT</p>
+                <h1 id="verify-title">从搬运片段中提取来源证据</h1>
+                <p class="lede">
+                  逐帧搜索水印的几何相位，联合同步码、汉明纠错与 CRC24 生成可解释命中，
+                  不用画面相似度猜答案。
+                </p>
+              </div>
+              <div class="heading-meta">
+                <span>MULTI-SCALE</span>
+                <span>MULTI-FRAME</span>
+                <span>EXPLAINABLE</span>
+              </div>
+            </div>
+
+            <div class="verify-grid">
+              <article class="panel verify-input-panel">
+                <div class="panel-head">
+                  <div>
+                    <p class="panel-kicker">SUSPECT CLIP</p>
+                    <h2>待核验片段</h2>
+                  </div>
+                  <span class="status-chip" id="verify-file-chip">未载入</span>
+                </div>
+                <div class="drop-zone compact-drop" id="verify-drop">
+                  <input type="file" id="verify-file" accept="video/*" hidden />
+                  <div class="drop-grid" aria-hidden="true"></div>
+                  <div class="drop-content">
+                    <span class="scan-glyph" aria-hidden="true"></span>
+                    <strong>载入二创 / 搬运片段</strong>
+                    <p>支持短片段、裁切、转码后的视频</p>
+                    <button class="ghost-button" id="verify-choose" type="button">选择片段</button>
+                  </div>
+                </div>
+                <div class="verify-clip" id="verify-clip" hidden>
+                  <video id="verify-video" muted playsinline></video>
+                  <div class="verify-clip-meta">
+                    <div>
+                      <strong id="verify-clip-name">—</strong>
+                      <span id="verify-clip-dims">—</span>
+                    </div>
+                    <button id="verify-replace" type="button">更换</button>
+                  </div>
+                </div>
+
+                <div class="scan-options">
+                  <div class="field-label row-label">
+                    <span>判定灵敏度</span>
+                    <output id="sensitivity-output">均衡</output>
+                  </div>
+                  <div class="segmented" id="sensitivity-control" role="radiogroup" aria-label="判定灵敏度">
+                    <button data-sensitivity="strict" role="radio" aria-checked="false">严格</button>
+                    <button data-sensitivity="balanced" role="radio" aria-checked="true" class="is-selected">均衡</button>
+                    <button data-sensitivity="aggressive" role="radio" aria-checked="false">宽松</button>
+                  </div>
+                  <p class="field-help">
+                    严格模式要求更多同步位和更高跨帧一致性，用于控制普通画面误报。
+                  </p>
+                </div>
+
+                <button class="primary-button verify-button" id="verify-run" type="button" disabled>
+                  <span class="scan-line-icon" aria-hidden="true"></span>
+                  开始来源核验
+                </button>
+                <div class="progress-wrap" id="verify-progress-wrap" hidden>
+                  <div class="progress-label">
+                    <span id="verify-progress-label">正在搜索几何相位…</span>
+                    <strong id="verify-progress-value">0%</strong>
+                  </div>
+                  <div class="progress-track"><i id="verify-progress-bar"></i></div>
+                </div>
+              </article>
+
+              <article class="panel verdict-panel">
+                <div class="panel-head">
+                  <div>
+                    <p class="panel-kicker">EVIDENCE REPORT</p>
+                    <h2>取证读数</h2>
+                  </div>
+                  <span class="status-chip neutral" id="verdict-status">等待片段</span>
+                </div>
+
+                <div class="verdict-empty" id="verdict-empty">
+                  <div class="radar" aria-hidden="true">
+                    <i></i><i></i><i></i><span></span>
+                  </div>
+                  <strong>证据尚未生成</strong>
+                  <p>载入片段后开始核验。系统会扫描帧内多尺度网格，并在多帧之间汇总位级证据。</p>
+                </div>
+
+                <div class="verdict-content" id="verdict-content" hidden>
+                  <div class="verdict-hero">
+                    <div class="verdict-id-block">
+                      <span class="verdict-label" id="verdict-label">VERIFIED SOURCE</span>
+                      <strong class="verdict-id" id="verdict-id">#000000</strong>
+                      <p id="verdict-summary">来源标识与完整性校验一致。</p>
+                    </div>
+                    <div class="confidence-ring" id="confidence-ring" style="--value: 0">
+                      <div>
+                        <strong id="confidence-value">0</strong>
+                        <span>置信度</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="evidence-metrics">
+                    <div><span>同步码</span><strong id="evidence-sync">—</strong></div>
+                    <div><span>CRC24</span><strong id="evidence-crc">—</strong></div>
+                    <div><span>编号纠错</span><strong id="evidence-hamming">—</strong></div>
+                    <div><span>帧一致</span><strong id="evidence-frames">—</strong></div>
+                  </div>
+
+                  <div class="evidence-visual-grid">
+                    <div class="evidence-frame-card">
+                      <div class="mini-head">
+                        <span>命中帧 / 网格锚点</span>
+                        <span id="evidence-geometry">—</span>
+                      </div>
+                      <canvas id="evidence-canvas"></canvas>
+                    </div>
+                    <div class="bitmap-card">
+                      <div class="mini-head">
+                        <span>96 位符号矩阵</span>
+                        <span>12 × 8</span>
+                      </div>
+                      <div class="bitmap" id="bitmap" aria-label="96 位水印符号矩阵"></div>
+                      <div class="bitmap-legend">
+                        <span><i class="positive"></i>正向</span>
+                        <span><i class="negative"></i>负向</span>
+                        <span><i class="uncertain"></i>弱证据</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="frame-timeline">
+                    <div class="mini-head">
+                      <span>逐帧证据</span>
+                      <span id="timeline-caption">—</span>
+                    </div>
+                    <div class="timeline-bars" id="timeline-bars"></div>
+                  </div>
+
+                  <div class="evidence-note" id="evidence-note">
+                    命中并不依赖固定样例或云端比对，而是由本片段中的同步位、编号纠错和校验和共同证明。
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="view" id="view-method" aria-labelledby="method-title" hidden>
+            <div class="view-heading">
+              <div>
+                <p class="eyebrow">METHOD / TRUST MODEL</p>
+                <h1 id="method-title">证据从哪里来</h1>
+                <p class="lede">
+                  水印不是一张截图比对，而是可被重复读取的多帧编码。每一次命中都能拆成
+                  几何、同步、纠错与完整性四类证据。
+                </p>
+              </div>
+              <div class="heading-meta"><span>OFFLINE</span><span>NO SAMPLES</span></div>
+            </div>
+
+            <div class="method-layout">
+              <article class="method-hero panel">
+                <p class="panel-kicker">SIGNAL CONSTRUCTION</p>
+                <h2>一条编号，被摊薄到每一帧的微小明暗变化里。</h2>
+                <div class="signal-diagram" aria-hidden="true">
+                  <div class="signal-frame">
+                    <span class="frame-label">FRAME N</span>
+                    <div class="cell-grid" id="method-grid"></div>
+                    <span class="frame-corner tl"></span>
+                    <span class="frame-corner br"></span>
+                  </div>
+                  <div class="signal-arrow"><span>重复</span><i></i></div>
+                  <div class="signal-stack">
+                    <span>N − 2</span><span>N − 1</span><span class="current">N</span><span>N + 1</span>
+                  </div>
+                  <div class="signal-arrow"><span>汇总</span><i></i></div>
+                  <div class="signal-output">
+                    <span>证据</span>
+                    <strong>ID + CONFIDENCE</strong>
+                  </div>
+                </div>
+              </article>
+
+              <div class="method-cards">
+                <article class="method-card">
+                  <span class="method-no">01</span>
+                  <h3>12 × 8 符号单元</h3>
+                  <p>每个单元写入一位符号，整块图案在画面内反复铺开。裁切后只要保留完整局部块，就能重新读取。</p>
+                </article>
+                <article class="method-card">
+                  <span class="method-no">02</span>
+                  <h3>多尺度几何搜索</h3>
+                  <p>检测器枚举单元尺寸、亚像素偏移与 12 × 8 相位，不依赖原始分辨率或画布位置。</p>
+                </article>
+                <article class="method-card">
+                  <span class="method-no">03</span>
+                  <h3>Hamming + CRC24</h3>
+                  <p>32 位编号经 Hamming 7,4 保护，再由 24 位 CRC 校验。普通画面很难同时伪造同步、纠错与校验。</p>
+                </article>
+                <article class="method-card">
+                  <span class="method-no">04</span>
+                  <h3>跨帧位级共识</h3>
+                  <p>短片段中的压缩噪声与运动纹理逐帧不同，来源码却保持一致。合并多帧软证据可提升截短片段的命中率。</p>
+                </article>
+              </div>
+
+              <article class="panel boundary-large">
+                <div>
+                  <p class="panel-kicker">SCOPE & LIMITS</p>
+                  <h2>只回答“像谁的作品”，不回答“怎样抹掉”。</h2>
+                  <p>
+                    工具不包含、也不会提供去除他人水印的算法或接口。极低码率、完全遮挡、
+                    长时间黑场或水印区域被整体裁掉时，报告会明确降低置信度或拒绝给出命中。
+                  </p>
+                </div>
+                <div class="limit-list">
+                  <div><span>保留能力</span><strong>来源编号 · 置信度 · 命中证据</strong></div>
+                  <div><span>不提供</span><strong>水印移除 · 自动洗稿 · 云端样本匹配</strong></div>
+                  <div><span>误报控制</span><strong>同步位门槛 · CRC24 · 跨帧一致性</strong></div>
+                  <div><span>数据路径</span><strong>文件 → 浏览器内存 → 本地下载</strong></div>
+                </div>
+              </article>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/app.ts"></script>
+  </body>
+</html>
