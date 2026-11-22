@@ -1,0 +1,11 @@
+{
+  "name": "decoder-lifecycle",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Unified hardware/software decoder lifecycle with conditional fallback. Zero dependencies, runs on Node >= 22.18 type stripping.",
+  "scripts": {
+    "test": "node --test test/*.test.ts",
+    "demo": "node examples/h265-fallback.ts"
+  }
+}
