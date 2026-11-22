@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LAN Relay · 电竞馆局域网中继</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/">
+        <span class="brand-mark">LR</span>
+        <span><b>LAN RELAY</b><small>局域网流中继</small></span>
+      </a>
+      <nav>
+        <a href="./simulator.html">模拟制作机</a>
+        <a href="./viewer.html">观看端</a>
+        <a href="/api/status" target="_blank">状态 JSON</a>
+      </nav>
+      <span class="offline-pill">OFFLINE / LAN ONLY</span>
+    </header>
+
+    <main class="landing">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">ONE SOURCE. MANY SCREENS. NO INTERNET.</p>
+          <h1>从最新关键帧加入，<br /><em>不让一个慢客户端拖垮全场。</em></h1>
+          <p class="lede">
+            单路本地 FLV/RTMP 入站，服务端按 GOP 有界缓存。每个观看连接拥有独立
+            背压队列，拥塞时跳到下一关键帧；源流中断与本机网络中断分开上报。
+          </p>
+          <div class="actions">
+            <a class="button primary" href="./simulator.html">启动模拟制作机</a>
+            <a class="button" href="./viewer.html">打开观看端</a>
+          </div>
+        </div>
+        <div class="signal-card" aria-label="中继拓扑">
+          <div class="signal-node source">
+            <span class="node-index">01</span>
+            <b>制作机</b>
+            <small>FLV / RTMP · 单路</small>
+          </div>
+          <div class="signal-line"><i></i><span>TCP 1935 / WS /source</span></div>
+          <div class="signal-node relay">
+            <span class="node-index">02</span>
+            <b>中继</b>
+            <small>GOP 环形缓存 · 背压隔离</small>
+          </div>
+          <div class="signal-line fan"><i></i><span>WS /ws · 最新关键帧</span></div>
+          <div class="viewer-pips">
+            <span>VIEW 01</span><span>VIEW 02</span><span>VIEW 03</span><span>VIEW 04</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="status-grid">
+        <article class="stat">
+          <span>源流</span>
+          <strong id="source-state">检测中</strong>
+          <small id="source-detail">—</small>
+        </article>
+        <article class="stat">
+          <span>GOP 缓存</span>
+          <strong id="cache-bytes">0 B</strong>
+          <small id="cache-detail">0 GOP / 0 帧</small>
+        </article>
+        <article class="stat">
+          <span>观看连接</span>
+          <strong id="client-count">0</strong>
+          <small id="slow-count">0 个拥塞</small>
+        </article>
+        <article class="stat">
+          <span>运行计数</span>
+          <strong id="totals">0 帧</strong>
+          <small id="drop-count">0 次慢客户端降级</small>
+        </article>
+      </section>
+
+      <section class="details">
+        <article class="panel">
+          <div class="panel-head"><h2>接入真实制作机</h2><span class="tag">NO PACKAGES</span></div>
+          <p>同一端口自动识别裸 FLV 流或 RTMP 推流。源重连后自动生成新代次，旧缓存隔离。</p>
+          <pre><code># 裸 FLV over TCP
+ffmpeg -re -i match.mp4 -c copy -f flv tcp://127.0.0.1:1935
+
+# 标准 RTMP 推流
+ffmpeg -re -i match.mp4 -c copy -f flv rtmp://127.0.0.1/live/match</code></pre>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><h2>诊断口径</h2><span class="tag">SEPARATED</span></div>
+          <ul class="diagnosis">
+            <li><b>客户端慢</b><span>服务端队列超过水位，丢媒体至下一关键帧；连接仍在线。</span></li>
+            <li><b>网络断开</b><span>浏览器 WebSocket 关闭或心跳超时，本机自动退避重连。</span></li>
+            <li><b>源流没了</b><span>源 TCP 断开，或 5 秒无媒体；观看端收到 source-timeout。</span></li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>LAN RELAY 1.0</span>
+      <span>TypeScript · Node stdlib · WebCodecs · WebAudio · Canvas · MediaSource</span>
+    </footer>
+    <script type="module" src="./dashboard.ts"></script>
+  </body>
+</html>

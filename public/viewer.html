@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>观看端 · LAN Relay</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./app.css" />
+    <link rel="stylesheet" href="./viewer.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/">
+        <span class="brand-mark">LR</span>
+        <span><b>LAN RELAY</b><small>训练室观看端</small></span>
+      </a>
+      <nav>
+        <a href="/">控制台</a>
+        <a href="./simulator.html">模拟制作机</a>
+        <a href="/api/status" target="_blank">状态 JSON</a>
+      </nav>
+      <span id="network-pill" class="offline-pill">CONNECTING</span>
+    </header>
+
+    <main class="watch-layout">
+      <section class="stage-panel">
+        <div class="stage-head">
+          <div class="stage-title"><span id="play-dot" class="play-dot"></span><b>LIVE PROGRAM</b><span id="source-label">等待源流</span></div>
+          <div class="mode-switch" role="group" aria-label="播放模式">
+            <button id="mode-webcodecs" class="active" type="button">WebCodecs</button>
+            <button id="mode-mse" type="button">MSE</button>
+          </div>
+        </div>
+
+        <div class="stage-shell">
+          <canvas id="video-canvas" width="960" height="540"></canvas>
+          <video id="video-element" playsinline></video>
+          <div id="stage-empty" class="stage-empty">
+            <span class="radar"></span>
+            <b>等待关键帧</b>
+            <small>连接中继并从最新 GOP 起点加入</small>
+          </div>
+          <div class="stage-hud top">
+            <span id="hud-mode">WEBCODECS / CANVAS</span>
+            <span id="hud-codec">—</span>
+          </div>
+          <div class="stage-hud bottom">
+            <span><i class="live-mark"></i>LIVE</span>
+            <span id="hud-latency">延迟 —</span>
+            <span id="hud-fps">0 FPS</span>
+          </div>
+          <button id="sound-button" class="sound-prompt" type="button">点击启用 WebAudio 声音</button>
+        </div>
+
+        <div class="watch-controls">
+          <button id="join-button" class="button primary" type="button">从最新关键帧重新加入</button>
+          <label class="volume">
+            <span>音量</span>
+            <input id="volume" type="range" min="0" max="1" step="0.05" value="0.8" />
+          </label>
+          <button id="mute-button" class="button" type="button">静音</button>
+          <span class="reconnect-info">WS 重连 <b id="reconnect-count">0</b> 次</span>
+        </div>
+      </section>
+
+      <aside class="watch-sidebar">
+        <div id="diagnosis-card" class="diagnosis-card unknown">
+          <span class="diagnosis-kicker">诊断</span>
+          <b id="diagnosis-title">正在连接中继</b>
+          <p id="diagnosis-text">区分源流、网络与客户端自身拥塞。</p>
+          <div class="diagnosis-rows">
+            <div><span>源流</span><b id="diag-source">未知</b></div>
+            <div><span>网络</span><b id="diag-network">连接中</b></div>
+            <div><span>客户端</span><b id="diag-client">正常</b></div>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="card-head"><b>播放指标</b><span id="playback-state">JOINING</span></div>
+          <div class="metric-grid">
+            <div><span>视频</span><b id="metric-resolution">—</b></div>
+            <div><span>编解码</span><b id="metric-codec">—</b></div>
+            <div><span>接收码率</span><b id="metric-bitrate">0 kbps</b></div>
+            <div><span>解码队列</span><b id="metric-decode-queue">0</b></div>
+            <div><span>播放缓冲</span><b id="metric-buffer">0 ms</b></div>
+            <div><span>WS 发送缓冲</span><b id="metric-ws-buffer">0 B</b></div>
+            <div><span>GOP 缓存</span><b id="metric-cache">0 B</b></div>
+            <div><span>已丢媒体</span><b id="metric-dropped">0 B</b></div>
+          </div>
+        </div>
+
+        <div class="data-card source-card">
+          <div class="card-head"><b>源流状态</b><span id="source-generation">GEN 0</span></div>
+          <div class="source-lines">
+            <div><span>协议</span><b id="source-protocol">—</b></div>
+            <div><span>最后活动</span><b id="source-last-seen">—</b></div>
+            <div><span>源端重连</span><b id="source-reconnects">0</b></div>
+          </div>
+        </div>
+
+        <div class="data-card grow">
+          <div class="card-head"><b>本机事件</b><span>LOCAL LOG</span></div>
+          <ol id="viewer-log" class="event-log"></ol>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <span id="transport-mode">WebCodecs → Canvas · WebAudio</span>
+      <span>自动关键帧加入 · 独立背压 · 有界内存</span>
+    </footer>
+    <script type="module" src="./viewer.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>模拟制作机 · LAN Relay</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./app.css" />
+    <link rel="stylesheet" href="./studio.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/">
+        <span class="brand-mark">LR</span>
+        <span><b>LAN RELAY</b><small>模拟制作机</small></span>
+      </a>
+      <nav>
+        <a href="/">控制台</a>
+        <a href="./viewer.html">观看端</a>
+        <a href="/api/status" target="_blank">状态 JSON</a>
+      </nav>
+      <span id="source-pill" class="offline-pill">SOURCE IDLE</span>
+    </header>
+
+    <main class="studio">
+      <section class="preview-panel">
+        <div class="preview-head">
+          <div><span class="live-dot"></span>PROGRAM / 本地模拟源</div>
+          <span id="codec-label">H.264 · WebCodecs</span>
+        </div>
+        <div class="canvas-shell">
+          <canvas id="program-canvas" width="960" height="540"></canvas>
+          <div class="safe-frame"></div>
+          <div class="preview-badge">SIMULATED / 30 FPS</div>
+        </div>
+        <div class="transport">
+          <button id="start-button" class="button primary" type="button">开始出流</button>
+          <button id="stop-button" class="button" type="button" disabled>停止</button>
+          <span class="endpoint">FLV over WS → <code id="endpoint-label">/source</code></span>
+        </div>
+      </section>
+
+      <aside class="source-sidebar">
+        <div class="status-card">
+          <div class="status-title"><span>出流状态</span><b id="source-state">待机</b></div>
+          <div class="meter-grid">
+            <div><span>视频码率</span><b id="video-bitrate">0 kbps</b></div>
+            <div><span>实际帧率</span><b id="fps">0</b></div>
+            <div><span>已发送</span><b id="sent-bytes">0 B</b></div>
+            <div><span>编码队列</span><b id="encode-queue">0</b></div>
+          </div>
+        </div>
+
+        <div class="status-card">
+          <div class="status-title"><span>声音抓取</span><b>WebAudio PCM</b></div>
+          <div class="audio-scope"><canvas id="audio-scope" width="320" height="70"></canvas></div>
+          <div class="audio-meta"><span id="audio-state">未启动</span><span>44.1 kHz · mono · s16le</span></div>
+        </div>
+
+        <div class="status-card grow">
+          <div class="status-title"><span>本机事件</span><b>LOCAL LOG</b></div>
+          <ol id="event-log" class="event-log"></ol>
+        </div>
+
+        <div class="notice">
+          <b>源端背压</b>
+          <span>浏览器发送缓冲超过 2 MB 时跳过画面编码，不排队拖死页面。服务端仍独立保护所有观众。</span>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <span>LOCAL MEDIA ONLY</span>
+      <span>Canvas → WebCodecs → FLV · WebAudio → PCM → FLV</span>
+    </footer>
+    <script type="module" src="./simulator.ts"></script>
+  </body>
+</html>
