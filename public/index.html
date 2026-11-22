@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>节拍切点编辑器 · BeatCut</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>节拍切点编辑器</h1>
+        <p class="subtitle">画面 · 节拍 · 音轨共用一条时间线，切点跟随重拍而非每拍硬切</p>
+      </div>
+      <div class="actions">
+        <button id="btn-demo" type="button">载入内置 demo</button>
+        <label class="file-btn">
+          导入音频
+          <input id="file-audio" type="file" accept="audio/*" hidden />
+        </label>
+        <button id="btn-replan" type="button" disabled>重新规划切点</button>
+        <button id="btn-export-video" type="button" disabled>导出视频</button>
+        <button id="btn-export-csv" type="button" disabled>切点表 CSV</button>
+        <button id="btn-export-json" type="button" disabled>切点表 JSON</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="stage">
+        <canvas id="preview" width="640" height="360"></canvas>
+        <div class="transport">
+          <button id="btn-play" type="button" disabled>播放</button>
+          <span id="play-time" class="mono">00:00.000</span>
+          <label>缩放
+            <input id="zoom" type="range" min="12" max="80" value="26" />
+          </label>
+          <video id="export-preview" controls hidden></video>
+        </div>
+        <canvas id="timeline" width="1040" height="236"></canvas>
+      </section>
+
+      <aside class="panel">
+        <h2>规划参数</h2>
+        <label>默认最短停留
+          <input id="min-duration" type="number" min="0.3" step="0.1" value="1.2" />
+          <span>秒</span>
+        </label>
+        <label>重拍偏好
+          <input id="downbeat-bias" type="range" min="0" max="1" step="0.05" value="0.6" />
+          <span id="downbeat-bias-val">0.60</span>
+        </label>
+        <label>吸附窗口
+          <input id="snap-distance" type="range" min="0.05" max="1" step="0.05" value="0.45" />
+          <span id="snap-distance-val">0.45s</span>
+        </label>
+
+        <h2>片段设置</h2>
+        <div id="clip-editor" class="clip-editor">
+          <p class="hint">载入素材后，在此设置每段强弱、最短停留与可选入点。</p>
+        </div>
+
+        <h2>切点检查</h2>
+        <div id="cut-inspector" class="inspector">
+          <p class="hint">在时间线上点击三角手柄选择并拖动切点。</p>
+        </div>
+        <ul id="issue-list" class="issues"></ul>
+
+        <h2>导出进度</h2>
+        <progress id="export-progress" max="100" value="0"></progress>
+        <p id="export-status" class="hint">尚未导出</p>
+      </aside>
+    </main>
+
+    <script type="module" src="../src/ui/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "beatcut",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "零依赖节拍切点视频编辑器（TypeScript + Node 标准库 + WebCodecs/WebAudio/Canvas/MediaSource）",
+  "scripts": {
+    "start": "node --experimental-strip-types src/server/server.ts",
+    "test": "node --experimental-strip-types --test tests/*.test.ts"
+  },
+  "engines": {
+    "node": ">=22.6"
+  }
+}
